@@ -19,3 +19,11 @@ xavfsizroq yo'l — Netlify Function orqali yuborish).
 
 ## Domen ulangach
 `index.html`dagi `og:image` ni to'liq havolaga o'zgartiring va `robots.txt`ga `Sitemap:` qo'shing.
+
+## Rasmlar
+`assets/img/` dagi rasmlar [Pexels](https://www.pexels.com) bepul litsenziyasi bilan olingan **namunaviy (stock)** rasmlar
+(muallif ko'rsatish shart emas). Klinikaning o'z rasmlari tayyor bo'lganda shu fayllarni xuddi shu nom bilan almashtiring
+yoki `index.html`dagi `src` ni o'zgartiring. Shifokorlar rasmi hozircha qo'yilmagan (namunaviy belgi turibdi).
+
+## Animatsiyalar
+GSAP (`assets/vendor/`) — skroll effektlari, 3D tilt, magnit tugmalar. Qurilmada "reduce motion" yoqilgan bo'lsa, animatsiyalar o'chadi.

@@ -237,7 +237,28 @@ window.I18N={
   "mb_book": "Yozilish",
   "hv_t": "LOR markazi",
   "menu": "Menyu",
-  "dr_ph": "Rasm qo'shiladi"
+  "dr_ph": "Rasm qo'shiladi",
+  "stats": [
+   [
+    "2",
+    "yo'nalish: LOR va UTT"
+   ],
+   [
+    "3",
+    "tilda xizmat"
+   ],
+   [
+    "24/7",
+    "onlayn yozilish"
+   ]
+  ],
+  "scroll": "Pastga",
+  "gl_h": "Klinikamizdan lavhalar",
+  "hm": [
+   "Tezkor qabul",
+   "Aniq diagnostika",
+   "Qulay narxlar"
+  ]
  },
  "ru": {
   "nav": [
@@ -476,7 +497,28 @@ window.I18N={
   "mb_book": "Записаться",
   "hv_t": "ЛОР-центр",
   "menu": "Меню",
-  "dr_ph": "Фото будет добавлено"
+  "dr_ph": "Фото будет добавлено",
+  "stats": [
+   [
+    "2",
+    "направления: ЛОР и УЗИ"
+   ],
+   [
+    "3",
+    "языка обслуживания"
+   ],
+   [
+    "24/7",
+    "онлайн-запись"
+   ]
+  ],
+  "scroll": "Вниз",
+  "gl_h": "Фото клиники",
+  "hm": [
+   "Быстрый приём",
+   "Точная диагностика",
+   "Доступные цены"
+  ]
  },
  "en": {
   "nav": [
@@ -715,6 +757,27 @@ window.I18N={
   "mb_book": "Book",
   "hv_t": "ENT center",
   "menu": "Menu",
-  "dr_ph": "Photo coming soon"
+  "dr_ph": "Photo coming soon",
+  "stats": [
+   [
+    "2",
+    "services: ENT & ultrasound"
+   ],
+   [
+    "3",
+    "languages"
+   ],
+   [
+    "24/7",
+    "online booking"
+   ]
+  ],
+  "scroll": "Scroll",
+  "gl_h": "Inside our clinic",
+  "hm": [
+   "Fast appointments",
+   "Accurate diagnostics",
+   "Fair prices"
+  ]
  }
 };
