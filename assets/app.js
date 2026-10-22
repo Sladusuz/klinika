@@ -91,7 +91,7 @@ $$("#drawer a").forEach(function(a){a.addEventListener("click",function(){tog(fa
 addEventListener("resize",function(){if(innerWidth>1080)tog(false)});
 $$("[data-tg]").forEach(function(a){a.href="https://t.me/"+C.telegram;a.target="_blank";a.rel="noopener"});
 $("#ig").href=$("#ig2").href="https://instagram.com/"+C.instagram;
-if(C.mapEmbed)$("#map").innerHTML='<iframe src="'+C.mapEmbed+'" width="100%" height="260" style="border:0" loading="lazy" allowfullscreen title="Map"></iframe>';
+if(C.mapQuery){var q=encodeURIComponent(C.mapQuery);$("#map").classList.add("live");$("#map").innerHTML='<iframe src="https://www.google.com/maps?q='+q+'&output=embed" width="100%" height="280" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen title="Map"></iframe>';$("#route").href="https://www.google.com/maps/search/?api=1&query="+q}
 var pr=$("#prog");function sc(){var y=scrollY;hd.classList.toggle("sc",y>30);var m=document.documentElement.scrollHeight-innerHeight;pr.style.transform="scaleX("+(m>0?y/m:0)+")"}
 addEventListener("scroll",sc,{passive:true});sc();
 var lb=$("#lb"),lbi=$("img",lb);

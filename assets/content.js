@@ -253,6 +253,7 @@ window.I18N={
    ]
   ],
   "scroll": "Pastga",
+  "route": "Yo'l ko'rsatish",
   "gl_h": "Klinikamizdan lavhalar",
   "hm": [
    "Tezkor qabul",
@@ -513,6 +514,7 @@ window.I18N={
    ]
   ],
   "scroll": "Вниз",
+  "route": "Построить маршрут",
   "gl_h": "Фото клиники",
   "hm": [
    "Быстрый приём",
@@ -773,6 +775,7 @@ window.I18N={
    ]
   ],
   "scroll": "Scroll",
+  "route": "Get directions",
   "gl_h": "Inside our clinic",
   "hm": [
    "Fast appointments",
