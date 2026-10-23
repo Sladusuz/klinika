@@ -1,10 +1,11 @@
 // Suhbat holatini Netlify Blobs'da saqlash. Blobs ishlamasa null qaytaradi (bot eski, holatsiz rejimda ishlayveradi).
-let blobs = null;
-try { blobs = require('@netlify/blobs'); } catch (e) { /* paket yo'q */ }
+let blobs = null, reason = '';
+try { blobs = require('@netlify/blobs'); } catch (e) { reason = 'paket yuklanmadi: ' + e.message; }
 
 async function openStore(event) {
   if (global.__BOT_STORE) return global.__BOT_STORE; // testlar uchun
   if (!blobs) return null;
+  reason = '';
   try {
     if (event && typeof blobs.connectLambda === 'function') blobs.connectLambda(event);
     const s = blobs.getStore({ name: 'bot-state', consistency: 'strong' });
@@ -13,6 +14,6 @@ async function openStore(event) {
       set: async (k, v) => { await s.setJSON(k, v); },
       del: async k => { try { await s.delete(k); } catch (e) { /* yo'q */ } }
     };
-  } catch (e) { console.error('blobs:', e.message); return null; }
+  } catch (e) { reason = 'getStore xato: ' + e.message; console.error('blobs:', e.message); return null; }
 }
-module.exports = { openStore };
+module.exports = { openStore, why: () => reason };

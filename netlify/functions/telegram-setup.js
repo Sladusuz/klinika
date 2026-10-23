@@ -1,6 +1,7 @@
 // Bir martalik sozlash: https://<sayt>/.netlify/functions/telegram-setup?key=<TELEGRAM_WEBHOOK_SECRET>
 // Webhook'ni ulaydi, bot nomi/tavsifi va buyruqlarni o'rnatadi.
 const { call, admins } = require('./lib/tg');
+const { openStore, why } = require('./lib/state');
 
 exports.handler = async (event) => {
   const secret = process.env.TELEGRAM_WEBHOOK_SECRET;
@@ -31,6 +32,13 @@ exports.handler = async (event) => {
     return 'ok';
   });
   await step('menuButton', () => call('setChatMenuButton', { menu_button: { type: 'web_app', text: '🌐 Sayt', web_app: { url: process.env.SITE_URL || `https://${host}` } } }));
+  await step('store', async () => {
+    const st = await openStore(event);
+    if (!st) throw new Error('xotira (Blobs) ulanmagan — ' + (why() || 'sabab noma\'lum'));
+    await st.set('health', { t: Date.now() });
+    const v = await st.get('health');
+    return v && v.t ? 'ok' : 'yozish/o\'qish ishlamadi';
+  });
   await step('me', async () => { const m = await call('getMe'); return '@' + m.username; });
   const info = await call('getWebhookInfo').catch(() => ({}));
   const failed = Object.values(res).some(v => String(v).startsWith('XATO'));
