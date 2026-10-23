@@ -1,6 +1,7 @@
 // Saytdagi formadan zayavka qabul qilish: POST /.netlify/functions/lead
 import tg from './lib/tg.js';
 import { openStore } from './lib/state.mjs';
+import { loadAdmins } from './lib/admins.mjs';
 const { notifyAdmins, normPhone, clean, SERVICES } = tg;
 
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
@@ -29,6 +30,7 @@ export default async (req) => {
 
   try {
     const store = await openStore();
+    await loadAdmins(store);
     await notifyAdmins({ name, phone, service, note, lang, source: 'site' }, store);
     return json(200, { ok: true });
   } catch (e) {

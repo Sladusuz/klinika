@@ -3,6 +3,7 @@
 import tg from './lib/tg.js';
 import { openStore, why } from './lib/state.mjs';
 import { sendReport, cleanup } from './lib/report.mjs';
+import { loadAdmins } from './lib/admins.mjs';
 const { call, admins } = tg;
 
 export default async (req) => {
@@ -13,10 +14,12 @@ export default async (req) => {
   if (url0.searchParams.get('key') !== secret) return out(401, { ok: false, error: 'key noto\'g\'ri' });
 
   const q = url0.searchParams;
+  { const st1 = await openStore(); await loadAdmins(st1); }
   if (q.get('log') || q.get('report')) { // diagnostika: oxirgi hodisalar yoki hisobotni hozir yuborish
     const st0 = await openStore(); if (!st0) return out(500, { ok: false, error: 'xotira yo\'q: ' + why() });
     if (q.get('report')) { const r = await sendReport(st0, null, true); return out(200, { ok: true, sent: true, leads: r.leads.length, users: r.users.length }); }
-    return out(200, { ok: true, log: (await st0.get('log')) || [] });
+    const bk = (await st0.list('b:')).sort().slice(-5);
+    return out(200, { ok: true, log: (await st0.get('log')) || [], broadcasts: await Promise.all(bk.map(k => st0.get(k))) });
   }
   const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || url0.host;
   const url = `https://${host}/.netlify/functions/telegram-webhook`;
@@ -41,7 +44,7 @@ export default async (req) => {
     return 'ok';
   });
   await step('adminCommands', async () => {
-    for (const chat_id of admins()) await call('setMyCommands', { scope: { type: 'chat', chat_id: Number(chat_id) }, commands: [{ command: 'stats', description: '📊 Bugungi hisobot' }, { command: 'users', description: '👥 Ro\'yxatdan o\'tganlar (CSV)' }, { command: 'start', description: 'Menyu' }, { command: 'profile', description: 'Profil' }, { command: 'id', description: 'Chat ID' }] });
+    for (const chat_id of admins()) await call('setMyCommands', { scope: { type: 'chat', chat_id: Number(chat_id) }, commands: [{ command: 'send', description: '📢 Hammaga xabar yuborish' }, { command: 'stats', description: '📊 Bugungi hisobot' }, { command: 'users', description: '👥 Ro\'yxatdan o\'tganlar (CSV)' }, { command: 'admins', description: '👮 Adminlar' }, { command: 'start', description: 'Menyu' }, { command: 'profile', description: 'Profil' }, { command: 'id', description: 'Chat ID' }] });
     return admins().length ? 'ok' : 'admin yo\'q';
   });
   await step('menuButton', () => call('setChatMenuButton', { menu_button: { type: 'web_app', text: '🌐 Sayt', web_app: { url: process.env.SITE_URL || `https://${host}` } } }));

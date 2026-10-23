@@ -5,6 +5,8 @@ import X from './lib/bot-texts.js';
 import { openStore } from './lib/state.mjs';
 import { saveUser } from './lib/data.mjs';
 import { sendReport, sendUsersCsv } from './lib/report.mjs';
+import { loadAdmins, addAdmin, removeAdmin, isEnvAdmin } from './lib/admins.mjs';
+import { recipients, runBroadcast } from './lib/broadcast.mjs';
 const { call, esc, admins, normPhone, clean, SERVICES, notifyAdmins, SITE, newTicket, leadText, leadKb, hm } = tg;
 const LANGS = ['uz', 'ru', 'en'];
 const TTL = 3 * 60 * 60 * 1000;
@@ -26,12 +28,17 @@ const say = async (chat_id, text, extra) => {
   if (!(await fresh(chat_id, text))) return null;
   return call('sendMessage', Object.assign({ chat_id, text, parse_mode: 'HTML', disable_web_page_preview: true }, extra || {}));
 };
-const sayFx = async (chat_id, text, extra) => { try { return await say(chat_id, text, Object.assign({ message_effect_id: EFFECT }, extra)); } catch (e) { return say(chat_id, text, extra); } };
+const sayFx = async (chat_id, text, extra) => { // effekt (konfetti) bilan; qo'llab-quvvatlanmasa, oddiy xabar (himoya faqat bir marta tekshiriladi)
+  if (!(await fresh(chat_id, text))) return null;
+  const base = Object.assign({ chat_id, text, parse_mode: 'HTML', disable_web_page_preview: true }, extra || {});
+  try { return await call('sendMessage', Object.assign({ message_effect_id: EFFECT }, base)); } catch (e) { return call('sendMessage', base); }
+};
 const svcKb = L => {
   const b = SERVICES[L].map((s, i) => ({ text: `${EMO[i]} ${s}`, callback_data: `s:${L}:${i}` }));
   const rows = []; for (let i = 0; i < b.length; i += 2) rows.push(b.slice(i, i + 2));
   return { inline_keyboard: rows };
 };
+const del = (chat_id, message_id) => call('deleteMessage', { chat_id, message_id }).catch(() => {}); // eski xabarni tozalash (xatosi e'tiborga olinmaydi)
 const force = ph => ({ reply_markup: { force_reply: true, input_field_placeholder: ph } });
 
 function findMenu(text) {
@@ -44,17 +51,16 @@ function findMenu(text) {
 }
 function clearStep(meta) { delete meta.step; delete meta.svc; delete meta.svcIdx; delete meta.name; delete meta.ts; }
 
-async function sendWelcome(chat, L, from, kb) {
-  const caption = `${X[L].hi}, <b>${esc((from && from.first_name) || '')}</b>! 👋\n\n${X[L].welcome}`;
-  const extra = kb ? { reply_markup: kb } : {};
-  if (!(await fresh(chat, 'photo:' + L))) return null;
-  try { await call('sendPhoto', Object.assign({ chat_id: chat, photo: `${SITE()}/assets/bot/welcome-${L}.jpg`, caption, parse_mode: 'HTML' }, extra)); }
-  catch (e) { await say(chat, caption, extra); }
-}
-async function greet(c, L, from) { // salomlashuv + (kerak bo'lsa) ro'yxatdan o'tish taklifi
+async function greet(c, L, from) { // BITTA xabar: banner + salomlashuv (+ kerak bo'lsa ro'yxatdan o'tish taklifi)
   const needReg = !!c.st && !c.meta.reg;
-  await sendWelcome(c.chat, L, from, needReg ? null : menuKb(L));
-  if (needReg) await say(c.chat, X[L].regAsk, { reply_markup: regKb(L) });
+  const hello = `${X[L].hi}, <b>${esc((from && from.first_name) || '')}</b>! 👋\n\n${X[L].welcome}`;
+  const caption = needReg ? `${hello}\n\n${X[L].regAsk}` : hello;
+  const kb = needReg ? regKb(L) : menuKb(L);
+  if (!(await fresh(c.chat, 'photo:' + L))) return null;
+  if (caption.length <= 1000) {
+    try { return await call('sendPhoto', { chat_id: c.chat, photo: `${SITE()}/assets/bot/welcome-${L}.jpg`, caption, parse_mode: 'HTML', reply_markup: kb }); } catch (e) { /* rasm bo'lmasa, matn */ }
+  }
+  return call('sendMessage', { chat_id: c.chat, text: caption, parse_mode: 'HTML', disable_web_page_preview: true, reply_markup: kb });
 }
 
 /* ---- holatsiz (zaxira) rejim: savol matniga yashirilgan holat ---- */
@@ -93,13 +99,19 @@ const confirmCard = (L, m) => `${X[L].confirm}\n\n🩺 ${esc(m.svc)}\n👤 ${esc
 const confirmKb = L => ({ inline_keyboard: [[{ text: X[L].send, callback_data: 'ok' }], [{ text: X[L].edit, callback_data: 'edit' }, { text: X[L].cancel, callback_data: 'cx' }]] });
 async function askName(c, L) { return say(c.chat, `${head(L, 2)}\n🩺 <b>${esc(c.meta.svc)}</b> ✓\n\n${X[L].askName}`, { reply_markup: stepKb(L) }); }
 
-async function startName(c, L, i) {
-  const svc = SERVICES[L][i];
+async function startName(c, L, i, q) {
+  const svc = SERVICES[L][i], mid = q && q.message && q.message.message_id;
   if (c.st) {
     Object.assign(c.meta, { lang: L, step: 'name', svc, svcIdx: i, name: '', ts: Date.now() }); await c.save();
-    if (c.meta.reg) { c.meta.step = 'confirm'; await c.save(); return say(c.chat, confirmCard(L, c.meta), { reply_markup: confirmKb(L) }); } // ro'yxatdan o'tgan: bitta bosish
+    if (c.meta.reg) { // ro'yxatdan o'tgan: xizmat tanlash xabarining o'zi tasdiq kartasiga aylanadi (yangi xabar yo'q)
+      c.meta.step = 'confirm'; await c.save();
+      if (mid) { try { return await call('editMessageText', { chat_id: c.chat, message_id: mid, text: confirmCard(L, c.meta), parse_mode: 'HTML', reply_markup: confirmKb(L) }); } catch (e) { /* tahrirlab bo'lmasa, yangi xabar */ } }
+      return say(c.chat, confirmCard(L, c.meta), { reply_markup: confirmKb(L) });
+    }
+    if (mid) await del(c.chat, mid);
     return askName(c, L);
   }
+  if (mid) await del(c.chat, mid);
   return say(c.chat, namePrompt(L, esc(svc)), force(X[L].askNameShort.replace(':', '')));
 }
 
@@ -119,10 +131,76 @@ async function menuAction(c, L, k) {
   if (k === 'cancel') return say(c.chat, X[L].cancelled, { reply_markup: menuKb(L) });
 }
 
+/* ---------- admin: hammaga xabar yuborish va adminlarni boshqarish ---------- */
+const isAdmin = c => admins().includes(String(c.chat));
+const bcKb = n => ({ inline_keyboard: [[{ text: `✅ Hammaga yuborish (${n})`, callback_data: 'bc:go' }], [{ text: '✏️ Qayta yozish', callback_data: 'bc:re' }, { text: '❌ Bekor', callback_data: 'bc:x' }]] });
+const BC_WAIT = "📢 <b>Hammaga xabar</b>\n\nEndi yuboriladigan xabarni shu yerga yozing: matn, rasm, video, fayl yoki ovozli xabar.\nU <b>ro'yxatdan o'tgan hamma foydalanuvchiga</b> boradi (avval sizga ko'rsatiladi va tasdiqlaysiz).";
+
+async function adminFlow(m, c, text) {
+  if (!c.st || !isAdmin(c) || m.chat.type !== 'private') return false;
+  const meta = c.meta;
+  if (/^\/(send|broadcast)(@\w+)?$/i.test(text)) {
+    meta.bc = { state: 'wait', ts: Date.now() }; await c.save();
+    await say(c.chat, BC_WAIT, { reply_markup: { inline_keyboard: [[{ text: '❌ Bekor', callback_data: 'bc:x' }]] } }); return true;
+  }
+  if (/^\/admins(@\w+)?$/i.test(text)) {
+    const list = admins();
+    await say(c.chat, `👮 <b>Adminlar</b> (${list.length})\n\n` + list.map(id => `• <code>${id}</code>${isEnvAdmin(id) ? ' · asosiy' : ''}`).join('\n') + "\n\nQo'shish: <code>/addadmin ID</code>\nO'chirish: <code>/rmadmin ID</code>\n<i>ID ni bilish uchun yangi admin botga /id yuborsin.</i>"); return true;
+  }
+  let mt = text.match(/^\/addadmin(?:@\w+)?\s+(\d{3,15})$/i);
+  if (mt) {
+    const added = await addAdmin(c.st, mt[1]);
+    await say(c.chat, added ? `✅ <code>${mt[1]}</code> admin qilindi.` : `ℹ️ <code>${mt[1]}</code> allaqachon admin.`);
+    if (added) call('sendMessage', { chat_id: mt[1], parse_mode: 'HTML', text: "👮 Siz <b>Orlent Medical</b> botida admin etib tayinlandingiz.\n\nBuyruqlar: /stats · /users · /send · /admins" }).catch(() => {});
+    return true;
+  }
+  mt = text.match(/^\/rmadmin(?:@\w+)?\s+(\d{3,15})$/i);
+  if (mt) {
+    const r = await removeAdmin(c.st, mt[1]);
+    await say(c.chat, r === 'env' ? "⛔️ Asosiy adminni o'chirib bo'lmaydi." : r ? `✅ <code>${mt[1]}</code> adminlikdan olindi.` : `ℹ️ <code>${mt[1]}</code> admin emas.`); return true;
+  }
+  if (/^\/(addadmin|rmadmin)/i.test(text)) { await say(c.chat, "Format: <code>/addadmin 123456789</code> yoki <code>/rmadmin 123456789</code>"); return true; }
+  // "hammaga xabar" rejimi: keyingi xabar nusxalanadi
+  if (meta.bc && meta.bc.state === 'wait' && Date.now() - meta.bc.ts < TTL && !/^\//.test(text) && !findMenu(text)) {
+    const n = (await recipients(c.st, c.chat)).length;
+    if (!n) { delete meta.bc; await c.save(); await say(c.chat, "ℹ️ Hali ro'yxatdan o'tgan foydalanuvchi yo'q, yuboradigan odam yo'q."); return true; }
+    meta.bc = { state: 'confirm', mid: m.message_id, ts: Date.now() }; await c.save();
+    await call('sendMessage', { chat_id: c.chat, parse_mode: 'HTML', reply_parameters: { message_id: m.message_id }, text: `📢 <b>Tasdiqlang</b>\n\nYuqoridagi xabar <b>${n}</b> ta ro'yxatdan o'tgan foydalanuvchiga yuboriladi.\n<i>Yuborilgach, qaytarib bo'lmaydi.</i>`, reply_markup: bcKb(n) });
+    return true;
+  }
+  return false;
+}
+
+async function startBroadcast(c, mid) { // fon funksiyasi orqali (uzoq davom etishi mumkin), bo'lmasa shu yerda
+  try {
+    const r = await fetch(`${SITE()}/.netlify/functions/broadcast-background`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-bot-secret': process.env.TELEGRAM_WEBHOOK_SECRET || '' }, body: JSON.stringify({ chat: c.chat, mid }) });
+    if (r.ok || r.status === 202) return 'bg';
+  } catch (e) { /* inline davom etadi */ }
+  await runBroadcast(c.st, c.chat, mid); return 'inline';
+}
+
+async function onBroadcastCallback(q, c, data) {
+  const ans = t => call('answerCallbackQuery', Object.assign({ callback_query_id: q.id }, t ? { text: t } : {})).catch(() => {});
+  if (!isAdmin(c) || !c.st) return ans('⛔️');
+  const meta = c.meta, mid = q.message.message_id, edit = (text, kb) => call('editMessageText', { chat_id: c.chat, message_id: mid, text, parse_mode: 'HTML', reply_markup: kb || { inline_keyboard: [] } }).catch(() => {});
+  if (data === 'bc:x') { delete meta.bc; await c.save(); await edit('❌ Bekor qilindi.'); return ans(); }
+  if (data === 'bc:re') { meta.bc = { state: 'wait', ts: Date.now() }; await c.save(); await edit(BC_WAIT, { inline_keyboard: [[{ text: '❌ Bekor', callback_data: 'bc:x' }]] }); return ans(); }
+  if (data === 'bc:go') {
+    const b = meta.bc;
+    if (!b || b.state !== 'confirm' || !b.mid) { await edit("ℹ️ Bu so'rov eskirgan. /send ni qaytadan yuboring."); return ans(); }
+    if (!(await c.st.once('bcgo:' + c.chat + ':' + b.mid))) return ans('Allaqachon yuborilgan'); // ikki marta bosilsa, ikki marta ketmaydi
+    delete meta.bc; await c.save();
+    await edit('⏳ <b>Yuborilmoqda…</b>\nTugagach natijani shu yerga yozaman.');
+    await ans();
+    return startBroadcast(c, b.mid);
+  }
+}
+
 async function onCallback(q, c) {
   const data = q.data || '';
   const adm = () => admins().includes(String(c.chat));
   const who = q.from.username ? '@' + q.from.username : q.from.first_name;
+  if (data.startsWith('bc:')) return onBroadcastCallback(q, c, data);
   if (/^(done|reopen):/.test(data)) { // zayavka kartasini yangilash (barcha xodimlardagi nusxasi)
     if (!adm()) return call('answerCallbackQuery', { callback_query_id: q.id, text: '⛔️' });
     const [act, id] = data.split(':');
@@ -149,16 +227,17 @@ async function onCallback(q, c) {
   if (data.startsWith('lang:')) {
     const L = data.slice(5); if (!X[L]) return;
     c.meta.lang = L; clearStep(c.meta); await c.save();
+    if (q.message) await del(c.chat, q.message.message_id);
     return greet(c, L, q.from);
   }
   const act = c.meta.step === 'confirm' && c.meta.svc && c.meta.reg, L0 = c.meta.lang || detectLang(q.from);
-  if (data === 'ok') { if (act) return finish(c, L0, c.meta.svc, c.meta.svcIdx, c.meta.reg.name, c.meta.reg.phone, q.from); return say(c.chat, X[L0].hint, { reply_markup: menuKb(L0) }); }
-  if (data === 'edit') { if (c.meta.svc) { c.meta.step = 'name'; await c.save(); return askName(c, L0); } return say(c.chat, X[L0].hint, { reply_markup: menuKb(L0) }); }
-  if (data === 'cx') { clearStep(c.meta); await c.save(); return say(c.chat, X[L0].cancelled, { reply_markup: menuKb(L0) }); }
+  if (data === 'ok') { if (act) { await del(c.chat, q.message.message_id); return finish(c, L0, c.meta.svc, c.meta.svcIdx, c.meta.reg.name, c.meta.reg.phone, q.from); } return say(c.chat, X[L0].hint, { reply_markup: menuKb(L0) }); }
+  if (data === 'edit') { if (c.meta.svc) { c.meta.step = 'name'; await c.save(); await del(c.chat, q.message.message_id); return askName(c, L0); } return say(c.chat, X[L0].hint, { reply_markup: menuKb(L0) }); }
+  if (data === 'cx') { clearStep(c.meta); await c.save(); await del(c.chat, q.message.message_id); return say(c.chat, X[L0].cancelled, { reply_markup: menuKb(L0) }); }
   if (data.startsWith('apply:')) { const L = data.slice(6); if (X[L]) return menuAction(c, L, 'apply'); }
   if (data.startsWith('s:')) {
     const [, L, i] = data.split(':');
-    if (X[L] && SERVICES[L][+i]) return startName(c, L, +i);
+    if (X[L] && SERVICES[L][+i]) return startName(c, L, +i, q);
   }
 }
 
@@ -169,6 +248,8 @@ async function onMessage(m, c) {
     if (!admins().includes(String(c.chat)) || !c.st) return;
     return /stats/i.test(text) ? sendReport(c.st, [c.chat], false) : sendUsersCsv(c.chat, c.st);
   }
+  if (await adminFlow(m, c, text)) return;
+  if (c.meta.bc && (/^\//.test(text) || findMenu(text))) { delete c.meta.bc; await c.save(); } // boshqa buyruq berilsa, kutilayotgan "hammaga xabar" bekor bo'ladi
   if (m.chat.type !== 'private') return;
   const meta = c.meta, L = meta.lang || detectLang(m.from);
   const active = meta.step && meta.svc && meta.ts && Date.now() - meta.ts < TTL;
@@ -238,13 +319,17 @@ export default async (req) => {
     st = await openStore();
     if (st && u.update_id && !(await st.once('uq:' + u.update_id))) { outcome = 'dup'; await logEvent(st, u, outcome, t0); return R('dup'); } // aynan shu update allaqachon qayta ishlangan
     GUARD = { st };
+    await loadAdmins(st);
     const meta = (st && await st.get('c:' + chat)) || {};
     const c = { st, chat, meta, save: async () => { if (st) await st.set('c:' + chat, meta); } };
     const who = (u.message && u.message.from) || (u.callback_query && u.callback_query.from);
     if (st && meta.reg && who && !(await st.get('usr:' + who.id))) await saveUser(st, who, meta.lang, meta.reg).catch(() => {}); // eski ro'yxatdan o'tganlarni yangi bazaga ko'chirish
     if (u.callback_query) await onCallback(u.callback_query, c);
     else if (u.message) await onMessage(u.message, c);
-  } catch (e) { outcome = 'error: ' + e.message; console.error('bot error:', e.message); }
+  } catch (e) { // foydalanuvchiga jim qolmaymiz: xato bo'lsa ham bitta muloyim xabar
+    outcome = 'error: ' + e.message; console.error('bot error:', e.message);
+    try { const ch = u.message && u.message.chat.type === 'private' && u.message.chat.id; if (ch && !/chat not found|blocked/i.test(e.message)) await call('sendMessage', { chat_id: ch, text: '⚠️ Kechirasiz, vaqtincha xatolik. Iltimos, qayta urinib ko\'ring yoki qo\'ng\'iroq qiling: +998 94 647 64 79' }); } catch (x) { /* yuborib bo'lmadi */ }
+  }
   finally { GUARD = null; }
   await logEvent(st, u, outcome, t0);
   return R('ok');

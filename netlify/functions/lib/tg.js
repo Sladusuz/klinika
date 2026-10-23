@@ -12,7 +12,10 @@ async function call(method, payload) {
 }
 
 const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-const admins = () => (process.env.ADMIN_CHAT_ID || '').split(',').map(s => s.trim()).filter(Boolean);
+let EXTRA = [];
+const setExtraAdmins = a => { EXTRA = (a || []).map(String); };
+const admins = () => [...new Set([...(process.env.ADMIN_CHAT_ID || '').split(',').map(s => s.trim()).filter(Boolean), ...EXTRA])];
+const envAdmins = () => (process.env.ADMIN_CHAT_ID || '').split(',').map(s => s.trim()).filter(Boolean);
 
 function normPhone(raw) {
   let d = String(raw || '').replace(/[^\d+]/g, '');
@@ -70,6 +73,7 @@ async function notifyAdmins(l, store) {
   const ids = admins();
   if (!ids.length) throw new Error('ADMIN_CHAT_ID sozlanmagan');
   l.id = l.id || newTicket(); l.time = l.time || tashkentTime(); l.msgs = {}; l.day = dayKey(); l.ts = Date.now();
+  if (store && !(await store.once('ld:' + l.phone + ':' + l.service + ':' + Math.floor(Date.now() / 120000)))) { l.dup = true; return l; } // bir xil zayavka 2 daqiqa ichida qayta kelsa, ikkinchisi yuborilmaydi
   if (store) { // kunlik indeks: hisobot shundan olinadi
     try { const k = 'd:' + l.day, cur = (await store.get(k)) || { n: 0, ids: [] }; cur.n++; (cur.ids = cur.ids || []).push(l.id); await store.set(k, cur); l.n = cur.n; } catch (e) { /* hisoblagich ixtiyoriy */ }
   }
@@ -95,4 +99,4 @@ async function sendDoc(chat_id, filename, content, caption) {
   return j.result;
 }
 
-module.exports = { sendDoc, EMO, dayKey, tashkentTime, FLAG, SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, leadKb, notifyAdmins, newTicket, hm };
+module.exports = { setExtraAdmins, envAdmins, sendDoc, EMO, dayKey, tashkentTime, FLAG, SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, leadKb, notifyAdmins, newTicket, hm };
