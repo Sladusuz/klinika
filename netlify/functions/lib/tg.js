@@ -31,42 +31,58 @@ const SERVICES = {
 };
 
 function tashkentTime() {
-  return new Intl.DateTimeFormat('ru-RU', { timeZone: 'Asia/Tashkent', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date());
+  return new Intl.DateTimeFormat('ru-RU', { timeZone: 'Asia/Tashkent', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date()).replace(',', ' ·');
 }
-
-// Klinika xodimlariga boradigan zayavka matni (doim o'zbekcha)
+const hm = () => new Intl.DateTimeFormat('ru-RU', { timeZone: 'Asia/Tashkent', hour: '2-digit', minute: '2-digit' }).format(new Date());
+const dayKey = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tashkent' }).format(new Date());
 const newTicket = () => 'OM-' + Date.now().toString(36).slice(-5).toUpperCase();
+const EMO = ['🩺', '👂', '👃', '🗣', '📡', '👶'];
+const FLAG = { uz: '🇺🇿', ru: '🇷🇺', en: '🇬🇧' };
+const LINE = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬';
 
+// Klinika xodimlariga boradigan zayavka kartasi (doim o'zbekcha)
 function leadText(l) {
-  const lines = [
-    '🆕 <b>Yangi zayavka</b>' + (l.id ? ' · <code>' + esc(l.id) + '</code>' : ''),
-    '',
-    `👤 <b>Ism:</b> ${esc(l.name)}`,
-    `📞 <b>Telefon:</b> ${esc(l.phone)}`,
-    `🩺 <b>Xizmat:</b> ${esc(l.service)}`
-  ];
-  if (l.note) lines.push(`💬 <b>Izoh:</b> ${esc(l.note)}`);
-  lines.push('', `🌐 <b>Manba:</b> ${l.source === 'bot' ? 'Telegram bot' : 'Sayt'}${l.lang ? ' · ' + esc(String(l.lang).toUpperCase()) : ''}`);
+  const se = EMO[SERVICES.uz.indexOf(l.service)] || '🩺';
+  const lines = [`🆕 <b>YANGI ZAYAVKA</b>   <code>${esc(l.id)}</code>`];
+  if (l.n) lines.push(`<i>Bugungi №${l.n}</i>`);
+  lines.push('', LINE, `👤 <b>${esc(l.name)}</b>`, `📞 ${esc(l.phone)}`, `${se} ${esc(l.service)}`, LINE);
+  if (l.note) lines.push(`<blockquote>💬 ${esc(l.note)}</blockquote>`);
+  lines.push(`🌐 ${l.source === 'bot' ? 'Telegram bot' : 'Sayt'}  ·  ${FLAG[l.lang] || ''} ${esc(String(l.lang || 'uz').toUpperCase())}`);
   if (l.user && l.user.id) {
     const label = l.user.username ? '@' + esc(l.user.username) : esc(l.user.first_name || 'Mijoz');
-    lines.push(`🔗 <b>Telegram:</b> <a href="tg://user?id=${l.user.id}">${label}</a>`);
+    lines.push(`🔗 <a href="tg://user?id=${l.user.id}">${label}</a>`);
   }
-  lines.push(`🕒 ${tashkentTime()}`);
+  lines.push(`🕒 ${esc(l.time || tashkentTime())}`, '');
+  lines.push(l.status ? `🟢 <b>Holat:</b> Qabul qilindi — ${esc(l.status.by)} · ${esc(l.status.at)}` : '🟡 <b>Holat:</b> Yangi');
   return lines.join('\n');
 }
 
-async function notifyAdmins(l) {
+function leadKb(l, opts) {
+  const o = opts || {}, rows = [];
+  rows.push(l.status ? [{ text: '🔄 Qayta ochish', callback_data: 'reopen:' + l.id }] : [{ text: '✅ Qabul qilindi', callback_data: 'done:' + l.id }]);
+  if (o.copy !== false) rows.push([{ text: '📋 Raqamni nusxalash', copy_text: { text: l.phone } }]);
+  if (o.write !== false && l.user && l.user.id) rows.push([{ text: '💬 Mijozga yozish', url: 'tg://user?id=' + l.user.id }]);
+  return { inline_keyboard: rows };
+}
+
+// store (ixtiyoriy): bugungi raqam va zayavkani saqlaydi, shunda tugma bosilganda xabar yangilanadi
+async function notifyAdmins(l, store) {
   const ids = admins();
   if (!ids.length) throw new Error('ADMIN_CHAT_ID sozlanmagan');
-  const rows = [[{ text: '✅ Qabul qilindi', callback_data: 'done' }]];
-  const withWrite = l.user && l.user.id ? rows.concat([[{ text: '💬 Mijozga yozish', url: 'tg://user?id=' + l.user.id }]]) : rows;
+  l.id = l.id || newTicket(); l.time = l.time || tashkentTime(); l.msgs = {};
+  if (store) {
+    try { const k = 'd:' + dayKey(), cur = (await store.get(k)) || { n: 0 }; cur.n++; await store.set(k, cur); l.n = cur.n; } catch (e) { /* hisoblagich ixtiyoriy */ }
+  }
   const send = async chat_id => {
     const base = { chat_id, text: leadText(l), parse_mode: 'HTML', disable_web_page_preview: true };
-    try { return await call('sendMessage', Object.assign({ reply_markup: { inline_keyboard: withWrite } }, base)); }
-    catch (e) { return call('sendMessage', Object.assign({ reply_markup: { inline_keyboard: rows } }, base)); } // maxfiylik sababli "yozish" tugmasi o'tmasa
+    for (const o of [{}, { copy: false }, { copy: false, write: false }]) { // eski mijoz/maxfiylik cheklovlarida tugmalarni kamaytirib qayta uriniladi
+      try { const r = await call('sendMessage', Object.assign({ reply_markup: leadKb(l, o) }, base)); l.msgs[chat_id] = r && r.message_id; return r; } catch (e) { if (o.write === false) throw e; }
+    }
   };
   const res = await Promise.allSettled(ids.map(send));
   if (!res.some(r => r.status === 'fulfilled')) throw new Error(res[0].reason && res[0].reason.message || 'send failed');
+  if (store) { try { await store.set('l:' + l.id, l); } catch (e) { /* ixtiyoriy */ } }
+  return l;
 }
 
-module.exports = { SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, notifyAdmins, newTicket };
+module.exports = { SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, leadKb, notifyAdmins, newTicket, hm };

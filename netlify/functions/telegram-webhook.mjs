@@ -3,7 +3,7 @@
 import tg from './lib/tg.js';
 import X from './lib/bot-texts.js';
 import { openStore } from './lib/state.mjs';
-const { call, esc, admins, normPhone, clean, SERVICES, notifyAdmins, SITE, newTicket } = tg;
+const { call, esc, admins, normPhone, clean, SERVICES, notifyAdmins, SITE, newTicket, leadText, leadKb, hm } = tg;
 const LANGS = ['uz', 'ru', 'en'];
 const TTL = 3 * 60 * 60 * 1000;
 
@@ -70,7 +70,7 @@ async function finish(c, L, svcName, svcIdx, name, phone, from) {
   const service = uzIdx >= 0 ? SERVICES.uz[uzIdx] : svcName;
   const id = newTicket();
   try {
-    await notifyAdmins({ id, name, phone, service, lang: L, source: 'bot', user: { id: from.id, username: from.username, first_name: from.first_name } });
+    await notifyAdmins({ id, name, phone, service, lang: L, source: 'bot', user: { id: from.id, username: from.username, first_name: from.first_name } }, c.st);
   } catch (e) {
     console.error('notify:', e.message);
     return say(c.chat, X[L].fail, { reply_markup: menuKb(L) });
@@ -111,9 +111,26 @@ async function menuAction(c, L, k) {
 
 async function onCallback(q, c) {
   const data = q.data || '';
-  if (data === 'done') {
-    if (!admins().includes(String(c.chat))) return call('answerCallbackQuery', { callback_query_id: q.id, text: '⛔️' });
-    const who = q.from.username ? '@' + q.from.username : q.from.first_name;
+  const adm = () => admins().includes(String(c.chat));
+  const who = q.from.username ? '@' + q.from.username : q.from.first_name;
+  if (/^(done|reopen):/.test(data)) { // zayavka kartasini yangilash (barcha xodimlardagi nusxasi)
+    if (!adm()) return call('answerCallbackQuery', { callback_query_id: q.id, text: '⛔️' });
+    const [act, id] = data.split(':');
+    const lead = c.st && await c.st.get('l:' + id);
+    if (!lead) { // zaxira: ma'lumot topilmasa, faqat tugmani almashtiramiz
+      await call('editMessageReplyMarkup', { chat_id: c.chat, message_id: q.message.message_id, reply_markup: { inline_keyboard: [[{ text: act === 'done' ? `✅ Qabul qilindi — ${who}` : '🆕', callback_data: 'noop' }]] } }).catch(() => {});
+      return call('answerCallbackQuery', { callback_query_id: q.id, text: '✅' });
+    }
+    lead.status = act === 'done' ? { by: who, at: hm() } : null;
+    await c.st.set('l:' + id, lead);
+    const targets = Object.assign({}, lead.msgs, { [c.chat]: q.message.message_id });
+    await Promise.allSettled(Object.entries(targets).map(([chat_id, message_id]) =>
+      call('editMessageText', { chat_id, message_id, text: leadText(lead), parse_mode: 'HTML', disable_web_page_preview: true, reply_markup: leadKb(lead, { copy: true }) })
+        .catch(() => call('editMessageText', { chat_id, message_id, text: leadText(lead), parse_mode: 'HTML', disable_web_page_preview: true, reply_markup: leadKb(lead, { copy: false, write: false }) }))));
+    return call('answerCallbackQuery', { callback_query_id: q.id, text: act === 'done' ? '✅ Qabul qilindi' : '🔄 Qayta ochildi' });
+  }
+  if (data === 'done') { // eski xabarlardagi tugma
+    if (!adm()) return call('answerCallbackQuery', { callback_query_id: q.id, text: '⛔️' });
     await call('editMessageReplyMarkup', { chat_id: c.chat, message_id: q.message.message_id, reply_markup: { inline_keyboard: [[{ text: `✅ Qabul qilindi — ${who}`, callback_data: 'noop' }]] } });
     return call('answerCallbackQuery', { callback_query_id: q.id, text: '✅' });
   }

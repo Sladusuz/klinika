@@ -1,21 +1,23 @@
 // Saytdagi formadan zayavka qabul qilish: POST /.netlify/functions/lead
-const { notifyAdmins, normPhone, clean, SERVICES } = require('./lib/tg');
+import tg from './lib/tg.js';
+import { openStore } from './lib/state.mjs';
+const { notifyAdmins, normPhone, clean, SERVICES } = tg;
 
-const json = (statusCode, body) => ({ statusCode, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }, body: JSON.stringify(body) });
+const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
 
-exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') return json(405, { ok: false, error: 'method' });
+export default async (req) => {
+  if (req.method !== 'POST') return json(405, { ok: false, error: 'method' });
   if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.ADMIN_CHAT_ID) return json(503, { ok: false, error: 'not_configured' });
 
   // boshqa saytlardan kelgan so'rovlarni rad etish
-  const origin = event.headers.origin || event.headers.Origin;
+  const origin = req.headers.get('origin');
   if (origin) {
-    let host = ''; try { host = new URL(origin).host; } catch (e) {}
-    const own = event.headers.host || event.headers.Host;
+    let host = ''; try { host = new URL(origin).host; } catch (e) { /* noto'g'ri origin */ }
+    const own = req.headers.get('host') || new URL(req.url).host;
     if (host && host !== own && !/^localhost(:\d+)?$/.test(host)) return json(403, { ok: false, error: 'origin' });
   }
 
-  let b; try { b = JSON.parse(event.body || '{}'); } catch (e) { return json(400, { ok: false, error: 'json' }); }
+  let b; try { b = await req.json(); } catch (e) { return json(400, { ok: false, error: 'json' }); }
   if (b.website) return json(200, { ok: true }); // honeypot: botlar to'ldiradi, jim qabul qilamiz
 
   const name = clean(b.name, 60), note = clean(b.note, 500), phone = normPhone(b.phone);
@@ -26,7 +28,8 @@ exports.handler = async (event) => {
   const service = SERVICES.uz[idx] || clean(b.service, 60) || SERVICES.uz[0]; // xodimlar doim o'zbekcha ko'radi
 
   try {
-    await notifyAdmins({ name, phone, service, note, lang, source: 'site' });
+    const store = await openStore();
+    await notifyAdmins({ name, phone, service, note, lang, source: 'site' }, store);
     return json(200, { ok: true });
   } catch (e) {
     console.error('lead error:', e.message);
