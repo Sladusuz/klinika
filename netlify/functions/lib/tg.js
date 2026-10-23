@@ -35,9 +35,11 @@ function tashkentTime() {
 }
 
 // Klinika xodimlariga boradigan zayavka matni (doim o'zbekcha)
+const newTicket = () => 'OM-' + Date.now().toString(36).slice(-5).toUpperCase();
+
 function leadText(l) {
   const lines = [
-    '🆕 <b>Yangi zayavka</b>',
+    '🆕 <b>Yangi zayavka</b>' + (l.id ? ' · <code>' + esc(l.id) + '</code>' : ''),
     '',
     `👤 <b>Ism:</b> ${esc(l.name)}`,
     `📞 <b>Telefon:</b> ${esc(l.phone)}`,
@@ -56,10 +58,15 @@ function leadText(l) {
 async function notifyAdmins(l) {
   const ids = admins();
   if (!ids.length) throw new Error('ADMIN_CHAT_ID sozlanmagan');
-  const markup = { inline_keyboard: [[{ text: '✅ Qabul qilindi', callback_data: 'done' }]] };
-  const res = await Promise.allSettled(ids.map(chat_id =>
-    call('sendMessage', { chat_id, text: leadText(l), parse_mode: 'HTML', disable_web_page_preview: true, reply_markup: markup })));
+  const rows = [[{ text: '✅ Qabul qilindi', callback_data: 'done' }]];
+  const withWrite = l.user && l.user.id ? rows.concat([[{ text: '💬 Mijozga yozish', url: 'tg://user?id=' + l.user.id }]]) : rows;
+  const send = async chat_id => {
+    const base = { chat_id, text: leadText(l), parse_mode: 'HTML', disable_web_page_preview: true };
+    try { return await call('sendMessage', Object.assign({ reply_markup: { inline_keyboard: withWrite } }, base)); }
+    catch (e) { return call('sendMessage', Object.assign({ reply_markup: { inline_keyboard: rows } }, base)); } // maxfiylik sababli "yozish" tugmasi o'tmasa
+  };
+  const res = await Promise.allSettled(ids.map(send));
   if (!res.some(r => r.status === 'fulfilled')) throw new Error(res[0].reason && res[0].reason.message || 'send failed');
 }
 
-module.exports = { SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, notifyAdmins };
+module.exports = { SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, notifyAdmins, newTicket };

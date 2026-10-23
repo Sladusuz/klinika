@@ -25,11 +25,12 @@ exports.handler = async (event) => {
     return 'ok';
   });
   await step('commands', async () => {
-    await call('setMyCommands', { commands: [{ command: 'start', description: 'Boshlash / Zayavka qoldirish' }, { command: 'lang', description: 'Tilni o\'zgartirish' }, { command: 'id', description: 'Chat ID' }] });
-    await call('setMyCommands', { language_code: 'ru', commands: [{ command: 'start', description: 'Начать / Оставить заявку' }, { command: 'lang', description: 'Сменить язык' }, { command: 'id', description: 'Chat ID' }] });
-    await call('setMyCommands', { language_code: 'en', commands: [{ command: 'start', description: 'Start / Book appointment' }, { command: 'lang', description: 'Change language' }, { command: 'id', description: 'Chat ID' }] });
+    await call('setMyCommands', { commands: [{ command: 'start', description: 'Boshlash / Zayavka qoldirish' }, { command: 'profile', description: 'Profil' }, { command: 'lang', description: 'Tilni o\'zgartirish' }, { command: 'id', description: 'Chat ID' }] });
+    await call('setMyCommands', { language_code: 'ru', commands: [{ command: 'start', description: 'Начать / Оставить заявку' }, { command: 'profile', description: 'Профиль' }, { command: 'lang', description: 'Сменить язык' }, { command: 'id', description: 'Chat ID' }] });
+    await call('setMyCommands', { language_code: 'en', commands: [{ command: 'start', description: 'Start / Book appointment' }, { command: 'profile', description: 'Profile' }, { command: 'lang', description: 'Change language' }, { command: 'id', description: 'Chat ID' }] });
     return 'ok';
   });
+  await step('menuButton', () => call('setChatMenuButton', { menu_button: { type: 'web_app', text: '🌐 Sayt', web_app: { url: process.env.SITE_URL || `https://${host}` } } }));
   await step('me', async () => { const m = await call('getMe'); return '@' + m.username; });
   const info = await call('getWebhookInfo').catch(() => ({}));
   const failed = Object.values(res).some(v => String(v).startsWith('XATO'));
