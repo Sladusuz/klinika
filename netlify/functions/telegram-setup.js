@@ -32,6 +32,8 @@ exports.handler = async (event) => {
   });
   await step('me', async () => { const m = await call('getMe'); return '@' + m.username; });
   const info = await call('getWebhookInfo').catch(() => ({}));
-  return out(200, { ok: true, webhookUrl: url, result: res, adminChatConfigured: admins().length > 0, pendingErrors: info.last_error_message || null,
-    next: admins().length ? 'Tayyor! Botga /start yuboring va sayt formasini sinab ko\'ring.' : 'ADMIN_CHAT_ID hali yo\'q: botga /id yuboring, kelgan raqamni Netlify muhit o\'zgaruvchisiga yozing.' });
+  const failed = Object.values(res).some(v => String(v).startsWith('XATO'));
+  const badToken = String(res.me || '').includes('Not Found') || String(res.me || '').includes('Unauthorized');
+  return out(failed ? 500 : 200, { ok: !failed, webhookUrl: url, result: res, adminChatConfigured: admins().length > 0, pendingErrors: info.last_error_message || null,
+    next: badToken ? "TELEGRAM_BOT_TOKEN noto'g'ri: Netlify'da haqiqiy token yozilganini tekshiring (BotFather bergan '123456:ABC...' ko'rinishidagi qator, bo'sh joysiz), saqlang va qayta deploy qiling." : admins().length ? 'Tayyor! Botga /start yuboring va sayt formasini sinab ko\'ring.' : 'ADMIN_CHAT_ID hali yo\'q: botga /id yuboring, kelgan raqamni Netlify muhit o\'zgaruvchisiga yozing.' });
 };
