@@ -69,9 +69,9 @@ function leadKb(l, opts) {
 async function notifyAdmins(l, store) {
   const ids = admins();
   if (!ids.length) throw new Error('ADMIN_CHAT_ID sozlanmagan');
-  l.id = l.id || newTicket(); l.time = l.time || tashkentTime(); l.msgs = {};
-  if (store) {
-    try { const k = 'd:' + dayKey(), cur = (await store.get(k)) || { n: 0 }; cur.n++; await store.set(k, cur); l.n = cur.n; } catch (e) { /* hisoblagich ixtiyoriy */ }
+  l.id = l.id || newTicket(); l.time = l.time || tashkentTime(); l.msgs = {}; l.day = dayKey(); l.ts = Date.now();
+  if (store) { // kunlik indeks: hisobot shundan olinadi
+    try { const k = 'd:' + l.day, cur = (await store.get(k)) || { n: 0, ids: [] }; cur.n++; (cur.ids = cur.ids || []).push(l.id); await store.set(k, cur); l.n = cur.n; } catch (e) { /* hisoblagich ixtiyoriy */ }
   }
   const send = async chat_id => {
     const base = { chat_id, text: leadText(l), parse_mode: 'HTML', disable_web_page_preview: true };
@@ -85,4 +85,14 @@ async function notifyAdmins(l, store) {
   return l;
 }
 
-module.exports = { SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, leadKb, notifyAdmins, newTicket, hm };
+async function sendDoc(chat_id, filename, content, caption) {
+  const fd = new FormData();
+  fd.append('chat_id', String(chat_id)); if (caption) { fd.append('caption', caption); fd.append('parse_mode', 'HTML'); }
+  fd.append('document', new Blob([content], { type: 'text/csv' }), filename);
+  const r = await fetch(`https://api.telegram.org/bot${token()}/sendDocument`, { method: 'POST', body: fd });
+  const j = await r.json().catch(() => ({}));
+  if (!j.ok) throw new Error('sendDocument: ' + (j.description || r.status));
+  return j.result;
+}
+
+module.exports = { sendDoc, EMO, dayKey, tashkentTime, FLAG, SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, leadKb, notifyAdmins, newTicket, hm };

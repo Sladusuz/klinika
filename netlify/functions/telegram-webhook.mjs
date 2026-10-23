@@ -3,6 +3,8 @@
 import tg from './lib/tg.js';
 import X from './lib/bot-texts.js';
 import { openStore } from './lib/state.mjs';
+import { saveUser } from './lib/data.mjs';
+import { sendReport, sendUsersCsv } from './lib/report.mjs';
 const { call, esc, admins, normPhone, clean, SERVICES, notifyAdmins, SITE, newTicket, leadText, leadKb, hm } = tg;
 const LANGS = ['uz', 'ru', 'en'];
 const TTL = 3 * 60 * 60 * 1000;
@@ -17,7 +19,13 @@ const bar = n => '▰'.repeat(n) + '▱'.repeat(3 - n);
 const head = (L, n) => `<code>${bar(n)}</code>  ${n}/3 · <b>${X[L].step[n - 1]}</b>`;
 const EFFECT = '5046509860389126442'; // 🎉 konfetti
 const PICK = '🌍 Tilni tanlang · Выберите язык · Choose language';
-const say = (chat_id, text, extra) => call('sendMessage', Object.assign({ chat_id, text, parse_mode: 'HTML', disable_web_page_preview: true }, extra || {}));
+let GUARD = null; // joriy so'rov: bir xil xabarni qisqa vaqtda ikki marta yubormaslik uchun
+const hash = t => { let h = 5381; for (let i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) | 0; return (h >>> 0).toString(36); };
+const fresh = async (chat, sig) => !(GUARD && GUARD.st) || GUARD.st.once(`o:${chat}:${hash(sig)}:${Math.floor(Date.now() / 6000)}`);
+const say = async (chat_id, text, extra) => {
+  if (!(await fresh(chat_id, text))) return null;
+  return call('sendMessage', Object.assign({ chat_id, text, parse_mode: 'HTML', disable_web_page_preview: true }, extra || {}));
+};
 const sayFx = async (chat_id, text, extra) => { try { return await say(chat_id, text, Object.assign({ message_effect_id: EFFECT }, extra)); } catch (e) { return say(chat_id, text, extra); } };
 const svcKb = L => {
   const b = SERVICES[L].map((s, i) => ({ text: `${EMO[i]} ${s}`, callback_data: `s:${L}:${i}` }));
@@ -39,6 +47,7 @@ function clearStep(meta) { delete meta.step; delete meta.svc; delete meta.svcIdx
 async function sendWelcome(chat, L, from, kb) {
   const caption = `${X[L].hi}, <b>${esc((from && from.first_name) || '')}</b>! 👋\n\n${X[L].welcome}`;
   const extra = kb ? { reply_markup: kb } : {};
+  if (!(await fresh(chat, 'photo:' + L))) return null;
   try { await call('sendPhoto', Object.assign({ chat_id: chat, photo: `${SITE()}/assets/bot/welcome-${L}.jpg`, caption, parse_mode: 'HTML' }, extra)); }
   catch (e) { await say(chat, caption, extra); }
 }
@@ -76,6 +85,7 @@ async function finish(c, L, svcName, svcIdx, name, phone, from) {
     return say(c.chat, X[L].fail, { reply_markup: menuKb(L) });
   }
   clearStep(c.meta); if (c.st && !c.meta.reg) c.meta.reg = { name, phone }; await c.save();
+  if (c.st) await saveUser(c.st, from, L, c.meta.reg || { name, phone }, { id, service, time: new Date().toISOString() }).catch(e => console.error('saveUser:', e.message));
   return sayFx(c.chat, X[L].done.replace('{svc}', esc(svcName)).replace('{name}', esc(name)).replace('{phone}', esc(phone)) + `\n🎫 № <code>${id}</code>`, { reply_markup: menuKb(L) });
 }
 
@@ -129,6 +139,7 @@ async function onCallback(q, c) {
         .catch(() => call('editMessageText', { chat_id, message_id, text: leadText(lead), parse_mode: 'HTML', disable_web_page_preview: true, reply_markup: leadKb(lead, { copy: false, write: false }) }))));
     return call('answerCallbackQuery', { callback_query_id: q.id, text: act === 'done' ? '✅ Qabul qilindi' : '🔄 Qayta ochildi' });
   }
+  if (data === 'users') { await call('answerCallbackQuery', { callback_query_id: q.id }).catch(() => {}); return adm() && c.st ? sendUsersCsv(c.chat, c.st) : null; }
   if (data === 'done') { // eski xabarlardagi tugma
     if (!adm()) return call('answerCallbackQuery', { callback_query_id: q.id, text: '⛔️' });
     await call('editMessageReplyMarkup', { chat_id: c.chat, message_id: q.message.message_id, reply_markup: { inline_keyboard: [[{ text: `✅ Qabul qilindi — ${who}`, callback_data: 'noop' }]] } });
@@ -154,6 +165,10 @@ async function onCallback(q, c) {
 async function onMessage(m, c) {
   const text = (m.text || '').trim();
   if (/^\/id(@\w+)?$/i.test(text)) return say(c.chat, `🆔 Chat ID: <code>${c.chat}</code>`);
+  if (/^\/(stats|users)(@\w+)?$/i.test(text)) { // faqat xodimlar uchun
+    if (!admins().includes(String(c.chat)) || !c.st) return;
+    return /stats/i.test(text) ? sendReport(c.st, [c.chat], false) : sendUsersCsv(c.chat, c.st);
+  }
   if (m.chat.type !== 'private') return;
   const meta = c.meta, L = meta.lang || detectLang(m.from);
   const active = meta.step && meta.svc && meta.ts && Date.now() - meta.ts < TTL;
@@ -172,7 +187,8 @@ async function onMessage(m, c) {
     if (!phone) return say(c.chat, X[L].badPhone, { reply_markup: stepKb(L) });
     if (active && meta.step !== 'confirm') return finish(c, L, meta.svc, meta.svcIdx, meta.name || cname, phone, m.from);
     if (!c.st) return say(c.chat, X[L].hint, { reply_markup: menuKb(L) });
-    meta.reg = { name: cname, phone }; if (meta.step === 'confirm') { /* tasdiq kartasi yangilanadi */ await c.save(); return say(c.chat, confirmCard(L, meta), { reply_markup: confirmKb(L) }); }
+    meta.reg = { name: cname, phone }; await saveUser(c.st, m.from, L, meta.reg).catch(e => console.error('saveUser:', e.message));
+    if (meta.step === 'confirm') { /* tasdiq kartasi yangilanadi */ await c.save(); return say(c.chat, confirmCard(L, meta), { reply_markup: confirmKb(L) }); }
     clearStep(meta); await c.save();
     return sayFx(c.chat, X[L].regDone.replace('{name}', esc(cname)), { reply_markup: menuKb(L) });
   }
@@ -215,18 +231,30 @@ export default async (req) => {
   const sec = process.env.TELEGRAM_WEBHOOK_SECRET;
   if (sec && (req.headers.get('x-telegram-bot-api-secret-token') || '') !== sec) return R('unauthorized', 401);
   let u; try { u = await req.json(); } catch (e) { return R('bad json', 400); }
+  const t0 = Date.now(); let st = null, outcome = 'ok';
   try {
     const chat = u.message ? u.message.chat.id : (u.callback_query && u.callback_query.message && u.callback_query.message.chat.id);
     if (!chat) return R('ok');
-    const st = await openStore();
-    let meta = (st && await st.get('c:' + chat)) || {};
-    if (st && u.update_id) { // Telegram qayta yuborgan xabarni takrorlamaymiz
-      if (meta.last && u.update_id <= meta.last) return R('dup');
-      meta.last = u.update_id; await st.set('c:' + chat, meta);
-    }
+    st = await openStore();
+    if (st && u.update_id && !(await st.once('uq:' + u.update_id))) { outcome = 'dup'; await logEvent(st, u, outcome, t0); return R('dup'); } // aynan shu update allaqachon qayta ishlangan
+    GUARD = { st };
+    const meta = (st && await st.get('c:' + chat)) || {};
     const c = { st, chat, meta, save: async () => { if (st) await st.set('c:' + chat, meta); } };
     if (u.callback_query) await onCallback(u.callback_query, c);
     else if (u.message) await onMessage(u.message, c);
-  } catch (e) { console.error('bot error:', e.message); }
+  } catch (e) { outcome = 'error: ' + e.message; console.error('bot error:', e.message); }
+  finally { GUARD = null; }
+  await logEvent(st, u, outcome, t0);
   return R('ok');
 };
+
+// Diagnostika jurnali (oxirgi 60 hodisa): setup?key=...&log=1 orqali ko'rinadi
+async function logEvent(st, u, outcome, t0) {
+  if (!st) return;
+  try {
+    const msg = u.message || (u.callback_query && u.callback_query.message) || {};
+    const e = { t: new Date().toISOString().slice(11, 19), id: u.update_id, chat: msg.chat && msg.chat.id, what: u.callback_query ? 'cb:' + (u.callback_query.data || '') : (u.message && (u.message.text || (u.message.contact ? '[contact]' : '[other]'))), ms: Date.now() - t0, outcome };
+    const log = (await st.get('log')) || [];
+    log.push(e); await st.set('log', log.slice(-60));
+  } catch (err) { /* jurnal ixtiyoriy */ }
+}

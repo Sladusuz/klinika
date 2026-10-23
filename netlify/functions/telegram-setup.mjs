@@ -2,6 +2,7 @@
 // Webhook'ni ulaydi, bot nomi/tavsifi va buyruqlarni o'rnatadi.
 import tg from './lib/tg.js';
 import { openStore, why } from './lib/state.mjs';
+import { sendReport, cleanup } from './lib/report.mjs';
 const { call, admins } = tg;
 
 export default async (req) => {
@@ -11,6 +12,12 @@ export default async (req) => {
   const url0 = new URL(req.url);
   if (url0.searchParams.get('key') !== secret) return out(401, { ok: false, error: 'key noto\'g\'ri' });
 
+  const q = url0.searchParams;
+  if (q.get('log') || q.get('report')) { // diagnostika: oxirgi hodisalar yoki hisobotni hozir yuborish
+    const st0 = await openStore(); if (!st0) return out(500, { ok: false, error: 'xotira yo\'q: ' + why() });
+    if (q.get('report')) { const r = await sendReport(st0, null, true); return out(200, { ok: true, sent: true, leads: r.leads.length, users: r.users.length }); }
+    return out(200, { ok: true, log: (await st0.get('log')) || [] });
+  }
   const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || url0.host;
   const url = `https://${host}/.netlify/functions/telegram-webhook`;
   const res = {};
@@ -32,6 +39,10 @@ export default async (req) => {
     await call('setMyCommands', { language_code: 'ru', commands: [{ command: 'start', description: 'Начать / Оставить заявку' }, { command: 'profile', description: 'Профиль' }, { command: 'lang', description: 'Сменить язык' }, { command: 'id', description: 'Chat ID' }] });
     await call('setMyCommands', { language_code: 'en', commands: [{ command: 'start', description: 'Start / Book appointment' }, { command: 'profile', description: 'Profile' }, { command: 'lang', description: 'Change language' }, { command: 'id', description: 'Chat ID' }] });
     return 'ok';
+  });
+  await step('adminCommands', async () => {
+    for (const chat_id of admins()) await call('setMyCommands', { scope: { type: 'chat', chat_id: Number(chat_id) }, commands: [{ command: 'stats', description: '📊 Bugungi hisobot' }, { command: 'users', description: '👥 Ro\'yxatdan o\'tganlar (CSV)' }, { command: 'start', description: 'Menyu' }, { command: 'profile', description: 'Profil' }, { command: 'id', description: 'Chat ID' }] });
+    return admins().length ? 'ok' : 'admin yo\'q';
   });
   await step('menuButton', () => call('setChatMenuButton', { menu_button: { type: 'web_app', text: '🌐 Sayt', web_app: { url: process.env.SITE_URL || `https://${host}` } } }));
   await step('store', async () => {
