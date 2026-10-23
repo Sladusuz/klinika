@@ -240,6 +240,8 @@ export default async (req) => {
     GUARD = { st };
     const meta = (st && await st.get('c:' + chat)) || {};
     const c = { st, chat, meta, save: async () => { if (st) await st.set('c:' + chat, meta); } };
+    const who = (u.message && u.message.from) || (u.callback_query && u.callback_query.from);
+    if (st && meta.reg && who && !(await st.get('usr:' + who.id))) await saveUser(st, who, meta.lang, meta.reg).catch(() => {}); // eski ro'yxatdan o'tganlarni yangi bazaga ko'chirish
     if (u.callback_query) await onCallback(u.callback_query, c);
     else if (u.message) await onMessage(u.message, c);
   } catch (e) { outcome = 'error: ' + e.message; console.error('bot error:', e.message); }
