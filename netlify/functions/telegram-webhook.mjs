@@ -141,7 +141,7 @@ const BC_WAIT = "📢 <b>Hammaga xabar</b>\n\nEndi yuboriladigan xabarni shu yer
 async function adminFlow(m, c, text) {
   if (!c.st || !isAdmin(c) || m.chat.type !== 'private') return false;
   const meta = c.meta;
-  if (/^\/panel(@\w+)?$/i.test(text)) { await say(c.chat, '⚙️ <b>Boshqaruv paneli</b>\nZayavkalar, mijozlar, statistika va xabar yuborish — bitta joyda.', { reply_markup: { inline_keyboard: [[panelBtn()]] } }); return true; }
+  if (/^\/panel(@\w+)?$/i.test(text)) { if (!isEnvAdmin(c.chat)) { await say(c.chat, '⛔️ Boshqaruv paneli faqat asosiy admin uchun.'); return true; } await say(c.chat, '⚙️ <b>Boshqaruv paneli</b>\nZayavkalar, mijozlar, statistika va xabar yuborish — bitta joyda.', { reply_markup: { inline_keyboard: [[panelBtn()]] } }); return true; }
   if (/^\/(send|broadcast)(@\w+)?$/i.test(text)) {
     meta.bc = { state: 'wait', ts: Date.now() }; await c.save();
     await say(c.chat, BC_WAIT, { reply_markup: { inline_keyboard: [[{ text: '❌ Bekor', callback_data: 'bc:x' }]] } }); return true;
@@ -154,7 +154,7 @@ async function adminFlow(m, c, text) {
   if (mt) {
     const added = await addAdmin(c.st, mt[1]);
     await say(c.chat, added ? `✅ <code>${mt[1]}</code> admin qilindi.` : `ℹ️ <code>${mt[1]}</code> allaqachon admin.`);
-    if (added) { await setAdminMenu(mt[1], true); call('sendMessage', { chat_id: mt[1], parse_mode: 'HTML', text: "👮 Siz <b>Orlent Medical</b> botida admin etib tayinlandingiz.\n\nPastdagi <b>⚙️ Panel</b> tugmasi orqali boshqaruv panelini oching.\nBuyruqlar: /panel · /stats · /users · /send · /admins" }).catch(() => {}); }
+    if (added) { call('sendMessage', { chat_id: mt[1], parse_mode: 'HTML', text: "👮 Siz <b>Orlent Medical</b> botida admin etib tayinlandingiz.\n\nSizga yangi zayavkalar, kunlik hisobot va /stats, /users, /send buyruqlari ochiq.\n<i>Boshqaruv paneli faqat asosiy admin uchun.</i>" }).catch(() => {}); }
     return true;
   }
   mt = text.match(/^\/rmadmin(?:@\w+)?\s+(\d{3,15})$/i);
@@ -213,7 +213,7 @@ async function onCallback(q, c) {
       await call('editMessageReplyMarkup', { chat_id: c.chat, message_id: q.message.message_id, reply_markup: { inline_keyboard: [[{ text: act === 'done' ? `✅ Qabul qilindi — ${who}` : '🆕', callback_data: 'noop' }]] } }).catch(() => {});
       return call('answerCallbackQuery', { callback_query_id: q.id, text: '✅' });
     }
-    lead.status = act === 'done' ? { by: who, at: hm() } : null;
+    lead.status = act === 'done' ? { by: who, at: hm(), ts: Date.now() } : null;
     await c.st.set('l:' + id, lead);
     const targets = Object.assign({}, lead.msgs, { [c.chat]: q.message.message_id });
     await Promise.allSettled(Object.entries(targets).map(([chat_id, message_id]) =>

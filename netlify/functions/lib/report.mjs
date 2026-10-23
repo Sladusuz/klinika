@@ -1,6 +1,7 @@
 // Kunlik hisobot va foydalanuvchilar ro'yxati (CSV)
 import tg from './tg.js';
 import { allUsers, usersCsv } from './data.mjs';
+import { allLeads } from './leads.mjs';
 const { call, esc, admins, SERVICES, EMO, dayKey, sendDoc } = tg;
 const LINE = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬';
 const plural = (n, w) => `${n} ${w}`;
@@ -66,4 +67,20 @@ export async function cleanup(st) { // takrorlanishdan himoya kalitlari bir kund
   let n = 0;
   for (const p of ['uq:', 'o:']) for (const k of await st.list(p)) { await st.del(k); n++; }
   return n;
+}
+
+const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+export async function sendLeadsCsv(chat, st) { // butun zayavkalar tarixi (Excel uchun BOM bilan)
+  const leads = await allLeads(st);
+  if (!leads.length) return call('sendMessage', { chat_id: chat, text: '📋 Hali zayavka yo\'q.' });
+  const head = ['Ariza №', 'Sana va vaqt', 'Ism', 'Telefon', 'Xizmat', 'Izoh', 'Manba', 'Til', 'Holat', 'Kim qabul qildi', 'Javob vaqti (daqiqa)', 'Telegram'];
+  const rows = leads.map(l => [l.id, l.time, l.name, l.phone, l.service, l.note || '', l.source === 'bot' ? 'Bot' : 'Sayt', (l.lang || '').toUpperCase(), l.status ? 'Qabul qilingan' : 'Yangi', l.status ? l.status.by + ' ' + l.status.at : '', l.status && l.status.ts && l.ts ? Math.round((l.status.ts - l.ts) / 60000) : '', l.user && l.user.username ? '@' + l.user.username : ''].map(q).join(','));
+  return sendDoc(chat, `orlent-zayavkalar-${dayKey()}.csv`, '\uFEFF' + [head.map(q).join(','), ...rows].join('\r\n'), `📋 <b>Zayavkalar:</b> ${leads.length} ta`);
+}
+
+export async function sendBackup(chat, st) { // hamma ma'lumotning to'liq zaxira nusxasi (JSON)
+  const [users, leads] = [await allUsers(st), await allLeads(st)];
+  const admins2 = (await st.get('admins')) || [];
+  const data = { exportedAt: new Date().toISOString(), users, leads, admins: admins2 };
+  return sendDoc(chat, `orlent-zaxira-${dayKey()}.json`, JSON.stringify(data, null, 1), `💾 <b>Zaxira nusxa</b>\n👥 ${users.length} mijoz · 📋 ${leads.length} zayavka`, 'application/json');
 }

@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#050f22">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="panel.css?v=20261024a">
+<link rel="stylesheet" href="panel.css?v=20261024b">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -17,6 +17,10 @@
  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></symbol>
  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
  <symbol id="i-send" viewBox="0 0 24 24"><path d="M14.5 21.7a.5.5 0 0 0 .94-.02l6.5-19a.5.5 0 0 0-.64-.64l-19 6.5a.5.5 0 0 0-.02.94l7.93 3.18a2 2 0 0 1 1.11 1.11z"/><path d="m21.85 2.15-10.94 10.94"/></symbol>
+ <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></symbol>
+ <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+ <symbol id="i-back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></symbol>
  <symbol id="i-set" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
@@ -41,6 +45,7 @@
   <section class="tab on" id="tab-home" data-tab="home">
    <div class="hello"><h1 id="helloT">Salom 👋</h1><p id="helloD"></p></div>
    <div class="kpis" id="kpis"></div>
+   <div class="ins" id="insights"></div>
    <div class="card"><div class="card-h"><b>So'nggi 7 kun</b><span class="legend"><i class="dot l"></i>Zayavkalar <i class="dot r"></i>Yangi mijozlar</span></div><div id="chart" class="chart"></div></div>
    <div class="card" id="svcCard"><div class="card-h"><b>Bugun: xizmatlar</b></div><div id="svcBars"></div></div>
    <div class="sect"><b>So'nggi zayavkalar</b><button class="link" data-go="leads">Hammasi →</button></div>
@@ -48,14 +53,17 @@
   </section>
 
   <section class="tab" id="tab-leads" data-tab="leads">
+   <div class="row-h"><div><b id="leadsTitle">Zayavkalar</b><small id="leadsSub">Butun tarix</small></div><button class="btn sm" id="leadsCsv"><svg class="i"><use href="#i-file"/></svg>CSV</button></div>
    <div class="seg" id="leadSeg"><button data-f="all" class="on">Hammasi</button><button data-f="new">🟡 Yangi</button><button data-f="done">🟢 Qabul</button></div>
    <label class="search"><svg class="i"><use href="#i-search"/></svg><input id="leadQ" placeholder="Ism, telefon yoki xizmat…" autocomplete="off"></label>
    <div id="leadList" class="list"></div>
+   <button class="btn ghost more-btn" id="leadMore" hidden>Yana yuklash</button>
   </section>
 
   <section class="tab" id="tab-users" data-tab="users">
    <div class="row-h"><div><b id="usersCount">Mijozlar</b><small>Ro'yxatdan o'tganlar</small></div><button class="btn sm" id="csvBtn"><svg class="i"><use href="#i-file"/></svg>CSV</button></div>
    <label class="search"><svg class="i"><use href="#i-search"/></svg><input id="userQ" placeholder="Ism, telefon yoki @username…" autocomplete="off"></label>
+   <div class="chips" id="userSort"><button data-s="new" class="on">🆕 Yangi</button><button data-s="active">🔥 Faol</button><button data-s="blocked">🚫 Bloklagan</button></div>
    <div id="userList" class="list"></div>
   </section>
 
@@ -69,14 +77,19 @@
    <div class="preview"><small>Mijoz shunday ko'radi</small><div class="bubble" id="bcPrev">Xabar matni shu yerda ko'rinadi…</div><div class="bubble-btn" id="bcPrevBtn" hidden></div></div>
    <button class="btn big" id="bcSend"><svg class="i"><use href="#i-send"/></svg><span>Yuborish</span></button>
    <p class="hint" id="bcHint"></p>
+   <div class="sect"><b>Oxirgi yuborilganlar</b></div><div id="bcHist" class="list"></div>
   </section>
 
-  <section class="tab" id="tab-set" data-tab="set">
-   <div class="hello"><h1>⚙️ Sozlamalar</h1></div>
-   <div class="card"><div class="card-h"><b>Adminlar</b><small id="admCount"></small></div><div id="admList"></div>
-    <div class="add" id="admAdd" hidden><input id="admId" inputmode="numeric" placeholder="Telegram ID (masalan 123456789)"><button class="btn sm" id="admBtn">Qo'shish</button></div>
-    <p class="hint" id="admHint">Yangi admin ID sini bilish uchun u botga <b>/id</b> yuborsin.</p></div>
-   <div class="card actions"><button class="btn ghost" id="repBtn"><svg class="i"><use href="#i-chart"/></svg>Hisobotni botga yuborish</button><button class="btn ghost" id="csv2Btn"><svg class="i"><use href="#i-file"/></svg>Mijozlar CSV (botga)</button></div>
+  <section class="tab" id="tab-more" data-tab="more">
+   <div class="hello"><h1>Ko'proq</h1><p>Statistika, tarix, xavfsizlik va zaxira</p></div>
+   <div class="owner"><div class="owner-av">🔐</div><div><b id="ownerName">—</b><small>Panelga faqat siz kira olasiz</small></div><span class="pill done">Egasi</span></div>
+   <div class="menu">
+    <button data-page="stats"><span class="mi" style="--c:#4be08c">📈</span><div><b>Statistika</b><small>7/30/90 kunlik tahlil, grafiklar</small></div><svg class="i chev"><use href="#i-chev"/></svg></button>
+    <button data-page="history"><span class="mi" style="--c:#7db4ff">📜</span><div><b>Xabarlar tarixi</b><small>Yuborilgan ommaviy xabarlar natijasi</small></div><svg class="i chev"><use href="#i-chev"/></svg></button>
+    <button data-page="security"><span class="mi" style="--c:#ffb84d">🛡️</span><div><b>Xavfsizlik va jurnal</b><small>Kirish urinishlari, bot faoliyati</small></div><svg class="i chev"><use href="#i-chev"/></svg></button>
+    <button data-page="admins"><span class="mi" style="--c:#ff9ecb">👮</span><div><b>Adminlar</b><small>Zayavka va hisobot oluvchilar</small></div><svg class="i chev"><use href="#i-chev"/></svg></button>
+    <button data-page="backup"><span class="mi" style="--c:#b69cff">💾</span><div><b>Eksport va zaxira</b><small>CSV, JSON, kunlik hisobot</small></div><svg class="i chev"><use href="#i-chev"/></svg></button>
+   </div>
    <p class="foot">Orlent Medical · Admin panel</p>
   </section>
  </main>
@@ -86,13 +99,14 @@
   <button data-go="leads"><svg class="i"><use href="#i-list"/></svg><span>Zayavka</span><em id="badge" hidden></em></button>
   <button data-go="users"><svg class="i"><use href="#i-users"/></svg><span>Mijozlar</span></button>
   <button data-go="send"><svg class="i"><use href="#i-send"/></svg><span>Xabar</span></button>
-  <button data-go="set"><svg class="i"><use href="#i-set"/></svg><span>Sozlama</span></button>
+  <button data-go="more"><svg class="i"><use href="#i-more"/></svg><span>Ko'proq</span></button>
  </nav>
 
+ <div class="page" id="page" hidden><div class="page-top"><button class="icon-btn" id="pageBack" aria-label="Orqaga"><svg class="i"><use href="#i-back"/></svg></button><b id="pageTitle"></b><span style="width:40px"></span></div><div class="page-body" id="pageBody"></div></div>
  <div class="scrim" id="scrim" hidden></div>
  <div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div id="sheetBody"></div></div>
  <div class="toast" id="toast" role="status"></div>
 </div>
-<script src="panel.js?v=20261024a"></script>
+<script src="panel.js?v=20261024b"></script>
 </body>
 </html>

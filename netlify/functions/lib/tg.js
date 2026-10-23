@@ -82,7 +82,8 @@ async function notifyAdmins(l, store) {
   }
   const send = async chat_id => {
     const base = { chat_id, text: leadText(l), parse_mode: 'HTML', disable_web_page_preview: true };
-    for (const o of [{}, { copy: false }, { copy: false, write: false, panel: false }]) { // eski mijoz/maxfiylik cheklovlarida tugmalarni kamaytirib qayta uriniladi
+    const owner = envAdmins().includes(String(chat_id)); // boshqaruv paneli faqat asosiy admin uchun
+    for (const o of [{ panel: owner }, { copy: false, panel: owner }, { copy: false, write: false, panel: false }]) { // eski mijoz/maxfiylik cheklovlarida tugmalarni kamaytirib qayta uriniladi
       try { const r = await call('sendMessage', Object.assign({ reply_markup: leadKb(l, o) }, base)); l.msgs[chat_id] = r && r.message_id; return r; } catch (e) { if (o.write === false) throw e; }
     }
   };
@@ -99,10 +100,10 @@ async function setAdminMenu(chat_id, on) {
   try { await call('setChatMenuButton', { chat_id: Number(chat_id), menu_button: on ? { type: 'web_app', text: '⚙️ Panel', web_app: { url: panelUrl() } } : { type: 'default' } }); } catch (e) { /* chat yo'q yoki bot boshlanmagan */ }
 }
 
-async function sendDoc(chat_id, filename, content, caption) {
+async function sendDoc(chat_id, filename, content, caption, mime) {
   const fd = new FormData();
   fd.append('chat_id', String(chat_id)); if (caption) { fd.append('caption', caption); fd.append('parse_mode', 'HTML'); }
-  fd.append('document', new Blob([content], { type: 'text/csv' }), filename);
+  fd.append('document', new Blob([content], { type: mime || 'text/csv' }), filename);
   const r = await fetch(`https://api.telegram.org/bot${token()}/sendDocument`, { method: 'POST', body: fd });
   const j = await r.json().catch(() => ({}));
   if (!j.ok) throw new Error('sendDocument: ' + (j.description || r.status));
