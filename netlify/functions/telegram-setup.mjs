@@ -1,15 +1,17 @@
 // Bir martalik sozlash: https://<sayt>/.netlify/functions/telegram-setup?key=<TELEGRAM_WEBHOOK_SECRET>
 // Webhook'ni ulaydi, bot nomi/tavsifi va buyruqlarni o'rnatadi.
-const { call, admins } = require('./lib/tg');
-const { openStore, why } = require('./lib/state');
+import tg from './lib/tg.js';
+import { openStore, why } from './lib/state.mjs';
+const { call, admins } = tg;
 
-exports.handler = async (event) => {
+export default async (req) => {
   const secret = process.env.TELEGRAM_WEBHOOK_SECRET;
-  const out = (code, body) => ({ statusCode: code, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }, body: JSON.stringify(body, null, 2) });
+  const out = (code, body) => new Response(JSON.stringify(body, null, 2), { status: code, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
   if (!process.env.TELEGRAM_BOT_TOKEN || !secret) return out(500, { ok: false, error: 'TELEGRAM_BOT_TOKEN va TELEGRAM_WEBHOOK_SECRET sozlanmagan' });
-  if ((event.queryStringParameters || {}).key !== secret) return out(401, { ok: false, error: 'key noto\'g\'ri' });
+  const url0 = new URL(req.url);
+  if (url0.searchParams.get('key') !== secret) return out(401, { ok: false, error: 'key noto\'g\'ri' });
 
-  const host = event.headers['x-forwarded-host'] || event.headers.host;
+  const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || url0.host;
   const url = `https://${host}/.netlify/functions/telegram-webhook`;
   const res = {};
   const step = async (k, fn) => { try { res[k] = await fn(); } catch (e) { res[k] = 'XATO: ' + e.message; } };
@@ -33,7 +35,7 @@ exports.handler = async (event) => {
   });
   await step('menuButton', () => call('setChatMenuButton', { menu_button: { type: 'web_app', text: '🌐 Sayt', web_app: { url: process.env.SITE_URL || `https://${host}` } } }));
   await step('store', async () => {
-    const st = await openStore(event);
+    const st = await openStore();
     if (!st) throw new Error('xotira (Blobs) ulanmagan — ' + (why() || 'sabab noma\'lum'));
     await st.set('health', { t: Date.now() });
     const v = await st.get('health');

@@ -1,8 +1,9 @@
 // Telegram bot webhook: POST /.netlify/functions/telegram-webhook
 // Suhbat holati Netlify Blobs'da saqlanadi (c:<chatId>). Blobs bo'lmasa, savol matniga yashirilgan holat bilan ishlaydi.
-const { call, esc, admins, normPhone, clean, SERVICES, notifyAdmins, SITE, newTicket } = require('./lib/tg');
-const { openStore } = require('./lib/state');
-const X = require('./lib/bot-texts');
+import tg from './lib/tg.js';
+import X from './lib/bot-texts.js';
+import { openStore } from './lib/state.mjs';
+const { call, esc, admins, normPhone, clean, SERVICES, notifyAdmins, SITE, newTicket } = tg;
 const LANGS = ['uz', 'ru', 'en'];
 const TTL = 3 * 60 * 60 * 1000;
 
@@ -191,23 +192,24 @@ async function onMessage(m, c) {
   return say(c.chat, X[L].hint, { reply_markup: menuKb(L) });
 }
 
-exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') return { statusCode: 200, body: 'Orlent Medical bot' };
+export default async (req) => {
+  const R = (body, status) => new Response(body, { status: status || 200 });
+  if (req.method !== 'POST') return R('Orlent Medical bot');
   const sec = process.env.TELEGRAM_WEBHOOK_SECRET;
-  if (sec && (event.headers['x-telegram-bot-api-secret-token'] || '') !== sec) return { statusCode: 401, body: 'unauthorized' };
-  let u; try { u = JSON.parse(event.body || '{}'); } catch (e) { return { statusCode: 400, body: 'bad json' }; }
+  if (sec && (req.headers.get('x-telegram-bot-api-secret-token') || '') !== sec) return R('unauthorized', 401);
+  let u; try { u = await req.json(); } catch (e) { return R('bad json', 400); }
   try {
     const chat = u.message ? u.message.chat.id : (u.callback_query && u.callback_query.message && u.callback_query.message.chat.id);
-    if (!chat) return { statusCode: 200, body: 'ok' };
-    const st = await openStore(event);
+    if (!chat) return R('ok');
+    const st = await openStore();
     let meta = (st && await st.get('c:' + chat)) || {};
     if (st && u.update_id) { // Telegram qayta yuborgan xabarni takrorlamaymiz
-      if (meta.last && u.update_id <= meta.last) return { statusCode: 200, body: 'dup' };
+      if (meta.last && u.update_id <= meta.last) return R('dup');
       meta.last = u.update_id; await st.set('c:' + chat, meta);
     }
     const c = { st, chat, meta, save: async () => { if (st) await st.set('c:' + chat, meta); } };
     if (u.callback_query) await onCallback(u.callback_query, c);
     else if (u.message) await onMessage(u.message, c);
   } catch (e) { console.error('bot error:', e.message); }
-  return { statusCode: 200, body: 'ok' };
+  return R('ok');
 };
