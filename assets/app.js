@@ -191,10 +191,23 @@ addEventListener("scroll",sc,{passive:true});sc();
 var lb=$("#lb"),lbi=$("img",lb);
 document.addEventListener("click",function(e){var f=e.target.closest(".gal figure");if(f){lbi.src=$("img",f).src;lb.classList.add("on")}else if(lb.classList.contains("on"))lb.classList.remove("on")});
 addEventListener("keydown",function(e){if(e.key==="Escape"){lb.classList.remove("on");tog(false)}});
-$("#form").onsubmit=function(e){e.preventDefault();var f=e.target,msg="Orlent Medical\n"+f.name.value+"\n"+f.phone.value+"\n"+f.service.value+"\n"+(f.note.value||"-");
- var done=function(){$("#ok").style.display="block";f.reset()};
- if(C.botToken&&C.chatId){fetch("https://api.telegram.org/bot"+C.botToken+"/sendMessage",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({chat_id:C.chatId,text:msg})}).then(done)}
- else{try{navigator.clipboard.writeText(msg)}catch(x){}window.open("https://t.me/"+C.telegram,"_blank");done()}};
+$("#botbtn").href="https://t.me/"+(C.botUsername||C.telegram);
+(function(){
+ var form=$("#form"),sub=$("#fsub"),err=$("#err"),fbt=$("#fbt");
+ function showErr(html){err.innerHTML=html;err.style.display=html?"block":"none"}
+ form.onsubmit=function(e){e.preventDefault();showErr("");var t=T[lang];
+  var phone=form.phone.value,digits=phone.replace(/\D/g,"");
+  if(digits.length<9||digits.length>13){showErr(t.fbadp);form.phone.focus();return}
+  sub.disabled=true;sub.classList.add("loading");fbt.textContent=t.fsend;
+  fetch("/.netlify/functions/lead",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:form.name.value,phone:phone,service:form.service.value,serviceIdx:form.service.selectedIndex,note:form.note.value,lang:lang,website:form.website.value})})
+   .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok&&j.ok}})})
+   .catch(function(){return{ok:false}})
+   .then(function(res){
+    sub.disabled=false;sub.classList.remove("loading");fbt.textContent=t.fb;
+    if(res.ok){form.classList.add("sent");form.reset();if(window.gsap&&!reduce)gsap.from("#ok > *",{y:20,opacity:0,stagger:.12,duration:.6,ease:"power3.out"});setTimeout(function(){form.classList.remove("sent")},9000)}
+    else showErr(t.ferr+' <a href="tel:'+C.phone+'">'+C.phoneView+'</a> <a href="https://t.me/'+C.telegram+'" target="_blank" rel="noopener">Telegram</a>')});
+ }
+})();
 
 render();hideHero();build();
 var started=false;function go(){if(started)return;started=true;intro();if(G)ScrollTrigger.refresh()}

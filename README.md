@@ -12,10 +12,29 @@ LOR markazi va UTT diagnostikasi uchun statik sayt (HTML/CSS/JS, build kerak ema
 - `assets/content.js` — barcha matnlar (shifokorlar, narxlar, sharhlar, FAQ) uch tilda.
 - `assets/` — logotip va rasmlar.
 
-## Qabul formasi
-Hozir ariza matni nusxalanadi va Telegram chat (`@orlentmedical`) ochiladi.
-Avtomatik yuborish uchun `config.js`da `botToken` va `chatId` to'ldiriladi (token sayt kodida ochiq bo'lishini unutmang;
-xavfsizroq yo'l — Netlify Function orqali yuborish).
+## Telegram bot va zayavkalar (@orlentmedical_bot)
+Sayt formasi va botning o'zi zayavkalarni klinika xodimlarining Telegramiga yuboradi.
+Kod `netlify/functions/` ichida: `lead.js` (sayt formasi), `telegram-webhook.js` (bot), `telegram-setup.js` (bir martalik sozlash).
+
+**Bot tokeni hech qachon GitHub'ga yozilmaydi** — faqat Netlify muhit o'zgaruvchilarida saqlanadi.
+
+### Sozlash (bir marta)
+1. Netlify → Site configuration → **Environment variables** → quyidagilarni qo'shing:
+   - `TELEGRAM_BOT_TOKEN` — @BotFather bergan token
+   - `ADMIN_CHAT_ID` — zayavkalar boradigan chat ID (bir nechta bo'lsa vergul bilan: `123,456`; guruh ID si `-100...` bilan boshlanadi)
+   - `TELEGRAM_WEBHOOK_SECRET` — uzun tasodifiy qator (webhook himoyasi va sozlash kaliti)
+   - `SITE_URL` — (ixtiyoriy) masalan `https://orlentmedi.netlify.app`
+2. **Deploys → Trigger deploy → Clear cache and deploy site**.
+3. Brauzerda oching: `https://<sayt>/.netlify/functions/telegram-setup?key=<TELEGRAM_WEBHOOK_SECRET>` — webhook ulanadi, bot nomi/tavsifi/buyruqlari o'rnatiladi.
+4. Botga `/start` yuboring va saytdagi formani sinab ko'ring.
+
+Chat ID bilmasangiz: webhook ulangach botga (yoki guruhga qo'shilgan botga) `/id` yuboring.
+
+### Bot imkoniyatlari
+- 🇺🇿 / 🇷🇺 / 🇬🇧 tillar, doimiy menyu: Zayavka · Manzil · Aloqa · Sayt · Til
+- Zayavka: xizmat → ism → telefon (raqam tekshiriladi), mijozga tasdiq xabari
+- Xodimlarga: ism, telefon, xizmat, manba (Sayt/Bot), mijoz havolasi va **«✅ Qabul qilindi»** tugmasi
+- Spamdan himoya: yashirin maydon, boshqa saytlardan so'rov rad etiladi, webhook maxfiy kalit bilan
 
 ## Domen ulangach
 `index.html`dagi `og:image` ni to'liq havolaga o'zgartiring va `robots.txt`ga `Sitemap:` qo'shing.

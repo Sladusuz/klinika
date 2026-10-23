@@ -211,8 +211,8 @@ window.I18N={
   "fs": "Xizmat",
   "fm": "Izoh (ixtiyoriy)",
   "fb": "Yuborish",
-  "fnote": "Yuborganingizdan so'ng Telegram ochiladi va biz tez orada bog'lanamiz.",
-  "fok": "Rahmat! Arizangiz yuborildi.",
+  "fnote": "Ma'lumotlaringiz maxfiy saqlanadi va faqat siz bilan bog'lanish uchun ishlatiladi.",
+  "fok": "Rahmat! Arizangiz qabul qilindi — tez orada bog'lanamiz.",
   "svopt": [
    "LOR ko'rik",
    "Quloq",
@@ -317,7 +317,12 @@ window.I18N={
   "vd_on": "Ovozni yoqish",
   "vd_off": "Ovozni o'chirish",
   "sv_hint": "Surib ko'ring",
-  "nav_book": "Yozilish"
+  "nav_book": "Yozilish",
+  "fsend": "Yuborilmoqda…",
+  "ferr": "Yuborib bo'lmadi. Iltimos, qo'ng'iroq qiling yoki Telegram'da yozing.",
+  "fbadp": "Telefon raqamini to'g'ri kiriting.",
+  "fbot": "Telegram bot orqali yozilish",
+  "for": "yoki"
  },
  "ru": {
   "nav": [
@@ -530,8 +535,8 @@ window.I18N={
   "fs": "Услуга",
   "fm": "Комментарий (необязательно)",
   "fb": "Отправить",
-  "fnote": "После отправки откроется Telegram, и мы скоро свяжемся с вами.",
-  "fok": "Спасибо! Заявка отправлена.",
+  "fnote": "Ваши данные конфиденциальны и используются только для связи с вами.",
+  "fok": "Спасибо! Заявка принята — скоро свяжемся.",
   "svopt": [
    "ЛОР-осмотр",
    "Ухо",
@@ -636,7 +641,12 @@ window.I18N={
   "vd_on": "Включить звук",
   "vd_off": "Выключить звук",
   "sv_hint": "Листайте",
-  "nav_book": "Записаться"
+  "nav_book": "Записаться",
+  "fsend": "Отправляется…",
+  "ferr": "Не удалось отправить. Позвоните нам или напишите в Telegram.",
+  "fbadp": "Введите номер телефона правильно.",
+  "fbot": "Записаться через Telegram-бота",
+  "for": "или"
  },
  "en": {
   "nav": [
@@ -849,8 +859,8 @@ window.I18N={
   "fs": "Service",
   "fm": "Comment (optional)",
   "fb": "Send",
-  "fnote": "Telegram will open after sending and we'll contact you soon.",
-  "fok": "Thank you! Your request was sent.",
+  "fnote": "Your details are kept private and used only to contact you.",
+  "fok": "Thank you! Your request was received — we'll contact you soon.",
   "svopt": [
    "ENT exam",
    "Ear",
@@ -955,6 +965,11 @@ window.I18N={
   "vd_on": "Sound on",
   "vd_off": "Sound off",
   "sv_hint": "Scroll",
-  "nav_book": "Book"
+  "nav_book": "Book",
+  "fsend": "Sending…",
+  "ferr": "Couldn't send. Please call us or message on Telegram.",
+  "fbadp": "Please enter a valid phone number.",
+  "fbot": "Book via our Telegram bot",
+  "for": "or"
  }
 };

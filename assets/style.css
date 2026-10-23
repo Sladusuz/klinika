@@ -281,3 +281,20 @@ footer img{height:56px;background:#fff;border-radius:14px;padding:5px;margin-bot
  .mbar .btn{padding:12px 14px;min-height:50px}.aurora i{filter:blur(60px)}}
 @media(max-width:380px){:root{--hh:64px}.lang button{padding:6px 9px;min-width:34px}.btn{padding:14px 20px}.hero h1{font-size:36px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.gsap-on .reveal{opacity:1}.pl{display:none}}
+
+/* zayavka formasi holatlari */
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+.or{display:flex;align-items:center;gap:14px;margin:18px 0 14px;color:#8a98aa;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.or::before,.or::after{content:"";flex:1;height:1px;background:#e1eaf4}
+.btn-tg{width:100%;background:#229ed9;color:#fff;box-shadow:0 12px 30px rgba(34,158,217,.4)}.btn-tg:hover{background:#1b8bc2}
+.err{margin-top:14px;display:none;background:#fdecec;color:#b42318;padding:13px 16px;border-radius:14px;margin:0 0 14px;font-weight:600;font-size:14.5px;line-height:1.45}
+.err a{color:#b42318;text-decoration:underline;font-weight:800;margin-left:6px}
+#fsub[disabled]{opacity:.75;cursor:progress}
+#fsub.loading .i{animation:spin .8s linear infinite}
+form .ok{display:none;text-align:center;padding:26px 16px}
+form.sent>:not(.ok){display:none!important}
+form.sent .ok{display:grid;gap:14px;justify-items:center;margin:0;background:none;font-size:20px}
+.ok svg{width:84px;height:84px;fill:none;stroke:#1d7a29;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.ok svg circle{stroke:#cfeed3;stroke-dasharray:151;stroke-dashoffset:151;animation:okc .7s ease forwards}
+.ok svg path{stroke-dasharray:40;stroke-dashoffset:40;animation:okc .5s .5s ease forwards}
+@keyframes okc{to{stroke-dashoffset:0}}

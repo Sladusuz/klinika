@@ -11,6 +11,5 @@ window.CLINIC = {
     en: "43 Sayram St, Mirzo Ulugbek district, Tashkent. Landmark: Buyuk Ipak Yuli metro"
   },
   mapQuery: "Sayram 43, Mirzo Ulugbek tumani, Toshkent",   // xaritada qidiriladigan manzil
-    // Formani to'g'ridan-to'g'ri Telegramga yuborish uchun (ixtiyoriy):
-  botToken: "", chatId: ""
+  botUsername: "orlentmedical_bot"   // zayavkalar shu bot orqali keladi (token faqat Netlify'da saqlanadi)
 };
