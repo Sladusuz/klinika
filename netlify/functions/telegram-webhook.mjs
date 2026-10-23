@@ -92,7 +92,9 @@ async function finish(c, L, svcName, svcIdx, name, phone, from) {
   }
   clearStep(c.meta); if (c.st && !c.meta.reg) c.meta.reg = { name, phone }; await c.save();
   if (c.st) await saveUser(c.st, from, L, c.meta.reg || { name, phone }, { id, service, time: new Date().toISOString() }).catch(e => console.error('saveUser:', e.message));
-  return sayFx(c.chat, X[L].done.replace('{svc}', esc(svcName)).replace('{name}', esc(name)).replace('{phone}', esc(phone)) + `\n🎫 № <code>${id}</code>`, { reply_markup: menuKb(L) });
+  // admin o'zi zayavka qoldirsa, xodim kartasi o'sha chatda ham keladi: ma'lumotni qayta yozmaymiz, bitta qisqa tasdiq
+  const body = admins().includes(String(c.chat)) ? `${X[L].sentShort}\n🩺 ${esc(svcName)}` : X[L].done.replace('{svc}', esc(svcName));
+  return sayFx(c.chat, `${body}\n🎫 № <code>${id}</code>`, { reply_markup: menuKb(L) });
 }
 
 const confirmCard = (L, m) => `${X[L].confirm}\n\n🩺 ${esc(m.svc)}\n👤 ${esc(m.reg.name)}\n📞 ${esc(m.reg.phone)}`;
