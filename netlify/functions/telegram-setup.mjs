@@ -17,7 +17,7 @@ export default async (req) => {
   const step = async (k, fn) => { try { res[k] = await fn(); } catch (e) { res[k] = 'XATO: ' + e.message; } };
 
   await step('webhook', () => call('setWebhook', { url, secret_token: secret, allowed_updates: ['message', 'callback_query'], drop_pending_updates: true }));
-  await step('name', () => call('setMyName', { name: 'Orlent Medical' }));
+  await step('name', async () => { const n = await call('getMyName'); if (n && n.name === 'Orlent Medical') return 'allaqachon to\'g\'ri'; return call('setMyName', { name: 'Orlent Medical' }); });
   await step('description', async () => {
     await call('setMyDescription', { description: "Orlent Medical — LOR markazi va UTT diagnostikasi. Qabulga yozilish uchun /start ni bosing." });
     await call('setMyDescription', { language_code: 'ru', description: 'Orlent Medical — ЛОР-центр и УЗИ-диагностика. Нажмите /start, чтобы записаться на приём.' });
