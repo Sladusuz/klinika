@@ -31,7 +31,9 @@ export default async (req) => {
   try {
     const store = await openStore();
     await loadAdmins(store);
-    await notifyAdmins({ name, phone, service, note, lang, source: 'site' }, store);
+    tg.STATS.m = [];
+    const lead = await notifyAdmins({ name, phone, service, note, lang, source: 'site' }, store);
+    try { if (store) { const log = (await store.get('log')) || []; log.push({ t: new Date().toISOString().slice(11, 19), what: 'LEAD ' + service, outcome: lead.dup ? 'dup (ikkinchi nusxa yuborilmadi)' : 'ok', sent: tg.STATS.m.join(' ') }); await store.set('log', log.slice(-60)); } } catch (e) { /* jurnal ixtiyoriy */ }
     return json(200, { ok: true });
   } catch (e) {
     console.error('lead error:', e.message);

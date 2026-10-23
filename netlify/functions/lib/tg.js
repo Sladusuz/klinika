@@ -2,7 +2,9 @@
 const SITE = () => process.env.SITE_URL || 'https://orlentmedi.netlify.app';
 const token = () => process.env.TELEGRAM_BOT_TOKEN;
 
+const STATS = { m: [] }; // diagnostika: joriy hodisada yuborilgan Telegram so'rovlari
 async function call(method, payload) {
+  STATS.m.push(method + (payload && payload.chat_id ? '>' + String(payload.chat_id).slice(-4) : ''));
   const r = await fetch(`https://api.telegram.org/bot${token()}/${method}`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload || {})
   });
@@ -99,4 +101,4 @@ async function sendDoc(chat_id, filename, content, caption) {
   return j.result;
 }
 
-module.exports = { setExtraAdmins, envAdmins, sendDoc, EMO, dayKey, tashkentTime, FLAG, SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, leadKb, notifyAdmins, newTicket, hm };
+module.exports = { STATS, setExtraAdmins, envAdmins, sendDoc, EMO, dayKey, tashkentTime, FLAG, SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, leadKb, notifyAdmins, newTicket, hm };

@@ -312,7 +312,7 @@ export default async (req) => {
   const sec = process.env.TELEGRAM_WEBHOOK_SECRET;
   if (sec && (req.headers.get('x-telegram-bot-api-secret-token') || '') !== sec) return R('unauthorized', 401);
   let u; try { u = await req.json(); } catch (e) { return R('bad json', 400); }
-  const t0 = Date.now(); let st = null, outcome = 'ok';
+  const t0 = Date.now(); let st = null, outcome = 'ok'; tg.STATS.m = [];
   try {
     const chat = u.message ? u.message.chat.id : (u.callback_query && u.callback_query.message && u.callback_query.message.chat.id);
     if (!chat) return R('ok');
@@ -340,7 +340,7 @@ async function logEvent(st, u, outcome, t0) {
   if (!st) return;
   try {
     const msg = u.message || (u.callback_query && u.callback_query.message) || {};
-    const e = { t: new Date().toISOString().slice(11, 19), id: u.update_id, chat: msg.chat && msg.chat.id, what: u.callback_query ? 'cb:' + (u.callback_query.data || '') : (u.message && (u.message.text || (u.message.contact ? '[contact]' : '[other]'))), ms: Date.now() - t0, outcome };
+    const e = { t: new Date().toISOString().slice(11, 19), id: u.update_id, chat: msg.chat && msg.chat.id, what: u.callback_query ? 'cb:' + (u.callback_query.data || '') : (u.message && (u.message.text || (u.message.contact ? '[contact]' : '[other]'))), ms: Date.now() - t0, outcome, sent: tg.STATS.m.filter(x => !x.startsWith('answerCallbackQuery')).join(' ') };
     const log = (await st.get('log')) || [];
     log.push(e); await st.set('log', log.slice(-60));
   } catch (err) { /* jurnal ixtiyoriy */ }
