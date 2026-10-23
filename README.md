@@ -49,3 +49,5 @@ GSAP + ScrollTrigger + Lenis (`assets/vendor/`): yumshoq skroll, skroll bilan qo
 
 ## Video
 `assets/video/reklama.mp4` — sayt ichidagi telefon maketida ko'rinadigan reklama videosi (ko'rinish maydoniga kirganda o'zi boshlanadi, ovoz tugma bilan yoqiladi).
+
+<!-- deploy: Telegram bot environment variables applied -->
