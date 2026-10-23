@@ -259,7 +259,65 @@ window.I18N={
    "Tezkor qabul",
    "Aniq diagnostika",
    "Qulay narxlar"
-  ]
+  ],
+  "mq": [
+   "LOR",
+   "UTT",
+   "Diagnostika",
+   "Davolash",
+   "Profilaktika"
+  ],
+  "watch": "Videoni ko'rish",
+  "fd_e": "Simptom tanlash",
+  "fd_h": "Sizni nima bezovta qilyapti?",
+  "fd_p": "Bezovta qilayotgan joyni tanlang — odatiy belgilarni ko'rasiz va darhol qabulga yozilasiz.",
+  "fd_cta": "Shu bo'yicha yozilish",
+  "fd_note": "Bu ma'lumot tashxis emas. Aniq tashxisni faqat shifokor qo'yadi.",
+  "fd": [
+   [
+    "Quloq",
+    "Quloq muammolari",
+    [
+     "Quloq og'rig'i",
+     "Eshitish pasayishi",
+     "Quloqda shovqin",
+     "Quloq tiqilishi",
+     "Ajralma"
+    ],
+    "Otit, quloq tiqini, eshitish pasayishi va boshqa holatlarni ko'rik va diagnostika orqali aniqlaymiz."
+   ],
+   [
+    "Burun",
+    "Burun muammolari",
+    [
+     "Burun bitishi",
+     "Doimiy tumov",
+     "Hid sezmaslik",
+     "Horlash",
+     "Peshona og'rig'i"
+    ],
+    "Rinit, sinusit, allergiya va burun to'sig'i muammolarini aniqlab, davolash rejasini tuzamiz."
+   ],
+   [
+    "Tomoq",
+    "Tomoq muammolari",
+    [
+     "Tomoq og'rig'i",
+     "Yutinishda og'riq",
+     "Ovoz bo'g'ilishi",
+     "Bodomsimon bez",
+     "Yo'tal"
+    ],
+    "Angina, faringit, laringit va boshqa yallig'lanishlarni aniqlab, to'g'ri davo tanlaymiz."
+   ]
+  ],
+  "vd_e": "Video",
+  "vd_h": "Orlent Medical bilan tanishing",
+  "vd_p": "20 soniyada klinikamiz haqida: LOR va UTT bir joyda, aniq tashxis va qulay muhit.",
+  "vd_on": "Ovozni yoqish",
+  "vd_off": "Ovozni o'chirish",
+  "sv_hint": "Surib ko'ring",
+  "nav_book": "Yozilish"
  },
  "ru": {
   "nav": [
@@ -520,7 +578,65 @@ window.I18N={
    "Быстрый приём",
    "Точная диагностика",
    "Доступные цены"
-  ]
+  ],
+  "mq": [
+   "ЛОР",
+   "УЗИ",
+   "Диагностика",
+   "Лечение",
+   "Профилактика"
+  ],
+  "watch": "Смотреть видео",
+  "fd_e": "Выбор симптома",
+  "fd_h": "Что вас беспокоит?",
+  "fd_p": "Выберите, что беспокоит — увидите частые признаки и сразу запишетесь на приём.",
+  "fd_cta": "Записаться по этому поводу",
+  "fd_note": "Это не диагноз. Точный диагноз ставит только врач.",
+  "fd": [
+   [
+    "Ухо",
+    "Проблемы с ухом",
+    [
+     "Боль в ухе",
+     "Снижение слуха",
+     "Шум в ухе",
+     "Заложенность",
+     "Выделения"
+    ],
+    "Отит, серные пробки, снижение слуха и другие состояния определяем осмотром и диагностикой."
+   ],
+   [
+    "Нос",
+    "Проблемы с носом",
+    [
+     "Заложенность носа",
+     "Постоянный насморк",
+     "Нет обоняния",
+     "Храп",
+     "Боль в области лба"
+    ],
+    "Ринит, синусит, аллергия и искривление перегородки — определим причину и составим план лечения."
+   ],
+   [
+    "Горло",
+    "Проблемы с горлом",
+    [
+     "Боль в горле",
+     "Боль при глотании",
+     "Охриплость",
+     "Миндалины",
+     "Кашель"
+    ],
+    "Ангина, фарингит, ларингит и другие воспаления — выявим причину и подберём лечение."
+   ]
+  ],
+  "vd_e": "Видео",
+  "vd_h": "Познакомьтесь с Orlent Medical",
+  "vd_p": "За 20 секунд о клинике: ЛОР и УЗИ в одном месте, точный диагноз и комфортная обстановка.",
+  "vd_on": "Включить звук",
+  "vd_off": "Выключить звук",
+  "sv_hint": "Листайте",
+  "nav_book": "Записаться"
  },
  "en": {
   "nav": [
@@ -781,6 +897,64 @@ window.I18N={
    "Fast appointments",
    "Accurate diagnostics",
    "Fair prices"
-  ]
+  ],
+  "mq": [
+   "ENT",
+   "Ultrasound",
+   "Diagnostics",
+   "Treatment",
+   "Prevention"
+  ],
+  "watch": "Watch video",
+  "fd_e": "Symptom finder",
+  "fd_h": "What's bothering you?",
+  "fd_p": "Pick the area that bothers you — see common signs and book right away.",
+  "fd_cta": "Book for this",
+  "fd_note": "This is not a diagnosis. Only a doctor can diagnose.",
+  "fd": [
+   [
+    "Ear",
+    "Ear problems",
+    [
+     "Ear pain",
+     "Hearing loss",
+     "Ringing in the ear",
+     "Blocked ear",
+     "Discharge"
+    ],
+    "We identify otitis, earwax blockage, hearing loss and more through examination and diagnostics."
+   ],
+   [
+    "Nose",
+    "Nose problems",
+    [
+     "Blocked nose",
+     "Constant runny nose",
+     "Loss of smell",
+     "Snoring",
+     "Forehead pain"
+    ],
+    "Rhinitis, sinusitis, allergies and septum problems — we find the cause and plan treatment."
+   ],
+   [
+    "Throat",
+    "Throat problems",
+    [
+     "Sore throat",
+     "Painful swallowing",
+     "Hoarseness",
+     "Tonsils",
+     "Cough"
+    ],
+    "Tonsillitis, pharyngitis, laryngitis and other inflammations — we find the cause and choose treatment."
+   ]
+  ],
+  "vd_e": "Video",
+  "vd_h": "Meet Orlent Medical",
+  "vd_p": "20 seconds about us: ENT and ultrasound in one place, accurate diagnosis and a comfortable setting.",
+  "vd_on": "Sound on",
+  "vd_off": "Sound off",
+  "sv_hint": "Scroll",
+  "nav_book": "Book"
  }
 };

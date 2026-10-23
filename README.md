@@ -25,5 +25,8 @@ xavfsizroq yo'l — Netlify Function orqali yuborish).
 (muallif ko'rsatish shart emas). Klinikaning o'z rasmlari tayyor bo'lganda shu fayllarni xuddi shu nom bilan almashtiring
 yoki `index.html`dagi `src` ni o'zgartiring. Shifokorlar rasmi hozircha qo'yilmagan (namunaviy belgi turibdi).
 
-## Animatsiyalar
-GSAP (`assets/vendor/`) — skroll effektlari, 3D tilt, magnit tugmalar. Qurilmada "reduce motion" yoqilgan bo'lsa, animatsiyalar o'chadi.
+## Animatsiyalar va effektlar
+GSAP + ScrollTrigger + Lenis (`assets/vendor/`): yumshoq skroll, skroll bilan qotib turuvchi gorizontal xizmatlar va qadamlar, jonli to'lqin fon (canvas), 3D tilt, magnit tugmalar, kursor. Telefonda og'ir effektlar yengillashtiriladi, "reduce motion" yoqilgan bo'lsa animatsiyalar o'chadi.
+
+## Video
+`assets/video/reklama.mp4` — sayt ichidagi telefon maketida ko'rinadigan reklama videosi (ko'rinish maydoniga kirganda o'zi boshlanadi, ovoz tugma bilan yoqiladi).
