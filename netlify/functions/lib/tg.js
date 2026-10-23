@@ -67,6 +67,7 @@ function leadKb(l, opts) {
   rows.push(l.status ? [{ text: '🔄 Qayta ochish', callback_data: 'reopen:' + l.id }] : [{ text: '✅ Qabul qilindi', callback_data: 'done:' + l.id }]);
   if (o.copy !== false) rows.push([{ text: '📋 Raqamni nusxalash', copy_text: { text: l.phone } }]);
   if (o.write !== false && l.user && l.user.id) rows.push([{ text: '💬 Mijozga yozish', url: 'tg://user?id=' + l.user.id }]);
+  if (o.panel !== false) rows.push([panelBtn()]);
   return { inline_keyboard: rows };
 }
 
@@ -81,7 +82,7 @@ async function notifyAdmins(l, store) {
   }
   const send = async chat_id => {
     const base = { chat_id, text: leadText(l), parse_mode: 'HTML', disable_web_page_preview: true };
-    for (const o of [{}, { copy: false }, { copy: false, write: false }]) { // eski mijoz/maxfiylik cheklovlarida tugmalarni kamaytirib qayta uriniladi
+    for (const o of [{}, { copy: false }, { copy: false, write: false, panel: false }]) { // eski mijoz/maxfiylik cheklovlarida tugmalarni kamaytirib qayta uriniladi
       try { const r = await call('sendMessage', Object.assign({ reply_markup: leadKb(l, o) }, base)); l.msgs[chat_id] = r && r.message_id; return r; } catch (e) { if (o.write === false) throw e; }
     }
   };
@@ -89,6 +90,13 @@ async function notifyAdmins(l, store) {
   if (!res.some(r => r.status === 'fulfilled')) throw new Error(res[0].reason && res[0].reason.message || 'send failed');
   if (store) { try { await store.set('l:' + l.id, l); } catch (e) { /* ixtiyoriy */ } }
   return l;
+}
+
+const panelUrl = () => SITE() + '/admin/';
+const panelBtn = () => ({ text: '⚙️ Panel', web_app: { url: panelUrl() } });
+// admin chatida bot menyusi yonida «⚙️ Panel» tugmasi; admin bo'lmasa — oddiy menyuga qaytaradi
+async function setAdminMenu(chat_id, on) {
+  try { await call('setChatMenuButton', { chat_id: Number(chat_id), menu_button: on ? { type: 'web_app', text: '⚙️ Panel', web_app: { url: panelUrl() } } : { type: 'default' } }); } catch (e) { /* chat yo'q yoki bot boshlanmagan */ }
 }
 
 async function sendDoc(chat_id, filename, content, caption) {
@@ -101,4 +109,4 @@ async function sendDoc(chat_id, filename, content, caption) {
   return j.result;
 }
 
-module.exports = { STATS, setExtraAdmins, envAdmins, sendDoc, EMO, dayKey, tashkentTime, FLAG, SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, leadKb, notifyAdmins, newTicket, hm };
+module.exports = { panelUrl, panelBtn, setAdminMenu, STATS, setExtraAdmins, envAdmins, sendDoc, EMO, dayKey, tashkentTime, FLAG, SITE, call, esc, admins, normPhone, clean, SERVICES, leadText, leadKb, notifyAdmins, newTicket, hm };

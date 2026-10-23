@@ -7,7 +7,7 @@ import { saveUser } from './lib/data.mjs';
 import { sendReport, sendUsersCsv } from './lib/report.mjs';
 import { loadAdmins, addAdmin, removeAdmin, isEnvAdmin } from './lib/admins.mjs';
 import { recipients, runBroadcast } from './lib/broadcast.mjs';
-const { call, esc, admins, normPhone, clean, SERVICES, notifyAdmins, SITE, newTicket, leadText, leadKb, hm } = tg;
+const { call, esc, admins, normPhone, clean, SERVICES, notifyAdmins, SITE, newTicket, leadText, leadKb, hm, panelBtn, setAdminMenu } = tg;
 const LANGS = ['uz', 'ru', 'en'];
 const TTL = 3 * 60 * 60 * 1000;
 
@@ -141,6 +141,7 @@ const BC_WAIT = "📢 <b>Hammaga xabar</b>\n\nEndi yuboriladigan xabarni shu yer
 async function adminFlow(m, c, text) {
   if (!c.st || !isAdmin(c) || m.chat.type !== 'private') return false;
   const meta = c.meta;
+  if (/^\/panel(@\w+)?$/i.test(text)) { await say(c.chat, '⚙️ <b>Boshqaruv paneli</b>\nZayavkalar, mijozlar, statistika va xabar yuborish — bitta joyda.', { reply_markup: { inline_keyboard: [[panelBtn()]] } }); return true; }
   if (/^\/(send|broadcast)(@\w+)?$/i.test(text)) {
     meta.bc = { state: 'wait', ts: Date.now() }; await c.save();
     await say(c.chat, BC_WAIT, { reply_markup: { inline_keyboard: [[{ text: '❌ Bekor', callback_data: 'bc:x' }]] } }); return true;
@@ -153,12 +154,13 @@ async function adminFlow(m, c, text) {
   if (mt) {
     const added = await addAdmin(c.st, mt[1]);
     await say(c.chat, added ? `✅ <code>${mt[1]}</code> admin qilindi.` : `ℹ️ <code>${mt[1]}</code> allaqachon admin.`);
-    if (added) call('sendMessage', { chat_id: mt[1], parse_mode: 'HTML', text: "👮 Siz <b>Orlent Medical</b> botida admin etib tayinlandingiz.\n\nBuyruqlar: /stats · /users · /send · /admins" }).catch(() => {});
+    if (added) { await setAdminMenu(mt[1], true); call('sendMessage', { chat_id: mt[1], parse_mode: 'HTML', text: "👮 Siz <b>Orlent Medical</b> botida admin etib tayinlandingiz.\n\nPastdagi <b>⚙️ Panel</b> tugmasi orqali boshqaruv panelini oching.\nBuyruqlar: /panel · /stats · /users · /send · /admins" }).catch(() => {}); }
     return true;
   }
   mt = text.match(/^\/rmadmin(?:@\w+)?\s+(\d{3,15})$/i);
   if (mt) {
     const r = await removeAdmin(c.st, mt[1]);
+    if (r === true) await setAdminMenu(mt[1], false);
     await say(c.chat, r === 'env' ? "⛔️ Asosiy adminni o'chirib bo'lmaydi." : r ? `✅ <code>${mt[1]}</code> adminlikdan olindi.` : `ℹ️ <code>${mt[1]}</code> admin emas.`); return true;
   }
   if (/^\/(addadmin|rmadmin)/i.test(text)) { await say(c.chat, "Format: <code>/addadmin 123456789</code> yoki <code>/rmadmin 123456789</code>"); return true; }

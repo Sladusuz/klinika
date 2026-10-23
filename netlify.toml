@@ -10,7 +10,6 @@
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "SAMEORIGIN"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
@@ -24,3 +23,22 @@
   from = "/*"
   to = "/404.html"
   status = 404
+
+# Sayt boshqa saytlar ichida ochilmasin (clickjacking himoyasi)
+[[headers]]
+  for = "/"
+  [headers.values]
+    Content-Security-Policy = "frame-ancestors 'self'"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Content-Security-Policy = "frame-ancestors 'self'"
+
+# Admin panel (Telegram Mini App) faqat Telegram ichida ochilishi mumkin
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    Content-Security-Policy = "frame-ancestors https://web.telegram.org https://webk.telegram.org https://webz.telegram.org https://*.telegram.org"
+    Cache-Control = "no-store"
+    X-Robots-Tag = "noindex, nofollow"

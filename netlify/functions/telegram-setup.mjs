@@ -44,7 +44,8 @@ export default async (req) => {
     return 'ok';
   });
   await step('adminCommands', async () => {
-    for (const chat_id of admins()) await call('setMyCommands', { scope: { type: 'chat', chat_id: Number(chat_id) }, commands: [{ command: 'send', description: '📢 Hammaga xabar yuborish' }, { command: 'stats', description: '📊 Bugungi hisobot' }, { command: 'users', description: '👥 Ro\'yxatdan o\'tganlar (CSV)' }, { command: 'admins', description: '👮 Adminlar' }, { command: 'start', description: 'Menyu' }, { command: 'profile', description: 'Profil' }, { command: 'id', description: 'Chat ID' }] });
+    for (const chat_id of admins()) await call('setMyCommands', { scope: { type: 'chat', chat_id: Number(chat_id) }, commands: [{ command: 'panel', description: '⚙️ Boshqaruv paneli' }, { command: 'send', description: '📢 Hammaga xabar yuborish' }, { command: 'stats', description: '📊 Bugungi hisobot' }, { command: 'users', description: '👥 Ro\'yxatdan o\'tganlar (CSV)' }, { command: 'admins', description: '👮 Adminlar' }, { command: 'start', description: 'Menyu' }, { command: 'profile', description: 'Profil' }, { command: 'id', description: 'Chat ID' }] });
+    for (const chat_id of admins()) await tg.setAdminMenu(chat_id, true);
     return admins().length ? 'ok' : 'admin yo\'q';
   });
   await step('menuButton', () => call('setChatMenuButton', { menu_button: { type: 'web_app', text: '🌐 Sayt', web_app: { url: process.env.SITE_URL || `https://${host}` } } }));
