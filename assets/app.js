@@ -160,7 +160,7 @@ if("IntersectionObserver"in window)new IntersectionObserver(function(es){es.forE
 function hideHero(){
  if(!G)return;
  gsap.set(".hero .w>span",{yPercent:115});
- gsap.set([".hero .pill",".hero .lead",".hero .cta",".hmeta li",".blob",".glass",".badge-rot",".scrollhint"],{opacity:0});
+ gsap.set([".hero .pill",".hero .lead",".hero .cta",".hmeta li",".blob",".glass",".hname",".badge-rot",".scrollhint"],{opacity:0});
 }
 function intro(){
  var pl=$("#pl");
@@ -173,7 +173,7 @@ function intro(){
   .to(".hero .w>span",{yPercent:0,duration:1.25,stagger:.07,ease:"power4.out"},"-=.5")
   .fromTo(".hero .pill,.hero .lead,.hero .cta,.hmeta li,.scrollhint",{opacity:0,y:30},{opacity:1,y:0,duration:.9,stagger:.1,ease:"power3.out"},"-=.9")
   .fromTo(".blob",{opacity:0,scale:.8},{opacity:1,scale:1,duration:1.5,ease:"power3.out"},"-=1.2")
-  .fromTo(".glass,.badge-rot",{opacity:0,scale:.5},{opacity:1,scale:1,duration:.9,stagger:.15,ease:"back.out(1.7)"},"-=.8");
+  .fromTo(".glass,.badge-rot,.hname",{opacity:0,scale:.5},{opacity:1,scale:1,duration:.9,stagger:.15,ease:"back.out(1.7)"},"-=.8");
 }
 
 /* ---------- ui ---------- */

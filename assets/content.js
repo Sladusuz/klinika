@@ -356,7 +356,12 @@ window.I18N={
   "ferr": "Yuborib bo'lmadi. Iltimos, qo'ng'iroq qiling yoki Telegram'da yozing.",
   "fbadp": "Telefon raqamini to'g'ri kiriting.",
   "fbot": "Telegram bot orqali yozilish",
-  "for": "yoki"
+  "for": "yoki",
+  "hd_b1": "8 yillik tajriba",
+  "hd_b2": "15 000+ mamnun bemor",
+  "hd_n": "Dr. Nurshod Oripov",
+  "hd_r": "Endoskopik LOR xirurg · terapevt",
+  "hd_e": "Bolalar va kattalar uchun"
  },
  "ru": {
   "nav": [
@@ -714,7 +719,12 @@ window.I18N={
   "ferr": "Не удалось отправить. Позвоните нам или напишите в Telegram.",
   "fbadp": "Введите номер телефона правильно.",
   "fbot": "Записаться через Telegram-бота",
-  "for": "или"
+  "for": "или",
+  "hd_b1": "8 лет опыта",
+  "hd_b2": "15 000+ довольных пациентов",
+  "hd_n": "Д-р Нуршод Орипов",
+  "hd_r": "Эндоскопический ЛОР-хирург · терапевт",
+  "hd_e": "Для детей и взрослых"
  },
  "en": {
   "nav": [
@@ -1072,6 +1082,11 @@ window.I18N={
   "ferr": "Couldn't send. Please call us or message on Telegram.",
   "fbadp": "Please enter a valid phone number.",
   "fbot": "Book via our Telegram bot",
-  "for": "or"
+  "for": "or",
+  "hd_b1": "8 years of experience",
+  "hd_b2": "15,000+ happy patients",
+  "hd_n": "Dr. Nurshod Oripov",
+  "hd_r": "Endoscopic ENT surgeon · therapist",
+  "hd_e": "For children and adults"
  }
 };
