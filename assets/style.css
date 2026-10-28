@@ -307,3 +307,4 @@ form.sent .ok{display:grid;gap:14px;justify-items:center;margin:0;background:non
 .dstat{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;justify-content:center}.dstat div{flex:1 1 90px;border-radius:16px;background:rgba(75,224,140,.08);border:1px solid rgba(75,224,140,.22);padding:10px 8px}
 .dstat b{display:block;font:800 20px Manrope,sans-serif;color:var(--mint)}.dstat span{font-size:12px;opacity:.8}
 @media(max-width:640px){#dr{grid-template-columns:1fr}}
+.blob img{object-position:50% 28%;transform:scale(1.04)}
