@@ -25,7 +25,7 @@ window.I18N={
   "f2": "Zamonaviy uskuna",
   "sv_e": "Xizmatlar",
   "sv_h": "Nimalarda yordam beramiz",
-  "sv_p": "LOR kasalliklarining diagnostikasi va davolash hamda ultratovush tekshiruvi.",
+  "sv_p": "Butun oila uchun LOR, UZI, muolajalar va laboratoriya tahlillari — bir joyda.",
   "sv": [
    [
     "👂",
@@ -34,28 +34,38 @@ window.I18N={
    ],
    [
     "👃",
-    "Burun kasalliklari",
-    "Rinit, sinusit, burun bitishi, allergiya, burun to'sig'i egriligi."
+    "Burun va allergiya",
+    "Allergik rinit, mavsumiy va doimiy allergiya, burun bitishi, sinusit, burun to'sig'i egriligi."
    ],
    [
     "🫁",
     "Tomoq kasalliklari",
-    "Angina, faringit, laringit, bodomsimon bez yallig'lanishi, ovoz bo'g'ilishi."
-   ],
-   [
-    "🩺",
-    "LOR ko'rik va diagnostika",
-    "To'liq ko'rik, endoskopiya va davolash rejasi."
-   ],
-   [
-    "📡",
-    "UTT diagnostikasi",
-    "Ultratovush tekshiruvi — xavfsiz, og'riqsiz va tezkor."
+    "Angina, faringit, laringit, surunkali tonzillit, ovoz bo'g'ilishi, og'izdan hid kelishi."
    ],
    [
     "👶",
-    "Bolalar LOR",
-    "Bolalar uchun yumshoq va e'tiborli yondashuv."
+    "Adenoid va bolalar LOR",
+    "Bolalarda adenoid va LOR kasalliklari — yumshoq, e'tiborli yondashuv."
+   ],
+   [
+    "🔬",
+    "Endoskopik LOR",
+    "Endoskopik ko'rik va aniq tashxis, terapevtik va xirurgik davolash."
+   ],
+   [
+    "📡",
+    "UZI diagnostikasi",
+    "Ultratovush tekshiruvi — xavfsiz, og'riqsiz va tezkor."
+   ],
+   [
+    "🧪",
+    "Laboratoriya tahlillari",
+    "Kerakli tahlillar shu yerning o'zida — alohida joyga borish shart emas."
+   ],
+   [
+    "💉",
+    "Muolajalar va inyeksiyalar",
+    "Protseduralar, inyeksiyalar va kunduzgi statsionar xizmati."
    ]
   ],
   "pr_e": "Narxlar",
@@ -87,19 +97,40 @@ window.I18N={
   "dr_h": "Tajribali mutaxassislar",
   "dr": [
    [
-    "Dr. Ism Familiya",
-    "LOR shifokori",
-    "Tajriba: X yil"
+    "Oripov Nurshod Tohirovich",
+    "Endoskopik LOR xirurg · terapevt",
+    "SamDTU (bakalavr) · Yevropa tibbiyot universiteti ordinaturasi",
+    "assets/img/dr-nurshod.jpg",
+    [
+     [
+      "8 yil",
+      "tajriba"
+     ],
+     [
+      "15 000+",
+      "mamnun bemor"
+     ]
+    ]
    ],
    [
-    "Dr. Ism Familiya",
-    "UTT mutaxassisi",
-    "Tajriba: X yil"
-   ],
-   [
-    "Dr. Ism Familiya",
-    "Bolalar LOR shifokori",
-    "Tajriba: X yil"
+    "Muztorov Mirjalol Rizoqulovich",
+    "Endoskopik LOR xirurg · terapevt",
+    "Bolalar va kattalar uchun",
+    "assets/img/dr-mirjalol.jpg",
+    [
+     [
+      "10 yil",
+      "tajriba"
+     ],
+     [
+      "10 000+",
+      "mamnun bemor"
+     ],
+     [
+      "1000+",
+      "muvaffaqiyatli operatsiya"
+     ]
+    ]
    ]
   ],
   "wy_e": "Nega biz",
@@ -216,10 +247,13 @@ window.I18N={
   "svopt": [
    "LOR ko'rik",
    "Quloq",
-   "Burun",
+   "Burun va allergiya",
    "Tomoq",
-   "UTT tekshiruvi",
-   "Bolalar LOR"
+   "Bolalar LOR / adenoid",
+   "Endoskopik LOR",
+   "UZI tekshiruvi",
+   "Laboratoriya tahlili",
+   "Muolaja / inyeksiya"
   ],
   "title": "Orlent Medical — LOR markazi va UTT diagnostikasi",
   "desc": "Orlent Medical: quloq, burun, tomoq kasalliklari diagnostikasi va davolash, UTT tekshiruvi. Onlayn qabulga yoziling.",
@@ -237,7 +271,7 @@ window.I18N={
   "mb_book": "Yozilish",
   "hv_t": "LOR markazi",
   "menu": "Menyu",
-  "dr_ph": "Rasm qo'shiladi",
+  "dr_ph": "Bolalar va kattalar",
   "stats": [
    [
     "2",
@@ -349,7 +383,7 @@ window.I18N={
   "f2": "Современная техника",
   "sv_e": "Услуги",
   "sv_h": "С чем мы помогаем",
-  "sv_p": "Диагностика и лечение ЛОР-заболеваний, а также ультразвуковые исследования.",
+  "sv_p": "ЛОР, УЗИ, процедуры и лабораторные анализы для всей семьи — в одном месте.",
   "sv": [
    [
     "👂",
@@ -358,28 +392,38 @@ window.I18N={
    ],
    [
     "👃",
-    "Заболевания носа",
-    "Ринит, синусит, заложенность, аллергия, искривление перегородки."
+    "Нос и аллергия",
+    "Аллергический ринит, сезонная и круглогодичная аллергия, заложенность, синусит, искривление перегородки."
    ],
    [
     "🫁",
     "Заболевания горла",
-    "Ангина, фарингит, ларингит, воспаление миндалин, охриплость."
+    "Ангина, фарингит, ларингит, хронический тонзиллит, охриплость, неприятный запах изо рта."
    ],
    [
-    "🩺",
-    "ЛОР-осмотр и диагностика",
-    "Полный осмотр, эндоскопия и план лечения."
+    "👶",
+    "Аденоиды и детский ЛОР",
+    "Аденоиды и ЛОР-заболевания у детей — бережный и внимательный подход."
+   ],
+   [
+    "🔬",
+    "Эндоскопический ЛОР",
+    "Эндоскопический осмотр и точный диагноз, терапевтическое и хирургическое лечение."
    ],
    [
     "📡",
     "УЗИ-диагностика",
-    "Безопасно, безболезненно и быстро."
+    "Ультразвуковое исследование — безопасно, безболезненно и быстро."
    ],
    [
-    "👶",
-    "Детский ЛОР",
-    "Мягкий и внимательный подход к детям."
+    "🧪",
+    "Лабораторные анализы",
+    "Нужные анализы прямо в клинике — не нужно ехать в другое место."
+   ],
+   [
+    "💉",
+    "Процедуры и инъекции",
+    "Процедуры, инъекции и дневной стационар."
    ]
   ],
   "pr_e": "Цены",
@@ -411,19 +455,40 @@ window.I18N={
   "dr_h": "Опытные специалисты",
   "dr": [
    [
-    "Д-р Имя Фамилия",
-    "ЛОР-врач",
-    "Стаж: X лет"
+    "Орипов Нуршод Тохирович",
+    "Эндоскопический ЛОР-хирург · терапевт",
+    "СамГМУ (бакалавр) · ординатура Европейского медицинского университета",
+    "assets/img/dr-nurshod.jpg",
+    [
+     [
+      "8 лет",
+      "опыта"
+     ],
+     [
+      "15 000+",
+      "довольных пациентов"
+     ]
+    ]
    ],
    [
-    "Д-р Имя Фамилия",
-    "Специалист УЗИ",
-    "Стаж: X лет"
-   ],
-   [
-    "Д-р Имя Фамилия",
-    "Детский ЛОР-врач",
-    "Стаж: X лет"
+    "Музторов Миржалол Ризокулович",
+    "Эндоскопический ЛОР-хирург · терапевт",
+    "Для детей и взрослых",
+    "assets/img/dr-mirjalol.jpg",
+    [
+     [
+      "10 лет",
+      "опыта"
+     ],
+     [
+      "10 000+",
+      "довольных пациентов"
+     ],
+     [
+      "1000+",
+      "успешных операций"
+     ]
+    ]
    ]
   ],
   "wy_e": "Почему мы",
@@ -540,10 +605,13 @@ window.I18N={
   "svopt": [
    "ЛОР-осмотр",
    "Ухо",
-   "Нос",
+   "Нос и аллергия",
    "Горло",
+   "Детский ЛОР / аденоиды",
+   "Эндоскопический ЛОР",
    "УЗИ",
-   "Детский ЛОР"
+   "Лабораторные анализы",
+   "Процедуры / инъекции"
   ],
   "title": "Orlent Medical — ЛОР-центр и УЗИ-диагностика",
   "desc": "Orlent Medical: диагностика и лечение заболеваний уха, горла, носа, УЗИ-обследование. Запишитесь онлайн.",
@@ -561,7 +629,7 @@ window.I18N={
   "mb_book": "Записаться",
   "hv_t": "ЛОР-центр",
   "menu": "Меню",
-  "dr_ph": "Фото будет добавлено",
+  "dr_ph": "Дети и взрослые",
   "stats": [
    [
     "2",
@@ -673,37 +741,47 @@ window.I18N={
   "f2": "Modern equipment",
   "sv_e": "Services",
   "sv_h": "How we can help",
-  "sv_p": "Diagnosis and treatment of ENT conditions, plus ultrasound examinations.",
+  "sv_p": "ENT, ultrasound, procedures and lab tests for the whole family — in one place.",
   "sv": [
    [
     "👂",
     "Ear conditions",
-    "Otitis, ear pain, hearing loss, earwax blockage, tinnitus."
+    "Otitis, ear pain, hearing loss, earwax plug, ringing."
    ],
    [
     "👃",
-    "Nose conditions",
-    "Rhinitis, sinusitis, congestion, allergies, deviated septum."
+    "Nose & allergy",
+    "Allergic rhinitis, seasonal and year-round allergy, nasal blockage, sinusitis, deviated septum."
    ],
    [
     "🫁",
     "Throat conditions",
-    "Tonsillitis, pharyngitis, laryngitis, hoarseness."
-   ],
-   [
-    "🩺",
-    "ENT exam & diagnostics",
-    "Full examination, endoscopy and treatment plan."
-   ],
-   [
-    "📡",
-    "Ultrasound",
-    "Safe, painless and quick."
+    "Tonsillitis, pharyngitis, laryngitis, chronic tonsillitis, hoarseness, bad breath."
    ],
    [
     "👶",
-    "Pediatric ENT",
-    "A gentle, attentive approach for children."
+    "Adenoids & paediatric ENT",
+    "Adenoids and ENT conditions in children — a gentle, attentive approach."
+   ],
+   [
+    "🔬",
+    "Endoscopic ENT",
+    "Endoscopic examination and accurate diagnosis, medical and surgical treatment."
+   ],
+   [
+    "📡",
+    "Ultrasound diagnostics",
+    "Ultrasound — safe, painless and quick."
+   ],
+   [
+    "🧪",
+    "Laboratory tests",
+    "The tests you need on site — no trip to another place."
+   ],
+   [
+    "💉",
+    "Procedures & injections",
+    "Procedures, injections and day-care service."
    ]
   ],
   "pr_e": "Prices",
@@ -735,19 +813,40 @@ window.I18N={
   "dr_h": "Experienced specialists",
   "dr": [
    [
-    "Dr. First Last",
-    "ENT doctor",
-    "Experience: X years"
+    "Oripov Nurshod Tohirovich",
+    "Endoscopic ENT surgeon · therapist",
+    "SamSMU (bachelor) · residency at the European Medical University",
+    "assets/img/dr-nurshod.jpg",
+    [
+     [
+      "8 yrs",
+      "experience"
+     ],
+     [
+      "15,000+",
+      "happy patients"
+     ]
+    ]
    ],
    [
-    "Dr. First Last",
-    "Ultrasound specialist",
-    "Experience: X years"
-   ],
-   [
-    "Dr. First Last",
-    "Pediatric ENT",
-    "Experience: X years"
+    "Muztorov Mirjalol Rizoqulovich",
+    "Endoscopic ENT surgeon · therapist",
+    "For children and adults",
+    "assets/img/dr-mirjalol.jpg",
+    [
+     [
+      "10 yrs",
+      "experience"
+     ],
+     [
+      "10,000+",
+      "happy patients"
+     ],
+     [
+      "1000+",
+      "successful surgeries"
+     ]
+    ]
    ]
   ],
   "wy_e": "Why us",
@@ -862,12 +961,15 @@ window.I18N={
   "fnote": "Your details are kept private and used only to contact you.",
   "fok": "Thank you! Your request was received — we'll contact you soon.",
   "svopt": [
-   "ENT exam",
+   "ENT consultation",
    "Ear",
-   "Nose",
+   "Nose & allergy",
    "Throat",
+   "Paediatric ENT / adenoids",
+   "Endoscopic ENT",
    "Ultrasound",
-   "Pediatric ENT"
+   "Lab tests",
+   "Procedures / injections"
   ],
   "title": "Orlent Medical — ENT center & ultrasound diagnostics",
   "desc": "Orlent Medical: diagnosis and treatment of ear, nose and throat conditions, ultrasound exams. Book online.",
@@ -885,7 +987,7 @@ window.I18N={
   "mb_book": "Book",
   "hv_t": "ENT center",
   "menu": "Menu",
-  "dr_ph": "Photo coming soon",
+  "dr_ph": "Children & adults",
   "stats": [
    [
     "2",

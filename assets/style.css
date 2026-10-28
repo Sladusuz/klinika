@@ -298,3 +298,12 @@ form.sent .ok{display:grid;gap:14px;justify-items:center;margin:0;background:non
 .ok svg circle{stroke:#cfeed3;stroke-dasharray:151;stroke-dashoffset:151;animation:okc .7s ease forwards}
 .ok svg path{stroke-dasharray:40;stroke-dashoffset:40;animation:okc .5s .5s ease forwards}
 @keyframes okc{to{stroke-dashoffset:0}}
+
+#dr{grid-template-columns:repeat(2,minmax(0,1fr));max-width:880px;margin:0 auto}
+.doc .ph:has(img){aspect-ratio:1/1.08;display:block}.doc .ph:has(img)::before{display:none}
+.doc .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block;transition:transform .8s var(--ease)}.doc:hover .ph img{transform:scale(1.04)}
+.doc .ph:has(img)::after{content:"";position:absolute;inset:auto 0 0;height:38%;background:linear-gradient(transparent,rgba(6,22,40,.55));pointer-events:none}
+.doc .bd p{font-size:14px;opacity:.8;margin:0}
+.dstat{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;justify-content:center}.dstat div{flex:1 1 90px;border-radius:16px;background:rgba(75,224,140,.08);border:1px solid rgba(75,224,140,.22);padding:10px 8px}
+.dstat b{display:block;font:800 20px Manrope,sans-serif;color:var(--mint)}.dstat span{font-size:12px;opacity:.8}
+@media(max-width:640px){#dr{grid-template-columns:1fr}}

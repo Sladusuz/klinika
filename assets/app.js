@@ -5,7 +5,7 @@ if(!T[lang])lang="uz";
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches,fine=matchMedia("(hover:hover) and (pointer:fine)").matches;
 var G=!!(window.gsap&&window.ScrollTrigger)&&!reduce;
 var ic=function(n,c){return'<svg class="i'+(c?" "+c:"")+'" aria-hidden="true"><use href="#i-'+n+'"/></svg>'};
-var SV=["ear","nose","throat","steth","wave","baby"],WY=["target","shield","heart","zap"],CE=["file","award","shield"],HM=["zap","target","heart"],FDI=["ear","nose","throat"],PRI=["phone","cal","steth"];
+var SV=["ear","nose","throat","baby","steth","wave","file","zap"],WY=["target","shield","heart","zap"],CE=["file","award","shield"],HM=["zap","target","heart"],FDI=["ear","nose","throat"],PRI=["phone","cal","steth"];
 var ANCH=["#services","#doctors","#prices","#reviews","#faq","#contact"];
 if(G){gsap.registerPlugin(ScrollTrigger);document.documentElement.classList.add("gsap-on")}
 
@@ -37,10 +37,10 @@ function render(){
  $$(".fd-tab").forEach(function(b){b.onclick=function(){showFd(+b.dataset.i,true)}});
  showFd(fdi,false);
  h("#sv",t.sv,function(x,i){return'<article class="svc spot tilt"><span class="num">0'+(i+1)+'</span><div class="ico">'+ic(SV[i])+'</div><h3>'+x[1]+'</h3><p>'+x[2]+'</p><a class="go" href="#contact" data-svi="'+i+'">'+t.more+ic("up")+'</a></article>'});
- $$(".svc .go").forEach(function(a){a.addEventListener("click",function(){var i=+a.dataset.svi;$("#fs").selectedIndex=[1,2,3,0,4,5][i]})});
+ $$(".svc .go").forEach(function(a){a.addEventListener("click",function(){var i=+a.dataset.svi;$("#fs").selectedIndex=i+1})});
  h("#wy",t.wy,function(x,i){return'<article class="wi reveal"><div class="ico">'+ic(WY[i])+'</div><div><h3>'+x[1]+'</h3><p>'+x[2]+'</p></div><b>0'+(i+1)+'</b></article>'});
  h("#stats",t.stats,function(x){var n=/^\d+$/.test(x[0]);return'<div class="stat"><b'+(n?' data-count="'+x[0]+'"':'')+'>'+x[0]+'</b><span>'+x[1]+'</span></div>'});
- h("#dr",t.dr,function(x){return'<article class="card doc spot tilt reveal"><div class="ph">'+ic("user")+'<em>'+t.dr_ph+'</em></div><div class="bd"><h3>'+x[0]+'</h3><small>'+x[1]+'</small><p>'+x[2]+'</p></div></article>'});
+ h("#dr",t.dr,function(x){var ch=(x[4]||[]).map(function(c){return'<div><b>'+c[0]+'</b><span>'+c[1]+'</span></div>'}).join('');return'<article class="card doc spot tilt reveal"><div class="ph">'+(x[3]?'<img src="'+x[3]+'" alt="'+x[0]+'" loading="lazy" width="800" height="880">':ic("user"))+'<em>'+t.dr_ph+'</em></div><div class="bd"><h3>'+x[0]+'</h3><small>'+x[1]+'</small><p>'+x[2]+'</p>'+(ch?'<div class="dstat">'+ch+'</div>':'')+'</div></article>'});
  h("#ce",t.ce,function(x,i){return'<div class="card cert spot reveal"><div class="ico">'+ic(CE[i])+'</div><h3>'+x[1]+'</h3></div>'});
  h("#pr",t.pr,function(x){return'<div class="prow"><span>'+x[0]+'</span><em>'+x[1]+'</em></div>'});
  var rv=t.rv.concat(t.rv).concat(t.rv).concat(t.rv);
