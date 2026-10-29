@@ -42,7 +42,7 @@ const hm = () => new Intl.DateTimeFormat('ru-RU', { timeZone: 'Asia/Tashkent', h
 const dayKey = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tashkent' }).format(new Date());
 const newTicket = () => 'OM-' + Date.now().toString(36).slice(-5).toUpperCase();
 const EMO = ['🩺', '👂', '👃', '🗣', '📡', '👶'];
-const FLAG = { uz: '🇺🇿', ru: '🇷🇺', en: '🇬🇧' };
+const FLAG = { uz: '🇺🇿', ru: '🇷🇺', kk: '🇰🇿', en: '🇬🇧' };
 const LINE = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬';
 
 // Klinika xodimlariga boradigan zayavka kartasi (doim o'zbekcha)

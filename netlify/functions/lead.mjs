@@ -22,7 +22,7 @@ export default async (req) => {
   if (b.website) return json(200, { ok: true }); // honeypot: botlar to'ldiradi, jim qabul qilamiz
 
   const name = clean(b.name, 60), note = clean(b.note, 500), phone = normPhone(b.phone);
-  const lang = ['uz', 'ru', 'en'].includes(b.lang) ? b.lang : 'uz';
+  const lang = ['uz', 'ru', 'kk', 'en'].includes(b.lang) ? b.lang : 'uz';
   if (name.length < 2) return json(422, { ok: false, error: 'name' });
   if (!phone) return json(422, { ok: false, error: 'phone' });
   const idx = Number.isInteger(b.serviceIdx) ? b.serviceIdx : -1;
