@@ -14,6 +14,7 @@ ALLOWED_ORIGINS = "https://sladusuz.github.io"
 [[d1_databases]]
 binding = "DB"
 database_name = "orlent-bot"
+database_id = "97ee429b-2b66-4323-bc66-e16e624fa864"
 
 [triggers]
 crons = ["0 15 * * *", "* * * * *"]
