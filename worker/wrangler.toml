@@ -6,9 +6,9 @@ compatibility_flags = ["nodejs_compat"]
 
 [vars]
 # Saytning ochiq manzili (GitHub Pages yoki o'z domeningiz). Bot rasmlari va panel havolasi shu yerdan olinadi.
-SITE_URL = "https://sladusuz.github.io/klinika"
+SITE_URL = "https://orlentmedi.netlify.app"
 # Formaga/panelga so'rov yuborishi mumkin bo'lgan saytlar (vergul bilan)
-ALLOWED_ORIGINS = "https://sladusuz.github.io"
+ALLOWED_ORIGINS = "https://orlentmedi.netlify.app,https://sladusuz.github.io"
 
 # Baza (D1). `wrangler d1 create orlent-bot` yoki Dashboard'da yaratib, database_id ni yozing
 [[d1_databases]]
