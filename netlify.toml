@@ -19,6 +19,12 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
 
+# /api/* — Cloudflare Worker bilan bir xil manzillar (Netlify'da o'tish davrida ishlashi uchun)
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/404.html"

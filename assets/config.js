@@ -12,5 +12,8 @@ window.CLINIC = {
     en: "43 Sayram St, Mirzo Ulugbek district, Tashkent. Landmark: Buyuk Ipak Yuli metro"
   },
   mapQuery: "Sayram 43, Mirzo Ulugbek tumani, Toshkent",   // xaritada qidiriladigan manzil
+  // API (Cloudflare Worker) manzili. Bo'sh = sayt bilan bir xil domen (domen /api/* ni Worker'ga yo'naltirgan bo'lsa).
+  // Aks holda to'liq manzil, masalan: "https://orlent-medical-api.<akkaunt>.workers.dev"
+  apiBase: "",
   botUsername: "orlentmedical_bot"   // zayavkalar shu bot orqali keladi (token faqat Netlify'da saqlanadi)
 };

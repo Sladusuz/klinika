@@ -202,7 +202,7 @@ $("#botbtn").href="https://t.me/"+(C.botUsername||C.telegram);
   var phone=form.phone.value,digits=phone.replace(/\D/g,"");
   if(digits.length<9||digits.length>13){showErr(t.fbadp);form.phone.focus();return}
   sub.disabled=true;sub.classList.add("loading");fbt.textContent=t.fsend;
-  fetch("/.netlify/functions/lead",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:form.name.value,phone:phone,service:form.service.value,serviceIdx:form.service.selectedIndex,note:form.note.value,lang:lang,website:form.website.value})})
+  fetch((C.apiBase||"")+"/api/lead",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:form.name.value,phone:phone,service:form.service.value,serviceIdx:form.service.selectedIndex,note:form.note.value,lang:lang,website:form.website.value})})
    .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok&&j.ok}})})
    .catch(function(){return{ok:false}})
    .then(function(res){

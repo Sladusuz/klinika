@@ -3,7 +3,7 @@
   var tg = (window.Telegram && window.Telegram.WebApp) || null;
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
-  var API = '/.netlify/functions/admin-api';
+  var API = ((window.CLINIC && window.CLINIC.apiBase) || '') + '/api/admin-api';
   var EMO = ['🩺', '👂', '👃', '🗣', '📡', '👶'];
   var DAYS = ['Ya', 'Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh'];
   var MONTHS = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'];
