@@ -29,10 +29,10 @@ function normPhone(raw) {
 }
 const clean = (s, n) => String(s == null ? '' : s).replace(/[\u0000-\u001f]+/g, ' ').trim().slice(0, n);
 
-const SERVICES = {
-  uz: ["LOR ko'rik", 'Quloq', 'Burun', 'Tomoq', 'UTT tekshiruvi', 'Bolalar LOR'],
-  ru: ['ЛОР-осмотр', 'Ухо', 'Нос', 'Горло', 'УЗИ', 'Детский ЛОР'],
-  en: ['ENT exam', 'Ear', 'Nose', 'Throat', 'Ultrasound', 'Pediatric ENT']
+const SERVICES = { // sayt formasi (assets/content.js: svopt) bilan bir xil tartibda
+  uz: ["LOR ko'rik", 'Quloq', 'Burun va allergiya', 'Tomoq', 'Bolalar LOR / adenoid', 'Endoskopik LOR', 'UZI tekshiruvi', 'Laboratoriya tahlili', 'Muolaja / inyeksiya'],
+  ru: ['ЛОР-осмотр', 'Ухо', 'Нос и аллергия', 'Горло', 'Детский ЛОР / аденоиды', 'Эндоскопический ЛОР', 'УЗИ', 'Лабораторные анализы', 'Процедуры / инъекции'],
+  en: ['ENT exam', 'Ear', 'Nose & allergy', 'Throat', 'Pediatric ENT / adenoids', 'Endoscopic ENT', 'Ultrasound', 'Lab tests', 'Procedures / injections']
 };
 
 function tashkentTime() {
@@ -41,7 +41,7 @@ function tashkentTime() {
 const hm = () => new Intl.DateTimeFormat('ru-RU', { timeZone: 'Asia/Tashkent', hour: '2-digit', minute: '2-digit' }).format(new Date());
 const dayKey = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tashkent' }).format(new Date());
 const newTicket = () => 'OM-' + Date.now().toString(36).slice(-5).toUpperCase();
-const EMO = ['🩺', '👂', '👃', '🗣', '📡', '👶'];
+const EMO = ['🩺', '👂', '👃', '🗣', '👶', '🔬', '📡', '🧪', '💉'];
 const FLAG = { uz: '🇺🇿', ru: '🇷🇺', kk: '🇰🇿', en: '🇬🇧' };
 const LINE = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬';
 

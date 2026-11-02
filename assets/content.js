@@ -11,13 +11,13 @@ window.I18N={
   ],
   "book": "Qabulga yozilish",
   "call": "Qo'ng'iroq qilish",
-  "pill": "LOR markazi va UTT diagnostikasi",
+  "pill": "LOR markazi va UZI diagnostikasi",
   "h1a": "Quloq, burun va tomoq —",
   "h1b": "ishonchli qo'llarda",
-  "hp": "Zamonaviy uskunalar, tajribali shifokorlar va aniq diagnostika. Orlent Medical — butun oila uchun LOR va UTT xizmatlari.",
+  "hp": "Zamonaviy uskunalar, tajribali shifokorlar va aniq diagnostika. Orlent Medical — butun oila uchun LOR va UZI xizmatlari.",
   "s1": "Aniq",
   "s1t": "diagnostika",
-  "s2": "UTT",
+  "s2": "UZI",
   "s2t": "tekshiruvi",
   "s3": "Oila",
   "s3t": "uchun davolash",
@@ -81,7 +81,7 @@ window.I18N={
     "Narx so'rang"
    ],
    [
-    "UTT tekshiruvi",
+    "UZI tekshiruvi",
     "Narx so'rang"
    ],
    [
@@ -99,7 +99,7 @@ window.I18N={
    [
     "Oripov Nurshod Tohirovich",
     "Endoskopik LOR xirurg · terapevt",
-    "SamDTU (bakalavr) · Yevropa tibbiyot universiteti ordinaturasi",
+    "Samarqand davlat tibbiyot universiteti (bakalavr) · Yevropa tibbiyot universiteti ordinaturasi",
     "/assets/img/dr-nurshod.jpg",
     [
      [
@@ -139,7 +139,7 @@ window.I18N={
    [
     "🎯",
     "Aniq diagnostika",
-    "LOR va UTT bir joyda — vaqtingizni tejaymiz."
+    "LOR va UZI bir joyda — vaqtingizni tejaymiz."
    ],
    [
     "🛡️",
@@ -159,7 +159,7 @@ window.I18N={
   ],
   "ab_e": "Klinika haqida",
   "ab_h": "Orlent Medical",
-  "ab_p": "Orlent Medical — quloq, burun va tomoq kasalliklarini aniqlash va davolashga ixtisoslashgan LOR markazi. UTT diagnostikasi ham shu yerda. Maqsadimiz — sifatli, tushunarli va hamyonbop tibbiy yordam.",
+  "ab_p": "Orlent Medical — quloq, burun va tomoq kasalliklarini aniqlash va davolashga ixtisoslashgan LOR markazi. UZI diagnostikasi ham shu yerda. Maqsadimiz — sifatli, tushunarli va hamyonbop tibbiy yordam.",
   "ce_h": "Litsenziya va sertifikatlar",
   "ce": [
    [
@@ -188,7 +188,7 @@ window.I18N={
     "Bemor"
    ],
    [
-    "UTT va LOR bir joyda bo'lgani juda qulay.",
+    "UZI va LOR bir joyda bo'lgani juda qulay.",
     "Bemor"
    ]
   ],
@@ -216,7 +216,7 @@ window.I18N={
     "Shart emas, lekin navbat kutmaslik uchun oldindan yozilish tavsiya etiladi."
    ],
    [
-    "UTT tekshiruviga tayyorgarlik kerakmi?",
+    "UZI tekshiruviga tayyorgarlik kerakmi?",
     "Tekshiruv turiga qarab farq qiladi. Yozilishda administrator aytib beradi."
    ],
    [
@@ -235,7 +235,7 @@ window.I18N={
   "l_ig": "Instagram",
   "l_ad": "Manzil",
   "l_wh": "Ish vaqti",
-  "wh": "Dushanba–Shanba: 09:00–18:00 (aniqlanadi)",
+  "wh": "Qabul vaqtini telefon orqali aniqlashtiring",
   "fm_h": "Onlayn qabulga yozilish",
   "fn": "Ismingiz",
   "fp": "Telefon raqamingiz",
@@ -261,7 +261,7 @@ window.I18N={
    "Zamonaviy uskunalar",
    "Tajribali shifokorlar",
    "Sterillik va xavfsizlik",
-   "LOR + UTT bir joyda"
+   "LOR + UZI bir joyda"
   ],
   "cta_h": "Salomatligingiz uchun bugunoq qadam tashlang",
   "cta_p": "Qabulga yoziling — biz qulay vaqtni tanlab beramiz.",
@@ -275,7 +275,7 @@ window.I18N={
   "stats": [
    [
     "2",
-    "yo'nalish: LOR va UTT"
+    "yo'nalish: LOR va UZI"
    ],
    [
     "4",
@@ -296,7 +296,7 @@ window.I18N={
   ],
   "mq": [
    "LOR",
-   "UTT",
+   "UZI",
    "Diagnostika",
    "Davolash",
    "Profilaktika"
@@ -347,7 +347,7 @@ window.I18N={
   ],
   "vd_e": "Video",
   "vd_h": "Orlent Medical bilan tanishing",
-  "vd_p": "20 soniyada klinikamiz haqida: LOR va UTT bir joyda, aniq tashxis va qulay muhit.",
+  "vd_p": "20 soniyada klinikamiz haqida: LOR va UZI bir joyda, aniq tashxis va qulay muhit.",
   "vd_on": "Ovozni yoqish",
   "vd_off": "Ovozni o'chirish",
   "sv_hint": "Surib ko'ring",
@@ -462,7 +462,7 @@ window.I18N={
    [
     "Орипов Нуршод Тохирович",
     "Эндоскопический ЛОР-хирург · терапевт",
-    "СамГМУ (бакалавр) · ординатура Европейского медицинского университета",
+    "Самаркандский государственный медицинский университет (бакалавр) · ординатура Европейского медицинского университета",
     "/assets/img/dr-nurshod.jpg",
     [
      [
@@ -598,7 +598,7 @@ window.I18N={
   "l_ig": "Instagram",
   "l_ad": "Адрес",
   "l_wh": "Время работы",
-  "wh": "Пн–Сб: 09:00–18:00 (уточняется)",
+  "wh": "Время приёма уточняйте по телефону",
   "fm_h": "Онлайн-запись на приём",
   "fn": "Ваше имя",
   "fp": "Ваш телефон",
@@ -766,7 +766,7 @@ window.I18N={
    [
     "🫁",
     "Throat conditions",
-    "Tonsillitis, pharyngitis, laryngitis, chronic tonsillitis, hoarseness, bad breath."
+    "Acute tonsillitis (angina), pharyngitis, laryngitis, chronic tonsillitis, hoarseness, bad breath."
    ],
    [
     "👶",
@@ -825,7 +825,7 @@ window.I18N={
    [
     "Oripov Nurshod Tohirovich",
     "Endoscopic ENT surgeon · therapist",
-    "SamSMU (bachelor) · residency at the European Medical University",
+    "Samarkand State Medical University (bachelor's) · residency at the European Medical University",
     "/assets/img/dr-nurshod.jpg",
     [
      [
@@ -961,7 +961,7 @@ window.I18N={
   "l_ig": "Instagram",
   "l_ad": "Address",
   "l_wh": "Working hours",
-  "wh": "Mon–Sat: 09:00–18:00 (to be confirmed)",
+  "wh": "Please call to confirm opening hours",
   "fm_h": "Book online",
   "fn": "Your name",
   "fp": "Your phone",
@@ -975,7 +975,7 @@ window.I18N={
    "Ear",
    "Nose & allergy",
    "Throat",
-   "Paediatric ENT / adenoids",
+   "Pediatric ENT / adenoids",
    "Endoscopic ENT",
    "Ultrasound",
    "Lab tests",
@@ -1100,21 +1100,21 @@ window.I18N={
   ],
   "book": "Қабылдауға жазылу",
   "call": "Қоңырау шалу",
-  "pill": "ЛОР орталығы және УДЗ диагностикасы",
+  "pill": "ЛОР орталығы және УЗИ диагностикасы",
   "h1a": "Құлақ, мұрын және тамақ —",
   "h1b": "сенімді қолдарда",
-  "hp": "Заманауи құрал-жабдықтар, тәжірибелі дәрігерлер және нақты диагностика. Orlent Medical — бүкіл отбасына арналған ЛОР және УДЗ қызметтері.",
+  "hp": "Заманауи құрал-жабдықтар, тәжірибелі дәрігерлер және нақты диагностика. Orlent Medical — бүкіл отбасына арналған ЛОР және УЗИ қызметтері.",
   "s1": "Нақты",
   "s1t": "диагностика",
-  "s2": "УДЗ",
+  "s2": "УЗИ",
   "s2t": "тексеруі",
   "s3": "Бүкіл отбасын",
   "s3t": "емдеу",
   "f1": "Жылдам қабылдау",
   "f2": "Заманауи жабдық",
   "sv_e": "Қызметтер",
-  "sv_h": "Қандай мәселеде көмектесеміз",
-  "sv_p": "Бүкіл отбасына арналған ЛОР, УДЗ, емшаралар және зертханалық талдаулар — бір жерде.",
+  "sv_h": "Қандай мәселелерде көмектесеміз",
+  "sv_p": "Бүкіл отбасына арналған ЛОР, УЗИ, емшаралар және зертханалық талдаулар — бір жерде.",
   "sv": [
    [
     "👂",
@@ -1143,8 +1143,8 @@ window.I18N={
    ],
    [
     "📡",
-    "УДЗ диагностикасы",
-    "Ультрадыбыстық тексеру — қауіпсіз, ауырсынбайтын және жылдам."
+    "УЗИ диагностикасы",
+    "Ультрадыбыстық тексеру — қауіпсіз, ауыртпайтын және жылдам."
    ],
    [
     "🧪",
@@ -1159,27 +1159,27 @@ window.I18N={
   ],
   "pr_e": "Бағалар",
   "pr_h": "Ашық бағалар",
-  "pr_p": "Нақты бағасын қабылдауда немесе телефон арқылы біліңіз.",
+  "pr_p": "Нақты бағаны қабылдауда немесе телефон арқылы біліп алыңыз.",
   "pr": [
    [
     "ЛОР дәрігерінің тексеруі",
-    "Сұраңыз"
+    "Бағасын сұраңыз"
    ],
    [
     "Құлақ / мұрын / тамақты емдеу",
-    "Сұраңыз"
+    "Бағасын сұраңыз"
    ],
    [
-    "УДЗ тексеруі",
-    "Сұраңыз"
+    "УЗИ тексеруі",
+    "Бағасын сұраңыз"
    ],
    [
-    "Балалар ЛОР тексеруі",
-    "Сұраңыз"
+    "Балалар ЛОР дәрігерінің тексеруі",
+    "Бағасын сұраңыз"
    ],
    [
     "Қайта қабылдау",
-    "Сұраңыз"
+    "Бағасын сұраңыз"
    ]
   ],
   "dr_e": "Дәрігерлер",
@@ -1188,7 +1188,7 @@ window.I18N={
    [
     "Орипов Нуршод Тохирович",
     "Эндоскопиялық ЛОР хирург · терапевт",
-    "СамММИ (бакалавр) · Еуропалық медицина университетінің ординатурасы",
+    "Самарқанд мемлекеттік медицина университеті (бакалавр) · Еуропалық медицина университетінің ординатурасы",
     "/assets/img/dr-nurshod.jpg",
     [
      [
@@ -1229,7 +1229,7 @@ window.I18N={
    [
     "🎯",
     "Нақты диагностика",
-    "ЛОР және УДЗ бір жерде — уақытыңызды үнемдейміз."
+    "ЛОР және УЗИ бір жерде — уақытыңызды үнемдейміз."
    ],
    [
     "🛡️",
@@ -1238,8 +1238,8 @@ window.I18N={
    ],
    [
     "💙",
-    "Назар",
-    "Әр емделушіге жеке көзқарас."
+    "Қамқорлық",
+    "Әр емделушіге жеке тәсіл."
    ],
    [
     "⚡",
@@ -1249,7 +1249,7 @@ window.I18N={
   ],
   "ab_e": "Клиника туралы",
   "ab_h": "Orlent Medical",
-  "ab_p": "Orlent Medical — құлақ, мұрын және тамақ ауруларын анықтау мен емдеуге маманданған ЛОР орталығы. УДЗ диагностикасы да осы жерде. Біздің мақсат — сапалы, түсінікті және қолжетімді медициналық көмек.",
+  "ab_p": "Orlent Medical — құлақ, мұрын және тамақ ауруларын анықтау мен емдеуге маманданған ЛОР орталығы. УЗИ диагностикасы да осы жерде. Біздің мақсат — сапалы, түсінікті және қолжетімді медициналық көмек.",
   "ce_h": "Лицензия және сертификаттар",
   "ce": [
    [
@@ -1279,7 +1279,7 @@ window.I18N={
     "Емделуші"
    ],
    [
-    "УДЗ мен ЛОР бір жерде болғаны өте ыңғайлы.",
+    "УЗИ мен ЛОР бір жерде болғаны өте ыңғайлы.",
     "Емделуші"
    ]
   ],
@@ -1307,7 +1307,7 @@ window.I18N={
     "Міндетті емес, бірақ кезекте тұрмау үшін жазылғаныңызды ұсынамыз."
    ],
    [
-    "УДЗ-ге дайындық керек пе?",
+    "УЗИ-ге дайындық керек пе?",
     "Тексеру түріне байланысты. Әкімші жазылғанда айтып береді."
    ],
    [
@@ -1326,7 +1326,7 @@ window.I18N={
   "l_ig": "Instagram",
   "l_ad": "Мекенжай",
   "l_wh": "Жұмыс уақыты",
-  "wh": "Дс–Сб: 09:00–18:00 (нақтыланады)",
+  "wh": "Қабылдау уақытын телефон арқылы нақтылаңыз",
   "fm_h": "Онлайн жазылу",
   "fn": "Атыңыз",
   "fp": "Телефоныңыз",
@@ -1342,17 +1342,17 @@ window.I18N={
    "Тамақ",
    "Балалар ЛОР / аденоид",
    "Эндоскопиялық ЛОР",
-   "УДЗ",
+   "УЗИ",
    "Зертханалық талдау",
    "Емшара / инъекция"
   ],
-  "title": "Orlent Medical — Ташкентте ЛОР дәрігері және УДЗ | Құлақ, мұрын, тамақ",
-  "desc": "Ташкент, Мирзо Улугбек ауданы, Сайрам көшесі, 43. Эндоскопиялық ЛОР хирург, құлақ-мұрын-тамақ емі, УДЗ, талдаулар. Балалар мен ересектерге. +998 94 647 64 79",
+  "title": "Orlent Medical — Ташкентте ЛОР дәрігері және УЗИ | Құлақ, мұрын, тамақ",
+  "desc": "Ташкент, Мирзо Улугбек ауданы, Сайрам көшесі, 43. Эндоскопиялық ЛОР хирург, құлақ-мұрын-тамақ емі, УЗИ, талдаулар. Балалар мен ересектерге. +998 94 647 64 79",
   "tr": [
    "Заманауи жабдық",
    "Тәжірибелі дәрігерлер",
    "Стерильділік және қауіпсіздік",
-   "ЛОР + УДЗ бір жерде"
+   "ЛОР + УЗИ бір жерде"
   ],
   "cta_h": "Денсаулыққа бір қадамды бүгін жасаңыз",
   "cta_p": "Қабылдауға жазылыңыз — ыңғайлы уақытты таңдап береміз.",
@@ -1365,7 +1365,7 @@ window.I18N={
   "stats": [
    [
     "2",
-    "бағыт: ЛОР және УДЗ"
+    "бағыт: ЛОР және УЗИ"
    ],
    [
     "4",
@@ -1385,7 +1385,7 @@ window.I18N={
   ],
   "mq": [
    "ЛОР",
-   "УДЗ",
+   "УЗИ",
    "Диагностика",
    "Емдеу",
    "Алдын алу"
@@ -1426,7 +1426,7 @@ window.I18N={
     "Тамақ мәселелері",
     [
      "Тамақ ауруы",
-     "Жұтынғанда ауыру",
+     "Жұтынғанда ауырсыну",
      "Дауыстың қарлығуы",
      "Бадамша бездер",
      "Жөтел"
@@ -1436,7 +1436,7 @@ window.I18N={
   ],
   "vd_e": "Бейне",
   "vd_h": "Orlent Medical-пен танысыңыз",
-  "vd_p": "20 секундта клиника туралы: ЛОР және УДЗ бір жерде, нақты диагноз және жайлы орта.",
+  "vd_p": "20 секундта клиника туралы: ЛОР және УЗИ бір жерде, нақты диагноз және жайлы орта.",
   "vd_on": "Дыбысты қосу",
   "vd_off": "Дыбысты өшіру",
   "sv_hint": "Сырғытыңыз",
@@ -1448,7 +1448,7 @@ window.I18N={
   "for": "немесе",
   "hd_b1": "8 жыл тәжірибе",
   "hd_b2": "15 000+ риза емделуші",
-  "hd_n": "Др. Нұршод Орипов",
+  "hd_n": "Дәрігер Нуршод Орипов",
   "hd_r": "Эндоскопиялық ЛОР хирург · терапевт",
   "hd_e": "Балалар мен ересектерге арналған"
  }

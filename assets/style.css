@@ -321,3 +321,4 @@ form.sent .ok{display:grid;gap:14px;justify-items:center;margin:0;background:non
 .lg-m button b{display:inline-grid;place-items:center;min-width:34px;height:26px;border-radius:8px;background:rgba(255,255,255,.1);font:800 12px Manrope,sans-serif;letter-spacing:.04em}
 .lg-m button:hover{background:rgba(255,255,255,.1)}
 .lg-m button.on{background:rgba(75,224,140,.14);color:#fff}.lg-m button.on b{background:var(--mint);color:#04201c}
+@media(max-width:400px){.mbar{grid-template-columns:1fr 1.2fr;gap:8px}.mbar .btn{padding:12px 8px;gap:6px;font-size:15px}.mbar .btn svg{width:18px;height:18px}}

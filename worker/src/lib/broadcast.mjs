@@ -65,7 +65,9 @@ export async function runChunk(st, id) {
 export async function processJob(st, id) {
   const r = await runChunk(st, id);
   if (r.done || r.busy) return r;
-  const base = (process.env.API_URL || globalThis.__ORIGIN || '').replace(/\/$/, '');
+  // O'z domenimizga (zona marshruti) fetch qilsak so'rov Worker'ga emas, eski hostingga ketib qolishi mumkin — shuning uchun faqat workers.dev (yoki lokal) manzili ishlatiladi
+  const o = globalThis.__ORIGIN || '';
+  const base = (process.env.API_URL || (/^https?:\/\/([^/]+\.workers\.dev|localhost(:\d+)?)$/.test(o) ? o : '')).replace(/\/$/, '');
   if (!base) return r; // cron davom ettiradi
   try { await fetch(`${base}/api/broadcast-background`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-bot-secret': process.env.TELEGRAM_WEBHOOK_SECRET || '' }, body: JSON.stringify({ job: id }) }); } catch (e) { /* cron davom ettiradi */ }
   return r;
