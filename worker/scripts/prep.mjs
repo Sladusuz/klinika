@@ -7,7 +7,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const out = join(root, 'worker', 'public');
 const SITE = (process.env.PUBLIC_SITE || 'https://orlentmedical.uz').replace(/\/$/, '');
 rmSync(out, { recursive: true, force: true }); mkdirSync(out, { recursive: true });
-for (const f of ['404.html', 'admin', 'assets', 'site.webmanifest']) if (existsSync(join(root, f))) cpSync(join(root, f), join(out, f), { recursive: true });
+for (const f of ['404.html', 'admin', 'assets', 'site.webmanifest', 'google6376e58e4d0e9ebb.html']) if (existsSync(join(root, f))) cpSync(join(root, f), join(out, f), { recursive: true });
 
 globalThis.window = {}; (0, eval)(readFileSync(join(root, 'assets/content.js'), 'utf8').replace('window.I18N=', 'globalThis.__I=')); const I = globalThis.__I;
 const tpl = readFileSync(join(root, 'index.html'), 'utf8');
