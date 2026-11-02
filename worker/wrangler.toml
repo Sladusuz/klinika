@@ -8,8 +8,8 @@ preview_urls = false
 
 # Domen: Worker saytni va API ni shu domenda beradi
 routes = [
-  { pattern = "orlentmedical.uz", custom_domain = true },
-  { pattern = "www.orlentmedical.uz", custom_domain = true }
+  { pattern = "orlentmedical.uz/*", zone_name = "orlentmedical.uz" },
+  { pattern = "www.orlentmedical.uz/*", zone_name = "orlentmedical.uz" }
 ]
 
 [build]
@@ -23,7 +23,7 @@ run_worker_first = ["/api/*"]
 
 [vars]
 # Saytning ochiq manzili (GitHub Pages yoki o'z domeningiz). Bot rasmlari va panel havolasi shu yerdan olinadi.
-SITE_URL = "https://orlent-medical-api.chempme.workers.dev"
+SITE_URL = "https://orlentmedical.uz"
 # Formaga/panelga so'rov yuborishi mumkin bo'lgan saytlar (vergul bilan)
 ALLOWED_ORIGINS = "https://orlentmedical.uz,https://www.orlentmedical.uz,https://orlent-medical-api.chempme.workers.dev"
 

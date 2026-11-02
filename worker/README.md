@@ -4,7 +4,7 @@ Telegram bot, sayt formasi, admin panel API va kunlik hisobot — Netlify o'rnig
 Sayt (statik) GitHub Pages'da turadi (`.github/workflows/pages.yml`).
 
 ## Sozlash
-1. **D1 baza:** Cloudflare → Storage & databases → D1 → Create → `orlent-bot`. `wrangler.toml` dagi `[[d1_databases]]` ga `database_id = "..."` yozing.
+1. **D1 baza:** yaratilgan (`orlent-bot`), `wrangler.toml` da `database_id` bor.
 2. **Deploy:** Workers & Pages → Create → Import a repository → `Sladusuz/klinika`, Root directory: `worker`.
 3. **Sirlar (Settings → Variables and Secrets, turi Secret):** `TELEGRAM_BOT_TOKEN`, `ADMIN_CHAT_ID`, `TELEGRAM_WEBHOOK_SECRET`.
 4. **O'zgaruvchilar:** `SITE_URL` (saytning manzili), `ALLOWED_ORIGINS` (shu sayt origin'i) — `wrangler.toml` da.
