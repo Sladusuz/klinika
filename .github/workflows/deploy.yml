@@ -1,0 +1,24 @@
+# main'ga push qilinganda sayt va API avtomatik Cloudflare'ga joylanadi.
+# Yoqish: repo → Settings → Secrets and variables → Actions → CLOUDFLARE_API_TOKEN va CLOUDFLARE_ACCOUNT_ID qo'shing.
+name: Deploy to Cloudflare
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Deploy
+        working-directory: worker
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then echo "CLOUDFLARE_API_TOKEN sozlanmagan — o'tkazib yuborildi"; exit 0; fi
+          npm install --silent
+          npx wrangler deploy
