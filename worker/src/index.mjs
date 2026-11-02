@@ -33,6 +33,7 @@ export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     boot(env, ctx, url);
+    if (url.pathname === '/google6376e58e4d0e9ebb.html') return new Response('google-site-verification: google6376e58e4d0e9ebb.html', { headers: { 'content-type': 'text/html; charset=utf-8' } }); // Google Search Console tasdiqlash fayli
     const m = /^\/api\/([a-z-]+)\/?$/.exec(url.pathname);
     const origin = allowedOrigin(req);
     if (req.method === 'OPTIONS') {

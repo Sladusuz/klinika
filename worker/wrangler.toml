@@ -19,7 +19,7 @@ command = "node scripts/prep.mjs"
 [assets]
 directory = "./public"
 not_found_handling = "404-page"
-run_worker_first = ["/api/*"]
+run_worker_first = ["/api/*", "/google6376e58e4d0e9ebb.html"]
 
 [vars]
 # Saytning ochiq manzili (GitHub Pages yoki o'z domeningiz). Bot rasmlari va panel havolasi shu yerdan olinadi.
