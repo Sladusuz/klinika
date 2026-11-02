@@ -100,7 +100,7 @@ window.I18N={
     "Oripov Nurshod Tohirovich",
     "Endoskopik LOR xirurg · terapevt",
     "SamDTU (bakalavr) · Yevropa tibbiyot universiteti ordinaturasi",
-    "assets/img/dr-nurshod.jpg",
+    "/assets/img/dr-nurshod.jpg",
     [
      [
       "8 yil",
@@ -116,7 +116,7 @@ window.I18N={
     "Muztorov Mirjalol Rizoqulovich",
     "Endoskopik LOR xirurg · terapevt",
     "Bolalar va kattalar uchun",
-    "assets/img/dr-mirjalol.jpg",
+    "/assets/img/dr-mirjalol.jpg",
     [
      [
       "10 yil",
@@ -255,8 +255,8 @@ window.I18N={
    "Laboratoriya tahlili",
    "Muolaja / inyeksiya"
   ],
-  "title": "Orlent Medical — LOR markazi va UTT diagnostikasi",
-  "desc": "Orlent Medical: quloq, burun, tomoq kasalliklari diagnostikasi va davolash, UTT tekshiruvi. Onlayn qabulga yoziling.",
+  "title": "Orlent Medical — LOR shifokori va UZI Toshkentda | Quloq, burun, tomoq",
+  "desc": "Toshkent, Mirzo Ulug'bek tumani, Sayram ko'chasi 43. Endoskopik LOR xirurg, quloq-burun-tomoq davolash, UZI, laboratoriya. Bolalar va kattalar. +998 94 647 64 79",
   "tr": [
    "Zamonaviy uskunalar",
    "Tajribali shifokorlar",
@@ -463,7 +463,7 @@ window.I18N={
     "Орипов Нуршод Тохирович",
     "Эндоскопический ЛОР-хирург · терапевт",
     "СамГМУ (бакалавр) · ординатура Европейского медицинского университета",
-    "assets/img/dr-nurshod.jpg",
+    "/assets/img/dr-nurshod.jpg",
     [
      [
       "8 лет",
@@ -479,7 +479,7 @@ window.I18N={
     "Музторов Миржалол Ризокулович",
     "Эндоскопический ЛОР-хирург · терапевт",
     "Для детей и взрослых",
-    "assets/img/dr-mirjalol.jpg",
+    "/assets/img/dr-mirjalol.jpg",
     [
      [
       "10 лет",
@@ -618,8 +618,8 @@ window.I18N={
    "Лабораторные анализы",
    "Процедуры / инъекции"
   ],
-  "title": "Orlent Medical — ЛОР-центр и УЗИ-диагностика",
-  "desc": "Orlent Medical: диагностика и лечение заболеваний уха, горла, носа, УЗИ-обследование. Запишитесь онлайн.",
+  "title": "Orlent Medical — ЛОР-врач и УЗИ в Ташкенте | Ухо, горло, нос",
+  "desc": "Ташкент, Мирзо-Улугбекский район, ул. Сайрам, 43. Эндоскопический ЛОР-хирург, лечение уха, горла и носа, УЗИ, анализы. Для детей и взрослых. +998 94 647 64 79",
   "tr": [
    "Современное оборудование",
    "Опытные врачи",
@@ -826,7 +826,7 @@ window.I18N={
     "Oripov Nurshod Tohirovich",
     "Endoscopic ENT surgeon · therapist",
     "SamSMU (bachelor) · residency at the European Medical University",
-    "assets/img/dr-nurshod.jpg",
+    "/assets/img/dr-nurshod.jpg",
     [
      [
       "8 yrs",
@@ -842,7 +842,7 @@ window.I18N={
     "Muztorov Mirjalol Rizoqulovich",
     "Endoscopic ENT surgeon · therapist",
     "For children and adults",
-    "assets/img/dr-mirjalol.jpg",
+    "/assets/img/dr-mirjalol.jpg",
     [
      [
       "10 yrs",
@@ -981,8 +981,8 @@ window.I18N={
    "Lab tests",
    "Procedures / injections"
   ],
-  "title": "Orlent Medical — ENT center & ultrasound diagnostics",
-  "desc": "Orlent Medical: diagnosis and treatment of ear, nose and throat conditions, ultrasound exams. Book online.",
+  "title": "Orlent Medical — ENT doctor & ultrasound in Tashkent | Ear, nose, throat",
+  "desc": "43 Sayram St, Mirzo Ulugbek district, Tashkent. Endoscopic ENT surgeon, ear-nose-throat treatment, ultrasound, lab tests. Children and adults. +998 94 647 64 79",
   "tr": [
    "Modern equipment",
    "Experienced doctors",
@@ -1189,7 +1189,7 @@ window.I18N={
     "Орипов Нуршод Тохирович",
     "Эндоскопиялық ЛОР хирург · терапевт",
     "СамММИ (бакалавр) · Еуропалық медицина университетінің ординатурасы",
-    "assets/img/dr-nurshod.jpg",
+    "/assets/img/dr-nurshod.jpg",
     [
      [
       "8 жыл",
@@ -1205,7 +1205,7 @@ window.I18N={
     "Музторов Миржалол Ризокулович",
     "Эндоскопиялық ЛОР хирург · терапевт",
     "Балалар мен ересектерге арналған",
-    "assets/img/dr-mirjalol.jpg",
+    "/assets/img/dr-mirjalol.jpg",
     [
      [
       "10 жыл",
@@ -1346,8 +1346,8 @@ window.I18N={
    "Зертханалық талдау",
    "Емшара / инъекция"
   ],
-  "title": "Orlent Medical — ЛОР орталығы және УДЗ диагностикасы",
-  "desc": "Orlent Medical: құлақ, тамақ, мұрын ауруларының диагностикасы мен емі, УДЗ тексеруі. Онлайн жазылыңыз.",
+  "title": "Orlent Medical — Ташкентте ЛОР дәрігері және УДЗ | Құлақ, мұрын, тамақ",
+  "desc": "Ташкент, Мирзо Улугбек ауданы, Сайрам көшесі, 43. Эндоскопиялық ЛОР хирург, құлақ-мұрын-тамақ емі, УДЗ, талдаулар. Балалар мен ересектерге. +998 94 647 64 79",
   "tr": [
    "Заманауи жабдық",
    "Тәжірибелі дәрігерлер",

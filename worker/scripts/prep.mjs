@@ -1,24 +1,85 @@
-// Sayt fayllarini worker/public ga yig'adi (Cloudflare Worker saytni ham, API ni ham shu domenda beradi)
-import { rmSync, mkdirSync, cpSync, writeFileSync, existsSync } from 'node:fs';
+// Sayt fayllarini worker/public ga yig'adi va SEO sahifalarini yaratadi:
+// /  (uz), /ru/, /kk/, /en/ — har biri o'z title/description/hreflang/JSON-LD bilan; sitemap.xml, robots.txt
+import { rmSync, mkdirSync, cpSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const out = join(root, 'worker', 'public');
+const SITE = (process.env.PUBLIC_SITE || 'https://orlentmedical.uz').replace(/\/$/, '');
 rmSync(out, { recursive: true, force: true }); mkdirSync(out, { recursive: true });
-for (const f of ['index.html', '404.html', 'admin', 'assets', 'robots.txt', 'site.webmanifest']) if (existsSync(join(root, f))) cpSync(join(root, f), join(out, f), { recursive: true });
+for (const f of ['404.html', 'admin', 'assets', 'site.webmanifest']) if (existsSync(join(root, f))) cpSync(join(root, f), join(out, f), { recursive: true });
+
+globalThis.window = {}; (0, eval)(readFileSync(join(root, 'assets/content.js'), 'utf8').replace('window.I18N=', 'globalThis.__I=')); const I = globalThis.__I;
+const tpl = readFileSync(join(root, 'index.html'), 'utf8');
+const PATH = { uz: '/', ru: '/ru/', kk: '/kk/', en: '/en/' };
+const LOC = { uz: 'uz_UZ', ru: 'ru_RU', kk: 'kk_KZ', en: 'en_US' };
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const OGIMG = SITE + '/assets/og.jpg';
+
+function jsonld(L) {
+  const t = I[L];
+  const clinic = {
+    '@context': 'https://schema.org', '@type': 'MedicalClinic', '@id': SITE + '/#clinic', name: 'Orlent Medical', url: SITE + PATH[L],
+    description: t.desc, image: [OGIMG, SITE + '/assets/img/dr-nurshod.jpg'], logo: SITE + '/assets/logo.png', telephone: '+998946476479',
+    medicalSpecialty: ['Otolaryngologic'], availableLanguage: ['uz', 'ru', 'kk', 'en'], isAcceptingNewPatients: true,
+    address: { '@type': 'PostalAddress', streetAddress: "Sayram ko'chasi, 43", addressLocality: 'Toshkent', addressRegion: "Mirzo Ulug'bek tumani", addressCountry: 'UZ' },
+    areaServed: { '@type': 'City', name: 'Toshkent' }, hasMap: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Sayram 43, Mirzo Ulugbek tumani, Toshkent'),
+    sameAs: ['https://t.me/orlentmedical', 'https://instagram.com/orlent_medical'],
+    makesOffer: t.sv.map(x => ({ '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: x[1], description: x[2] } })),
+    employee: t.dr.map(d => ({ '@type': 'Physician', name: d[0], jobTitle: d[1], description: d[2], image: SITE + d[3], worksFor: { '@id': SITE + '/#clinic' } }))
+  };
+  const faq = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: t.fq.map(q => ({ '@type': 'Question', name: q[0], acceptedAnswer: { '@type': 'Answer', text: q[1] } })) };
+  return [clinic, faq].map(o => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c')}</script>`).join('\n');
+}
+
+function head(L) {
+  const t = I[L], url = SITE + PATH[L];
+  return [
+    `<title>${esc(t.title)}</title>`,
+    `<meta name="description" content="${esc(t.desc)}">`,
+    `<meta name="robots" content="index,follow,max-image-preview:large">`,
+    `<link rel="canonical" href="${url}">`,
+    ...Object.keys(PATH).map(l => `<link rel="alternate" hreflang="${l}" href="${SITE + PATH[l]}">`),
+    `<link rel="alternate" hreflang="x-default" href="${SITE}/">`,
+    `<meta property="og:type" content="website"><meta property="og:site_name" content="Orlent Medical"><meta property="og:title" content="${esc(t.title)}"><meta property="og:description" content="${esc(t.desc)}"><meta property="og:url" content="${url}"><meta property="og:locale" content="${LOC[L]}"><meta property="og:image" content="${OGIMG}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">`,
+    `<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(t.title)}"><meta name="twitter:description" content="${esc(t.desc)}"><meta name="twitter:image" content="${OGIMG}">`,
+    `<script>window.FORCE_LANG="${L}"</script>`,
+    jsonld(L)
+  ].join('\n');
+}
+
+function noscript(L) { // JS o'chirilgan qidiruv robotlari va foydalanuvchilar uchun asosiy matn
+  const t = I[L];
+  return `<noscript><main style="max-width:760px;margin:0 auto;padding:24px;font-family:sans-serif;color:#fff;background:#050f22"><h1>Orlent Medical — ${esc(t.h1a)} ${esc(t.h1b)}</h1><p>${esc(t.hp)}</p><h2>${esc(t.sv_h)}</h2><ul>${t.sv.map(x => `<li><b>${esc(x[1])}</b> — ${esc(x[2])}</li>`).join('')}</ul><h2>${esc(t.dr_h)}</h2><ul>${t.dr.map(d => `<li><b>${esc(d[0])}</b> — ${esc(d[1])}. ${esc(d[2])}</li>`).join('')}</ul><h2>${esc(t.ct_h)}</h2><p>${esc(t.l_ad)}: Toshkent, Mirzo Ulug'bek, Sayram 43. ${esc(t.l_ph)}: <a href="tel:+998946476479">+998 94 647 64 79</a></p></main></noscript>`;
+}
+
+for (const L of Object.keys(PATH)) {
+  let h = tpl.replace('<!--SEO_HEAD-->', head(L)).replace('<html lang="uz">', `<html lang="${L}">`).replace('<body>', '<body>\n' + noscript(L));
+  const dir = L === 'uz' ? out : join(out, L); mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, 'index.html'), h);
+}
+
+const today = new Date().toISOString().slice(0, 10);
+writeFileSync(join(out, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n` +
+  Object.keys(PATH).map(L => `<url><loc>${SITE + PATH[L]}</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>${L === 'uz' ? '1.0' : '0.8'}</priority>${Object.keys(PATH).map(l => `<xhtml:link rel="alternate" hreflang="${l}" href="${SITE + PATH[l]}"/>`).join('')}<xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/"/></url>`).join('\n') + `\n</urlset>\n`);
+writeFileSync(join(out, 'f73bdd20e36df0fc36bb1ddb09e93689.txt'), 'f73bdd20e36df0fc36bb1ddb09e93689'); // IndexNow kaliti (Bing/Yandex ga yangilanishni xabar qilish)
+writeFileSync(join(out, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`);
+
 writeFileSync(join(out, '_headers'), `/*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
 /
   Content-Security-Policy: frame-ancestors 'self'
-/index.html
+/*/
   Content-Security-Policy: frame-ancestors 'self'
 /assets/img/*
+  Cache-Control: public, max-age=86400
+/assets/og.jpg
   Cache-Control: public, max-age=86400
 /admin/*
   Content-Security-Policy: frame-ancestors https://web.telegram.org https://webk.telegram.org https://webz.telegram.org https://*.telegram.org
   Cache-Control: no-store
   X-Robots-Tag: noindex, nofollow
 `);
-console.log('public/ tayyor');
+console.log('public/ tayyor:', Object.keys(PATH).join(', '));

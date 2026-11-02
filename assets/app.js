@@ -1,6 +1,11 @@
 (function(){
 var C=window.CLINIC,T=window.I18N,$=function(s,r){return(r||document).querySelector(s)},$$=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
-var lang="uz";try{lang=localStorage.getItem("lang")||(navigator.language||"").slice(0,2)}catch(e){}
+var PATHS={uz:"/",ru:"/ru/",kk:"/kk/",en:"/en/"},FORCE=window.FORCE_LANG,lang=FORCE||"uz";
+if(FORCE){try{var sv=localStorage.getItem("lang");
+ if(FORCE==="uz"&&location.pathname==="/"&&!/[?&]nolang/.test(location.search)){ // bosh sahifada: eslab qolingan yoki brauzer tiliga qarab mos sahifaga o'tkazish
+  var want=sv||((/bot|crawl|spider|google|bing|yandex/i.test(navigator.userAgent)||navigator.webdriver)?"":(navigator.language||"").slice(0,2));
+  if(want&&want!=="uz"&&want!=="en"&&PATHS[want])location.replace(PATHS[want]+location.hash)}}catch(e){}}
+else{try{lang=localStorage.getItem("lang")||(navigator.language||"").slice(0,2)}catch(e){}}
 if(!T[lang])lang="uz";
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches,fine=matchMedia("(hover:hover) and (pointer:fine)").matches;
 var G=!!(window.gsap&&window.ScrollTrigger)&&!reduce;
@@ -177,7 +182,7 @@ function intro(){
 }
 
 /* ---------- ui ---------- */
-$$(".lg-m button").forEach(function(b){b.onclick=function(){lang=b.dataset.l;try{localStorage.setItem("lang",lang)}catch(e){}render();build();lgo(false)}});
+$$(".lg-m button").forEach(function(b){b.onclick=function(){var l=b.dataset.l;try{localStorage.setItem("lang",l)}catch(e){}if(FORCE&&PATHS[l]){if(l!==lang)location.href=PATHS[l];else lgo(false);return}lang=l;render();build();lgo(false)}});
 var lg=$("#lang"),lgt=$("#lgt");function lgo(o){lg.classList.toggle("open",o);lgt.setAttribute("aria-expanded",o)}
 lgt.onclick=function(e){e.stopPropagation();lgo(!lg.classList.contains("open"))};
 document.addEventListener("click",function(e){if(!lg.contains(e.target))lgo(false)});document.addEventListener("keydown",function(e){if(e.key==="Escape")lgo(false)});
