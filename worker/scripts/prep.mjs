@@ -93,9 +93,33 @@ writeFileSync(join(out, '_headers'), `/*
 /*/
   Content-Security-Policy: frame-ancestors 'self'
 /assets/img/*
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=2592000
+/assets/vendor/*
+  Cache-Control: public, max-age=2592000
+/assets/video/*
+  Cache-Control: public, max-age=604800
+/assets/bot/*
+  Cache-Control: public, max-age=604800
+/assets/logo*
+  Cache-Control: public, max-age=2592000
+/assets/favicon.png
+  Cache-Control: public, max-age=2592000
 /assets/og.jpg
   Cache-Control: public, max-age=86400
+/assets/style.css
+  Cache-Control: public, max-age=3600
+/assets/inner.css
+  Cache-Control: public, max-age=3600
+/assets/app.js
+  Cache-Control: public, max-age=3600
+/assets/content.js
+  Cache-Control: public, max-age=3600
+/assets/prices.js
+  Cache-Control: public, max-age=3600
+/assets/config.js
+  Cache-Control: public, max-age=3600
+/assets/analytics.js
+  Cache-Control: public, max-age=3600
 /admin/*
   Content-Security-Policy: frame-ancestors https://web.telegram.org https://webk.telegram.org https://webz.telegram.org https://*.telegram.org
   Cache-Control: no-store
