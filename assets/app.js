@@ -47,7 +47,7 @@ function render(){
  h("#stats",t.stats,function(x){var n=/^\d+$/.test(x[0]);return'<div class="stat"><b'+(n?' data-count="'+x[0]+'"':'')+'>'+x[0]+'</b><span>'+x[1]+'</span></div>'});
  h("#dr",t.dr,function(x){var ch=(x[4]||[]).map(function(c){return'<div><b>'+c[0]+'</b><span>'+c[1]+'</span></div>'}).join('');return'<article class="card doc spot tilt reveal"><div class="ph">'+(x[3]?'<img src="'+x[3]+'" alt="'+x[0]+'" loading="lazy" width="800" height="880">':ic("user"))+'<em>'+t.dr_ph+'</em></div><div class="bd"><h3>'+x[0]+'</h3><small>'+x[1]+'</small><p>'+x[2]+'</p>'+(ch?'<div class="dstat">'+ch+'</div>':'')+'</div></article>'});
  h("#ce",t.ce,function(x,i){return'<div class="card cert spot reveal"><div class="ico">'+ic(CE[i])+'</div><h3>'+x[1]+'</h3></div>'});
- h("#pr",t.pr,function(x){return'<div class="prow"><span>'+x[0]+'</span><em>'+x[1]+'</em></div>'});
+ renderPrices();
  var rv=t.rv.concat(t.rv).concat(t.rv).concat(t.rv);
  h("#rv",rv,function(x){return'<article class="card rev">'+ic("quote","q")+'<div class="stars">'+ic("star").repeat(5)+'</div><p>“'+x[0]+'”</p><div class="who"><span>'+ic("user")+'</span>'+x[1]+'</div></article>'});
  h("#st",t.st,function(x,i){return'<article class="pr-step"><div class="pr-n">0'+(i+1)+'</div><div><div class="pr-ic">'+ic(PRI[i])+'</div><h3>'+x[0]+'</h3><p>'+x[1]+'</p></div></article>'});
@@ -181,6 +181,41 @@ function intro(){
   .fromTo(".blob",{opacity:0,scale:.8},{opacity:1,scale:1,duration:1.5,ease:"power3.out"},"-=1.2")
   .fromTo(".glass,.badge-rot,.hname",{opacity:0,scale:.5},{opacity:1,scale:1,duration:.9,stagger:.15,ease:"back.out(1.7)"},"-=.8");
 }
+
+
+/* ---------- narxlar (price list) ---------- */
+var PL={tab:0,q:""};
+function fmt(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g," ")}
+function plText(){return (window.PRICE_I18N&&window.PRICE_I18N[lang])||window.PRICE_I18N.uz}
+function renderPrices(){
+ var root=$("#px");if(!root||!window.PRICE_DATA)return;var P=plText(),D=window.PRICE_DATA;
+ var tabs=D.map(function(tb,i){var n=0;tb.groups.forEach(function(g){n+=g.items.length});
+  return'<button type="button" role="tab" class="px-tab'+(i===PL.tab?" on":"")+'" data-i="'+i+'">'+ic(tb.icon)+'<span>'+P.tabs[tb.id]+'</span><em>'+n+'</em></button>'}).join("");
+ root.innerHTML='<div class="px-bar"><div class="px-tabs" role="tablist"><i class="px-ind"></i>'+tabs+'</div>'
+  +'<label class="px-s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="pxq" autocomplete="off" placeholder="'+P.search+'" value="'+PL.q.replace(/"/g,"&quot;")+'"></label></div>'
+  +'<div class="px-body" id="pxb"></div><div class="px-foot" id="pxf"></div>';
+ $$(".px-tab",root).forEach(function(b){b.onclick=function(){PL.tab=+b.dataset.i;$$(".px-tab",root).forEach(function(x){x.classList.toggle("on",x===b)});plInd();plDraw(true)}});
+ $("#pxq").oninput=function(){PL.q=this.value;plDraw(false)};
+ plDraw(false);plInd();
+}
+function plInd(){var root=$("#px"),on=$(".px-tab.on",root),ind=$(".px-ind",root);if(!on||!ind)return;ind.style.width=on.offsetWidth+"px";ind.style.transform="translateX("+on.offsetLeft+"px)"}
+function plDraw(anim){
+ var P=plText(),tb=window.PRICE_DATA[PL.tab],body=$("#pxb"),q=PL.q.trim().toLowerCase(),k=0,total=0,html="";
+ tb.groups.forEach(function(g){
+  var rows="",cnt=0;
+  g.items.forEach(function(it){var name=P.n[it[0]]||"";
+   if(q&&name.toLowerCase().indexOf(q)<0&&(it[1]==null||String(it[1]).indexOf(q.replace(/\s/g,""))<0))return;
+   cnt++;total++;
+   var price=it[1]==null?'<b class="px-p ask">'+P.ask+'</b>':'<b class="px-p">'+fmt(it[1])+(it[2]?'<u>'+it[2]+'</u>':'')+'<small>'+P.cur+'</small></b>';
+   rows+='<div class="px-row" style="--i:'+Math.min(k++,24)+'"><span class="px-n">'+name+'</span><i class="px-dots"></i>'+price+'</div>'});
+  if(cnt)html+='<div class="px-grp">'+(g.g?'<h4 class="px-g">'+P.groups[g.g]+'<em>'+cnt+'</em></h4>':"")+rows+'</div>'});
+ if(!total)html='<p class="px-none">'+P.none+'</p>';
+ body.className="px-body"+(anim?" px-anim":"");body.innerHTML=html;
+ var note=tb.note?'<p class="px-note"><b>'+tb.note+'</b>'+P.nonres+'</p>':"";
+ $("#pxf").innerHTML=note+'<p class="px-small">'+P.foot+'</p><div class="px-cta"><a class="btn btn-p mag" href="#contact">'+ic("cal")+'<span>'+P.book+'</span></a><a class="btn btn-g" data-ph data-keep>'+ic("phone")+'<span>'+P.call+'</span></a></div>';
+ $$("#pxf [data-ph]").forEach(function(x){x.href="tel:"+C.phone});
+}
+addEventListener("resize",function(){plInd()});
 
 /* ---------- ui ---------- */
 $$(".lg-m button").forEach(function(b){b.onclick=function(){var l=b.dataset.l;try{localStorage.setItem("lang",l)}catch(e){}if(FORCE&&PATHS[l]){if(l!==lang)location.href=PATHS[l];else lgo(false);return}lang=l;render();build();lgo(false)}});

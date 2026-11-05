@@ -69,8 +69,8 @@ window.I18N={
    ]
   ],
   "pr_e": "Narxlar",
-  "pr_h": "Shaffof narxlar",
-  "pr_p": "Aniq narxni qabulda yoki telefon orqali bilib oling.",
+  "pr_h": "Aniq va ochiq narxlar",
+  "pr_p": "Barcha xizmatlar narxi — LOR, UZI va muolajalar. Narxlar so'mda ko'rsatilgan.",
   "pr": [
    [
     "LOR shifokori ko'rigi",
@@ -433,8 +433,8 @@ window.I18N={
    ]
   ],
   "pr_e": "Цены",
-  "pr_h": "Прозрачные цены",
-  "pr_p": "Точную стоимость уточняйте на приёме или по телефону.",
+  "pr_h": "Понятные и прозрачные цены",
+  "pr_p": "Цены на все услуги — ЛОР, УЗИ и процедуры. Стоимость указана в сумах.",
   "pr": [
    [
     "Осмотр ЛОР-врача",
@@ -797,8 +797,8 @@ window.I18N={
    ]
   ],
   "pr_e": "Prices",
-  "pr_h": "Transparent pricing",
-  "pr_p": "Ask for the exact price at the clinic or by phone.",
+  "pr_h": "Clear, transparent pricing",
+  "pr_p": "Prices for all services — ENT, ultrasound and procedures. Amounts are in UZS.",
   "pr": [
    [
     "ENT doctor consultation",
@@ -1161,8 +1161,8 @@ window.I18N={
    ]
   ],
   "pr_e": "Бағалар",
-  "pr_h": "Ашық бағалар",
-  "pr_p": "Нақты бағаны қабылдауда немесе телефон арқылы біліп алыңыз.",
+  "pr_h": "Айқын әрі ашық бағалар",
+  "pr_p": "Барлық қызметтердің бағасы — ЛОР, УЗИ және емшаралар. Бағалар сұмен көрсетілген.",
   "pr": [
    [
     "ЛОР дәрігерінің тексеруі",

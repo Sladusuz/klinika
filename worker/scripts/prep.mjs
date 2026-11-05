@@ -10,6 +10,8 @@ rmSync(out, { recursive: true, force: true }); mkdirSync(out, { recursive: true 
 for (const f of ['404.html', 'admin', 'assets', 'site.webmanifest']) if (existsSync(join(root, f))) cpSync(join(root, f), join(out, f), { recursive: true });
 
 globalThis.window = {}; (0, eval)(readFileSync(join(root, 'assets/content.js'), 'utf8').replace('window.I18N=', 'globalThis.__I=')); const I = globalThis.__I;
+(0, eval)(readFileSync(join(root, 'assets/prices.js'), 'utf8')); // window.PRICE_DATA / PRICE_I18N
+const PD = globalThis.window.PRICE_DATA, PI = globalThis.window.PRICE_I18N;
 const tpl = readFileSync(join(root, 'index.html'), 'utf8');
 const PATH = { uz: '/', ru: '/ru/', kk: '/kk/', en: '/en/' };
 const LOC = { uz: 'uz_UZ', ru: 'ru_RU', kk: 'kk_KZ', en: 'en_US' };
@@ -26,6 +28,7 @@ function jsonld(L) {
     areaServed: { '@type': 'City', name: 'Toshkent' }, hasMap: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Sayram 43, Mirzo Ulugbek tumani, Toshkent'),
     sameAs: ['https://t.me/orlentmedical', 'https://instagram.com/orlent_medical'],
     makesOffer: t.sv.map(x => ({ '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: x[1], description: x[2] } })),
+    hasOfferCatalog: { '@type': 'OfferCatalog', name: t.pr_h, itemListElement: PD.map(tb => ({ '@type': 'OfferCatalog', name: PI[L].tabs[tb.id], itemListElement: tb.groups.flatMap(g => g.items).filter(it => it[1] != null).map(it => ({ '@type': 'Offer', price: String(it[1]), priceCurrency: 'UZS', itemOffered: { '@type': 'MedicalProcedure', name: PI[L].n[it[0]] } })) })) },
     employee: t.dr.map(d => ({ '@type': 'Physician', name: d[0], jobTitle: d[1], description: d[2], image: SITE + d[3], worksFor: { '@id': SITE + '/#clinic' } }))
   };
   const faq = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: t.fq.map(q => ({ '@type': 'Question', name: q[0], acceptedAnswer: { '@type': 'Answer', text: q[1] } })) };
