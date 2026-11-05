@@ -22,6 +22,7 @@ const PATH = { uz: '/', ru: '/ru/', kk: '/kk/', en: '/en/' };
 const LOC = { uz: 'uz_UZ', ru: 'ru_RU', kk: 'kk_KZ', en: 'en_US' };
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const OGIMG = SITE + '/assets/og.jpg';
+const GSC = ['JHYKcO52u__elc8h9dWH9N8I4wYquvh3e80uexCVxq4', 'JHYKcO52u__eIc8h9dWH9N8I4wYquvh3e80uexCVxq4', 'JHYKcO52u__elc8h9dWH9N8l4wYquvh3e80uexCVxq4', 'JHYKcO52u__eIc8h9dWH9N8l4wYquvh3e80uexCVxq4'];
 
 function jsonld(L) {
   const t = I[L];
@@ -56,6 +57,7 @@ function head(L) {
     `<meta property="og:type" content="website"><meta property="og:site_name" content="Orlent Medical"><meta property="og:title" content="${esc(t.title)}"><meta property="og:description" content="${esc(t.desc)}"><meta property="og:url" content="${url}"><meta property="og:locale" content="${LOC[L]}"><meta property="og:image" content="${OGIMG}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">`,
     `<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(t.title)}"><meta name="twitter:description" content="${esc(t.desc)}"><meta name="twitter:image" content="${OGIMG}">`,
     `<meta name="geo.region" content="UZ-TK"><meta name="geo.placename" content="Toshkent"><meta name="geo.position" content="${CL.geo.lat};${CL.geo.lng}"><meta name="ICBM" content="${CL.geo.lat}, ${CL.geo.lng}">`,
+    ...(L === 'uz' ? GSC.map(c => `<meta name="google-site-verification" content="${c}" />`) : []),
     `<script>window.FORCE_LANG="${L}"</script>`,
     jsonld(L)
   ].join('\n');
@@ -66,7 +68,7 @@ function noscript(L) { // JS o'chirilgan qidiruv robotlari va foydalanuvchilar u
   return `<noscript><main style="max-width:760px;margin:0 auto;padding:24px;font-family:sans-serif;color:#fff;background:#050f22"><h1>Orlent Medical — ${esc(t.h1a)} ${esc(t.h1b)}</h1><p>${esc(t.hp)}</p><h2>${esc(t.sv_h)}</h2><ul>${t.sv.map(x => `<li><b>${esc(x[1])}</b> — ${esc(x[2])}</li>`).join('')}</ul><h2>${esc(t.dr_h)}</h2><ul>${t.dr.map(d => `<li><b>${esc(d[0])}</b> — ${esc(d[1])}. ${esc(d[2])}</li>`).join('')}</ul><h2>${esc(t.ct_h)}</h2><p>${esc(t.l_ad)}: Toshkent, Mirzo Ulug'bek, Sayram 43. ${esc(t.l_ph)}: <a href="tel:+998946476479">+998 94 647 64 79</a></p></main></noscript>`;
 }
 
-const V = '20261107b';
+const V = '20261108a';
 const ctx = { I, PD, PI, CL, PATH, SITE, OGIMG, V, NAV };
 for (const L of Object.keys(PATH)) {
   const h = ssr(tpl, L, ctx).replace('<!--SEO_HEAD-->', head(L)).replace('<html lang="uz">', `<html lang="${L}">`);
