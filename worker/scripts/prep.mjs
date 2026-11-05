@@ -11,6 +11,8 @@ for (const f of ['404.html', 'admin', 'assets', 'site.webmanifest']) if (existsS
 
 globalThis.window = {}; (0, eval)(readFileSync(join(root, 'assets/content.js'), 'utf8').replace('window.I18N=', 'globalThis.__I=')); const I = globalThis.__I;
 (0, eval)(readFileSync(join(root, 'assets/prices.js'), 'utf8')); // window.PRICE_DATA / PRICE_I18N
+(0, eval)(readFileSync(join(root, 'assets/config.js'), 'utf8'));
+const CL = globalThis.window.CLINIC;
 const PD = globalThis.window.PRICE_DATA, PI = globalThis.window.PRICE_I18N;
 const tpl = readFileSync(join(root, 'index.html'), 'utf8');
 const PATH = { uz: '/', ru: '/ru/', kk: '/kk/', en: '/en/' };
@@ -20,14 +22,18 @@ const OGIMG = SITE + '/assets/og.jpg';
 
 function jsonld(L) {
   const t = I[L];
+  const GM = CL.maps.google;
   const clinic = {
-    '@context': 'https://schema.org', '@type': 'MedicalClinic', '@id': SITE + '/#clinic', name: 'Orlent Medical', url: SITE + PATH[L],
+    '@context': 'https://schema.org', '@type': 'MedicalClinic', '@id': SITE + '/#clinic', name: 'Orlent Medical', alternateName: ['Orlent Medical LOR va UZI markazi', 'ORL-ENT MEDICAL', 'Орлент Медикал'], url: SITE + PATH[L],
     description: t.desc, image: [OGIMG, SITE + '/assets/img/dr-nurshod.jpg'], logo: SITE + '/assets/logo.png', telephone: '+998946476479',
-    medicalSpecialty: ['Otolaryngologic'], availableLanguage: ['uz', 'ru', 'kk', 'en'], isAcceptingNewPatients: true,
-    address: { '@type': 'PostalAddress', streetAddress: "Sayram ko'chasi, 43", addressLocality: 'Toshkent', addressRegion: "Mirzo Ulug'bek tumani", addressCountry: 'UZ' },
-    areaServed: { '@type': 'City', name: 'Toshkent' }, hasMap: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Sayram 43, Mirzo Ulugbek tumani, Toshkent'),
-    sameAs: ['https://t.me/orlentmedical', 'https://instagram.com/orlent_medical'],
-    makesOffer: t.sv.map(x => ({ '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: x[1], description: x[2] } })),
+    medicalSpecialty: ['Otolaryngologic', 'Radiography'], availableLanguage: ['uz', 'ru', 'kk', 'en'], isAcceptingNewPatients: true,
+    address: { '@type': 'PostalAddress', streetAddress: "Sayram ko'chasi, 43", addressLocality: 'Toshkent', addressRegion: "Mirzo Ulug'bek tumani", postalCode: CL.postalCode, addressCountry: 'UZ' },
+    geo: { '@type': 'GeoCoordinates', latitude: CL.geo.lat, longitude: CL.geo.lng },
+    areaServed: { '@type': 'City', name: 'Toshkent' }, hasMap: GM,
+    openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '00:00', closes: '23:59' }],
+    contactPoint: [{ '@type': 'ContactPoint', telephone: '+998946476479', contactType: 'customer service', availableLanguage: ['uz', 'ru', 'kk', 'en'] }],
+    availableService: t.sv.map((x, i) => ({ '@type': i === 5 || i === 6 ? 'MedicalTest' : 'MedicalProcedure', name: x[1], description: x[2] })),
+    sameAs: [GM, CL.maps.yandex, 'https://instagram.com/' + CL.instagram, 'https://t.me/' + CL.telegram],
     hasOfferCatalog: { '@type': 'OfferCatalog', name: t.pr_h, itemListElement: PD.map(tb => ({ '@type': 'OfferCatalog', name: PI[L].tabs[tb.id], itemListElement: tb.groups.flatMap(g => g.items).filter(it => it[1] != null).map(it => ({ '@type': 'Offer', price: String(it[1]), priceCurrency: 'UZS', itemOffered: { '@type': 'MedicalProcedure', name: PI[L].n[it[0]] } })) })) },
     employee: t.dr.map(d => ({ '@type': 'Physician', name: d[0], jobTitle: d[1], description: d[2], image: SITE + d[3], worksFor: { '@id': SITE + '/#clinic' } }))
   };
@@ -46,6 +52,7 @@ function head(L) {
     `<link rel="alternate" hreflang="x-default" href="${SITE}/">`,
     `<meta property="og:type" content="website"><meta property="og:site_name" content="Orlent Medical"><meta property="og:title" content="${esc(t.title)}"><meta property="og:description" content="${esc(t.desc)}"><meta property="og:url" content="${url}"><meta property="og:locale" content="${LOC[L]}"><meta property="og:image" content="${OGIMG}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">`,
     `<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(t.title)}"><meta name="twitter:description" content="${esc(t.desc)}"><meta name="twitter:image" content="${OGIMG}">`,
+    `<meta name="geo.region" content="UZ-TK"><meta name="geo.placename" content="Toshkent"><meta name="geo.position" content="${CL.geo.lat};${CL.geo.lng}"><meta name="ICBM" content="${CL.geo.lat}, ${CL.geo.lng}">`,
     `<script>window.FORCE_LANG="${L}"</script>`,
     jsonld(L)
   ].join('\n');

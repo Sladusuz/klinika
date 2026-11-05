@@ -235,7 +235,7 @@ window.I18N={
   "l_ig": "Instagram",
   "l_ad": "Manzil",
   "l_wh": "Ish vaqti",
-  "wh": "Qabul vaqtini telefon orqali aniqlashtiring",
+  "wh": "Har kuni, kecha-kunduz (24/7)",
   "fm_h": "Onlayn qabulga yozilish",
   "fn": "Ismingiz",
   "fp": "Telefon raqamingiz",
@@ -362,7 +362,9 @@ window.I18N={
   "hd_n": "Dr. Nurshod Oripov",
   "hd_r": "Endoskopik LOR xirurg · terapevt",
   "hd_e": "Bolalar va kattalar uchun",
-  "wa_msg": "Assalomu alaykum! Orlent Medical'ga qabulga yozilmoqchiman."
+  "wa_msg": "Assalomu alaykum! Orlent Medical'ga qabulga yozilmoqchiman.",
+  "gm": "Google Maps'da ochish",
+  "gmrv": "Google'da sharh qoldirish"
  },
  "ru": {
   "nav": [
@@ -599,7 +601,7 @@ window.I18N={
   "l_ig": "Instagram",
   "l_ad": "Адрес",
   "l_wh": "Время работы",
-  "wh": "Время приёма уточняйте по телефону",
+  "wh": "Ежедневно, круглосуточно (24/7)",
   "fm_h": "Онлайн-запись на приём",
   "fn": "Ваше имя",
   "fp": "Ваш телефон",
@@ -726,7 +728,9 @@ window.I18N={
   "hd_n": "Д-р Нуршод Орипов",
   "hd_r": "Эндоскопический ЛОР-хирург · терапевт",
   "hd_e": "Для детей и взрослых",
-  "wa_msg": "Здравствуйте! Хочу записаться на приём в Orlent Medical."
+  "wa_msg": "Здравствуйте! Хочу записаться на приём в Orlent Medical.",
+  "gm": "Открыть в Google Maps",
+  "gmrv": "Оставить отзыв в Google"
  },
  "en": {
   "nav": [
@@ -963,7 +967,7 @@ window.I18N={
   "l_ig": "Instagram",
   "l_ad": "Address",
   "l_wh": "Working hours",
-  "wh": "Please call to confirm opening hours",
+  "wh": "Open daily, 24/7",
   "fm_h": "Book online",
   "fn": "Your name",
   "fp": "Your phone",
@@ -1090,7 +1094,9 @@ window.I18N={
   "hd_n": "Dr. Nurshod Oripov",
   "hd_r": "Endoscopic ENT surgeon · therapist",
   "hd_e": "For children and adults",
-  "wa_msg": "Hello! I would like to book an appointment at Orlent Medical."
+  "wa_msg": "Hello! I would like to book an appointment at Orlent Medical.",
+  "gm": "Open in Google Maps",
+  "gmrv": "Leave a Google review"
  },
  "kk": {
   "nav": [
@@ -1329,7 +1335,7 @@ window.I18N={
   "l_ig": "Instagram",
   "l_ad": "Мекенжай",
   "l_wh": "Жұмыс уақыты",
-  "wh": "Қабылдау уақытын телефон арқылы нақтылаңыз",
+  "wh": "Күн сайын, тәулік бойы (24/7)",
   "fm_h": "Онлайн жазылу",
   "fn": "Атыңыз",
   "fp": "Телефоныңыз",
@@ -1454,6 +1460,8 @@ window.I18N={
   "hd_n": "Дәрігер Нуршод Орипов",
   "hd_r": "Эндоскопиялық ЛОР хирург · терапевт",
   "hd_e": "Балалар мен ересектерге арналған",
-  "wa_msg": "Сәлеметсіз бе! Orlent Medical-ға қабылдауға жазылғым келеді."
+  "wa_msg": "Сәлеметсіз бе! Orlent Medical-ға қабылдауға жазылғым келеді.",
+  "gm": "Google Maps-та ашу",
+  "gmrv": "Google-да пікір қалдыру"
  }
 };

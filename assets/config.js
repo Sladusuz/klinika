@@ -12,6 +12,9 @@ window.CLINIC = {
     kk: "Ташкент, Мирзо Улугбек ауданы, Сайрам көшесі, 43-үй. Бағдар: «Буюк Ипак Йули» метросы",
     en: "43 Sayram St, Mirzo Ulugbek district, Tashkent. Landmark: Buyuk Ipak Yuli metro"
   },
+  // Google/Yandex xarita va sharh havolalari, koordinatalar (Google qidiruv va xarita uchun)
+  geo: { lat: 41.3270095, lng: 69.3264717 }, postalCode: "100170",
+  maps: { google: "https://g.page/r/CY92svNpwOEqEBM", review: "https://g.page/r/CY92svNpwOEqEBM/review", yandex: "https://yandex.uz/maps/org/orlent_medical/149891150120/" },
   mapQuery: "Sayram 43, Mirzo Ulugbek tumani, Toshkent",   // xaritada qidiriladigan manzil
   // API (Cloudflare Worker) manzili. Bo'sh = sayt bilan bir xil domen (domen /api/* ni Worker'ga yo'naltirgan bo'lsa).
   // Aks holda to'liq manzil, masalan: "https://orlent-medical-api.<akkaunt>.workers.dev"
