@@ -8,8 +8,7 @@ preview_urls = false
 
 # Domen: Worker saytni va API ni shu domenda beradi
 routes = [
-  { pattern = "orlentmedical.uz/*", zone_name = "orlentmedical.uz" },
-  { pattern = "www.orlentmedical.uz/*", zone_name = "orlentmedical.uz" }
+  { pattern = "orlentmedical.uz/*", zone_name = "orlentmedical.uz" }
 ]
 
 [build]

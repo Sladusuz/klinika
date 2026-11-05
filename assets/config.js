@@ -19,5 +19,7 @@ window.CLINIC = {
   // API (Cloudflare Worker) manzili. Bo'sh = sayt bilan bir xil domen (domen /api/* ni Worker'ga yo'naltirgan bo'lsa).
   // Aks holda to'liq manzil, masalan: "https://orlent-medical-api.<akkaunt>.workers.dev"
   apiBase: "",
+  // Analitika: Google Analytics 4 o'lchov ID (G-XXXXXXXXXX) va Yandex Metrika hisoblagich raqami. Bo'sh bo'lsa o'chirilgan.
+  analytics: { ga4: "", ym: 0 },
   botUsername: "orlentmedical_bot"   // zayavkalar shu bot orqali keladi (token faqat Netlify'da saqlanadi)
 };

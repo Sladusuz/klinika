@@ -1,0 +1,45 @@
+/* Ichki sahifalar (/uzi/, /lor/, /bolalar-lor/) — JavaScript'siz, tez yuklanadi */
+:root{--bg:#050f22;--blue:#1456c8;--mint:#4be08c;--sky:#7db4ff;--txt:#e8f0ff;--mute:rgba(205,220,245,.72);--line:rgba(255,255,255,.12);--card:rgba(255,255,255,.05);--grad:linear-gradient(135deg,#1456c8 0%,#1b8f8a 55%,#2f9e3a 100%);--grad2:linear-gradient(100deg,#7db4ff 0%,#4be08c 100%)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:90px}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--txt);line-height:1.65;font-size:16px;background:radial-gradient(1000px 700px at 90% -10%,rgba(27,143,138,.26),transparent 60%),radial-gradient(900px 700px at -10% 30%,rgba(20,86,200,.28),transparent 60%),var(--bg);min-height:100vh}
+img{display:block;max-width:100%}a{color:inherit;text-decoration:none}ul{list-style:none}
+.ip-wrap{width:100%;max-width:1040px;margin:0 auto;padding-inline:clamp(16px,4vw,32px)}
+.ip-hdr{position:sticky;top:0;z-index:20;background:rgba(5,15,34,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.ip-nav{display:flex;align-items:center;gap:18px;min-height:68px;flex-wrap:wrap;padding-block:8px}
+.ip-brand img{width:46px;height:46px;background:#fff;border-radius:12px;padding:3px}
+.ip-menu{display:flex;gap:6px 18px;flex-wrap:wrap;margin-right:auto;font-weight:600;font-size:15px}
+.ip-menu a{color:var(--mute);padding:6px 2px;border-bottom:2px solid transparent}.ip-menu a:hover,.ip-menu a[aria-current]{color:#fff;border-color:var(--mint)}
+.ip-right{display:flex;align-items:center;gap:12px}
+.ip-lang{display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.ip-lang a{font-weight:700;font-size:12px;padding:6px 10px;border-radius:999px;color:var(--mute)}.ip-lang a[aria-current]{background:#fff;color:var(--blue)}
+.ip-tel{font-weight:700;font-size:14px;white-space:nowrap}
+.ip-bc{display:flex;gap:8px;font-size:13.5px;color:var(--mute);margin:22px 0 6px}.ip-bc a{color:var(--sky)}
+.ip-hero{padding:14px 0 10px}
+h1,h2,h3{font-family:Manrope,Inter,sans-serif;line-height:1.15;letter-spacing:-.02em;color:#fff}
+h1{font-size:clamp(30px,5.2vw,52px);margin:8px 0 18px;background:var(--grad2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ip-lead{color:var(--mute);font-size:clamp(16px,1.7vw,18.5px);max-width:820px;margin-bottom:12px}
+.ip-cta{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 6px}
+.ip-btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 22px;border-radius:999px;font-weight:700;font-size:15px;border:1px solid var(--line);background:rgba(255,255,255,.07);transition:.2s}.ip-btn:hover{background:rgba(255,255,255,.14)}
+.ip-p{background:var(--grad);border-color:transparent;box-shadow:0 10px 30px rgba(20,86,200,.4)}.ip-wa{background:#25d366;border-color:transparent;color:#04200f}.ip-tg{background:#229ed9;border-color:transparent}
+.ip-sec{margin-top:clamp(36px,6vw,64px)}
+h2{font-size:clamp(24px,3.4vw,34px);margin-bottom:18px}
+.ip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.ip-card{padding:20px;border-radius:20px;background:var(--card);border:1px solid var(--line)}.ip-card h3{font-size:18px;margin-bottom:6px}.ip-card p{color:var(--mute);font-size:15px}
+.ip-g{font-size:15px;color:var(--mint);margin:22px 0 6px;display:flex;align-items:center;gap:10px}.ip-g::before{content:"";width:22px;height:3px;border-radius:3px;background:var(--grad2)}
+.ip-list{border-radius:18px;background:var(--card);border:1px solid var(--line);padding:6px 14px}
+.ip-row{display:flex;align-items:baseline;gap:10px;padding:11px 2px}.ip-row+.ip-row{border-top:1px solid rgba(255,255,255,.07)}
+.ip-row span{min-width:0}.ip-row i{flex:1;min-width:12px;border-bottom:2px dotted rgba(255,255,255,.18);align-self:flex-end;margin-bottom:6px}
+.ip-row b{white-space:nowrap;font-family:Manrope,sans-serif;font-weight:800}.ip-row small{margin-left:5px;font:600 12px Inter,sans-serif;color:var(--mint)}
+.ip-row em{font-style:normal;font:700 13px Inter,sans-serif;color:var(--mint)}.ip-row u{text-decoration:none;margin-left:6px;font:700 11px Inter,sans-serif;background:var(--mint);color:#0b2a25;padding:2px 7px;border-radius:999px}
+.ip-note{margin-top:16px;padding:12px 16px;border-radius:14px;background:rgba(25,167,255,.1);border:1px solid rgba(25,167,255,.28)}.ip-note b{background:var(--grad);padding:3px 10px;border-radius:999px;margin-right:8px}
+.ip-small{color:var(--mute);font-size:13.5px;margin-top:14px}
+.ip-docs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.ip-doc{display:grid;grid-template-columns:130px 1fr;gap:16px;padding:16px;border-radius:22px;background:var(--card);border:1px solid var(--line)}
+.ip-doc img{width:130px;height:150px;object-fit:cover;object-position:50% 22%;border-radius:16px}.ip-doc h3{font-size:19px}.ip-role{color:var(--mint);font-weight:700;font-size:14px;margin:4px 0}.ip-doc p{font-size:14px;color:var(--mute)}
+.ip-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.ip-chips li{font-size:12.5px;padding:4px 10px;border-radius:999px;background:rgba(75,224,140,.1);border:1px solid rgba(75,224,140,.25)}.ip-chips b{color:var(--mint)}
+.ip-faq{border-radius:16px;background:var(--card);border:1px solid var(--line);margin-bottom:10px;padding:2px 18px}.ip-faq summary{cursor:pointer;padding:15px 0;font-weight:700;list-style:none}.ip-faq summary::-webkit-details-marker{display:none}.ip-faq summary::after{content:"+";float:right;color:var(--mint);font-size:22px;line-height:1}.ip-faq[open] summary::after{content:"–"}.ip-faq p{color:var(--mute);padding-bottom:16px}
+.ip-contact p{margin-bottom:8px;color:var(--mute)}.ip-contact b{color:#fff}.ip-links{display:flex;gap:8px 20px;flex-wrap:wrap;margin:10px 0 16px}.ip-links a{color:var(--mint);text-decoration:underline;text-underline-offset:3px}
+.ip-chips2{display:flex;flex-wrap:wrap;gap:10px}.ip-chip{padding:10px 18px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-weight:600}.ip-chip:hover{background:rgba(255,255,255,.12)}
+.ip-foot{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px}
+@media(max-width:640px){.ip-doc{grid-template-columns:96px 1fr}.ip-doc img{width:96px;height:120px}.ip-row{flex-wrap:wrap}.ip-row i{display:none}.ip-row span{flex:1 1 100%}.ip-nav{gap:10px}.ip-menu{order:3;flex:1 1 100%;font-size:14px}}

@@ -255,7 +255,7 @@ window.I18N={
    "Laboratoriya tahlili",
    "Muolaja / inyeksiya"
   ],
-  "title": "Orlent Medical — LOR shifokori va UZI Toshkentda | Quloq, burun, tomoq",
+  "title": "Orlent Medical — LOR va UZI Toshkentda, 24/7",
   "desc": "Toshkent, Mirzo Ulug'bek tumani, Sayram ko'chasi 43. Endoskopik LOR xirurg, quloq-burun-tomoq davolash, UZI, laboratoriya. Bolalar va kattalar. +998 94 647 64 79",
   "tr": [
    "Zamonaviy uskunalar",
@@ -621,7 +621,7 @@ window.I18N={
    "Лабораторные анализы",
    "Процедуры / инъекции"
   ],
-  "title": "Orlent Medical — ЛОР-врач и УЗИ в Ташкенте | Ухо, горло, нос",
+  "title": "Orlent Medical — ЛОР и УЗИ в Ташкенте, 24/7",
   "desc": "Ташкент, Мирзо-Улугбекский район, ул. Сайрам, 43. Эндоскопический ЛОР-хирург, лечение уха, горла и носа, УЗИ, анализы. Для детей и взрослых. +998 94 647 64 79",
   "tr": [
    "Современное оборудование",
@@ -987,7 +987,7 @@ window.I18N={
    "Lab tests",
    "Procedures / injections"
   ],
-  "title": "Orlent Medical — ENT doctor & ultrasound in Tashkent | Ear, nose, throat",
+  "title": "Orlent Medical — ENT & Ultrasound in Tashkent, 24/7",
   "desc": "43 Sayram St, Mirzo Ulugbek district, Tashkent. Endoscopic ENT surgeon, ear-nose-throat treatment, ultrasound, lab tests. Children and adults. +998 94 647 64 79",
   "tr": [
    "Modern equipment",
@@ -1355,7 +1355,7 @@ window.I18N={
    "Зертханалық талдау",
    "Емшара / инъекция"
   ],
-  "title": "Orlent Medical — Ташкентте ЛОР дәрігері және УЗИ | Құлақ, мұрын, тамақ",
+  "title": "Orlent Medical — Ташкентте ЛОР және УЗИ, 24/7",
   "desc": "Ташкент, Мирзо Улугбек ауданы, Сайрам көшесі, 43. Эндоскопиялық ЛОР хирург, құлақ-мұрын-тамақ емі, УЗИ, талдаулар. Балалар мен ересектерге. +998 94 647 64 79",
   "tr": [
    "Заманауи жабдық",

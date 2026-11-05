@@ -54,7 +54,7 @@ function render(){
  h("#fq",t.fq,function(x){return'<details class="reveal"><summary>'+x[0]+'</summary><p>'+x[1]+'</p></details>'});
  $("#fs").innerHTML=t.svopt.map(function(o){return"<option>"+o+"</option>"}).join("");
  $("#ad").textContent=C.address[lang];
- $$(".lg-m button").forEach(function(b){b.classList.toggle("on",b.dataset.l===lang);b.setAttribute("aria-selected",b.dataset.l===lang)});$("#lgc").textContent=lang.toUpperCase();
+ $$(".lg-m [data-l]").forEach(function(b){b.classList.toggle("on",b.dataset.l===lang);b.setAttribute("aria-selected",b.dataset.l===lang)});$("#lgc").textContent=lang.toUpperCase();
  $$("[data-wa]").forEach(function(a){a.href="https://wa.me/"+C.whatsapp+"?text="+encodeURIComponent(t.wa_msg);a.target="_blank";a.rel="noopener";var s=a.querySelector("span");if(s)s.textContent=C.phoneView});
  $$("[data-ph]").forEach(function(a){a.href="tel:"+C.phone;var s=a.querySelector("span:not([data-t])");if(s)s.textContent=C.phoneView});
  sndLabel();
@@ -218,7 +218,7 @@ function plDraw(anim){
 addEventListener("resize",function(){plInd()});
 
 /* ---------- ui ---------- */
-$$(".lg-m button").forEach(function(b){b.onclick=function(){var l=b.dataset.l;try{localStorage.setItem("lang",l)}catch(e){}if(FORCE&&PATHS[l]){if(l!==lang)location.href=PATHS[l];else lgo(false);return}lang=l;render();build();lgo(false)}});
+$$(".lg-m [data-l]").forEach(function(b){b.onclick=function(e){if(e&&e.preventDefault)e.preventDefault();var l=b.dataset.l;try{localStorage.setItem("lang",l)}catch(e){}if(FORCE&&PATHS[l]){if(l!==lang)location.href=PATHS[l];else lgo(false);return}lang=l;render();build();lgo(false)}});
 var lg=$("#lang"),lgt=$("#lgt");function lgo(o){lg.classList.toggle("open",o);lgt.setAttribute("aria-expanded",o)}
 lgt.onclick=function(e){e.stopPropagation();lgo(!lg.classList.contains("open"))};
 document.addEventListener("click",function(e){if(!lg.contains(e.target))lgo(false)});document.addEventListener("keydown",function(e){if(e.key==="Escape")lgo(false)});
@@ -241,7 +241,7 @@ $("#botbtn").href="https://t.me/"+(C.botUsername||C.telegram);
  var form=$("#form"),sub=$("#fsub"),err=$("#err"),fbt=$("#fbt");
  function showErr(html){err.innerHTML=html;err.style.display=html?"block":"none"}
  form.onsubmit=function(e){e.preventDefault();showErr("");var t=T[lang];
-  var phone=form.phone.value,digits=phone.replace(/\D/g,"");
+  var phone=form.phone.value,digits=phone.replace(/\D/g,"");var svcName=form.service.value;
   if(digits.length<9||digits.length>13){showErr(t.fbadp);form.phone.focus();return}
   sub.disabled=true;sub.classList.add("loading");fbt.textContent=t.fsend;
   fetch((C.apiBase||"")+"/api/lead",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:form.name.value,phone:phone,service:form.service.value,serviceIdx:form.service.selectedIndex,note:form.note.value,lang:lang,website:form.website.value})})
@@ -249,7 +249,7 @@ $("#botbtn").href="https://t.me/"+(C.botUsername||C.telegram);
    .catch(function(){return{ok:false}})
    .then(function(res){
     sub.disabled=false;sub.classList.remove("loading");fbt.textContent=t.fb;
-    if(res.ok){form.classList.add("sent");form.reset();if(window.gsap&&!reduce)gsap.from("#ok > *",{y:20,opacity:0,stagger:.12,duration:.6,ease:"power3.out"});setTimeout(function(){form.classList.remove("sent")},9000)}
+    if(res.ok){if(window.track)window.track("lead_submit",{service:svcName,lang:lang});form.classList.add("sent");form.reset();if(window.gsap&&!reduce)gsap.from("#ok > *",{y:20,opacity:0,stagger:.12,duration:.6,ease:"power3.out"});setTimeout(function(){form.classList.remove("sent")},9000)}
     else showErr(t.ferr+' <a href="tel:'+C.phone+'">'+C.phoneView+'</a> <a href="https://t.me/'+C.telegram+'" target="_blank" rel="noopener">Telegram</a>')});
  }
 })();

@@ -18,9 +18,9 @@ const allowedOrigin = (req) => {
   return list.includes(o) || /^https?:\/\/localhost(:\d+)?$/.test(o) ? o : '';
 };
 const withCors = (res, origin) => {
-  if (!origin) return res;
   const h = new Headers(res.headers);
-  h.set('Access-Control-Allow-Origin', origin); h.set('Vary', 'Origin');
+  h.set('Strict-Transport-Security', 'max-age=31536000');
+  if (origin) { h.set('Access-Control-Allow-Origin', origin); h.set('Vary', 'Origin'); }
   return new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
 };
 

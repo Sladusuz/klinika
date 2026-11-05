@@ -3,11 +3,14 @@
 import { rmSync, mkdirSync, cpSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { ssr } from './ssr.mjs';
+import { innerPages } from './inner.mjs';
+import { PAGES, NAV } from './inner-data.mjs';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const out = join(root, 'worker', 'public');
 const SITE = (process.env.PUBLIC_SITE || 'https://orlentmedical.uz').replace(/\/$/, '');
 rmSync(out, { recursive: true, force: true }); mkdirSync(out, { recursive: true });
-for (const f of ['404.html', 'admin', 'assets', 'site.webmanifest']) if (existsSync(join(root, f))) cpSync(join(root, f), join(out, f), { recursive: true });
+for (const f of ['404.html', 'admin', 'assets', 'site.webmanifest', 'favicon.ico']) if (existsSync(join(root, f))) cpSync(join(root, f), join(out, f), { recursive: true });
 
 globalThis.window = {}; (0, eval)(readFileSync(join(root, 'assets/content.js'), 'utf8').replace('window.I18N=', 'globalThis.__I=')); const I = globalThis.__I;
 (0, eval)(readFileSync(join(root, 'assets/prices.js'), 'utf8')); // window.PRICE_DATA / PRICE_I18N
@@ -63,19 +66,25 @@ function noscript(L) { // JS o'chirilgan qidiruv robotlari va foydalanuvchilar u
   return `<noscript><main style="max-width:760px;margin:0 auto;padding:24px;font-family:sans-serif;color:#fff;background:#050f22"><h1>Orlent Medical — ${esc(t.h1a)} ${esc(t.h1b)}</h1><p>${esc(t.hp)}</p><h2>${esc(t.sv_h)}</h2><ul>${t.sv.map(x => `<li><b>${esc(x[1])}</b> — ${esc(x[2])}</li>`).join('')}</ul><h2>${esc(t.dr_h)}</h2><ul>${t.dr.map(d => `<li><b>${esc(d[0])}</b> — ${esc(d[1])}. ${esc(d[2])}</li>`).join('')}</ul><h2>${esc(t.ct_h)}</h2><p>${esc(t.l_ad)}: Toshkent, Mirzo Ulug'bek, Sayram 43. ${esc(t.l_ph)}: <a href="tel:+998946476479">+998 94 647 64 79</a></p></main></noscript>`;
 }
 
+const V = '20261107a';
+const ctx = { I, PD, PI, CL, PATH, SITE, OGIMG, V, NAV };
 for (const L of Object.keys(PATH)) {
-  let h = tpl.replace('<!--SEO_HEAD-->', head(L)).replace('<html lang="uz">', `<html lang="${L}">`).replace('<body>', '<body>\n' + noscript(L));
+  const h = ssr(tpl, L, ctx).replace('<!--SEO_HEAD-->', head(L)).replace('<html lang="uz">', `<html lang="${L}">`);
   const dir = L === 'uz' ? out : join(out, L); mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, 'index.html'), h);
 }
+const inner = innerPages(ctx, (path, html) => { const d = join(out, path); mkdirSync(d, { recursive: true }); writeFileSync(join(d, 'index.html'), html); });
 
 const today = new Date().toISOString().slice(0, 10);
+const urlOf = (L, slug) => SITE + (PATH[L] === '/' ? '/' : PATH[L]) + (slug ? slug + '/' : '');
+const entries = [{ slug: '', pr: ['1.0', '0.8'] }, ...Object.values(PAGES).map(pg => ({ slug: pg.slug, pr: ['0.9', '0.7'] }))];
 writeFileSync(join(out, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n` +
-  Object.keys(PATH).map(L => `<url><loc>${SITE + PATH[L]}</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>${L === 'uz' ? '1.0' : '0.8'}</priority>${Object.keys(PATH).map(l => `<xhtml:link rel="alternate" hreflang="${l}" href="${SITE + PATH[l]}"/>`).join('')}<xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/"/></url>`).join('\n') + `\n</urlset>\n`);
+  entries.flatMap(e => Object.keys(PATH).map(L => `<url><loc>${urlOf(L, e.slug)}</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>${L === 'uz' ? e.pr[0] : e.pr[1]}</priority>${Object.keys(PATH).map(l => `<xhtml:link rel="alternate" hreflang="${l}" href="${urlOf(l, e.slug)}"/>`).join('')}<xhtml:link rel="alternate" hreflang="x-default" href="${urlOf('uz', e.slug)}"/></url>`)).join('\n') + `\n</urlset>\n`);
 writeFileSync(join(out, 'f73bdd20e36df0fc36bb1ddb09e93689.txt'), 'f73bdd20e36df0fc36bb1ddb09e93689'); // IndexNow kaliti (Bing/Yandex ga yangilanishni xabar qilish)
 writeFileSync(join(out, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`);
 
 writeFileSync(join(out, '_headers'), `/*
+  Strict-Transport-Security: max-age=31536000
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
