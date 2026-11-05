@@ -361,7 +361,8 @@ window.I18N={
   "hd_b2": "15 000+ mamnun bemor",
   "hd_n": "Dr. Nurshod Oripov",
   "hd_r": "Endoskopik LOR xirurg · terapevt",
-  "hd_e": "Bolalar va kattalar uchun"
+  "hd_e": "Bolalar va kattalar uchun",
+  "wa_msg": "Assalomu alaykum! Orlent Medical'ga qabulga yozilmoqchiman."
  },
  "ru": {
   "nav": [
@@ -724,7 +725,8 @@ window.I18N={
   "hd_b2": "15 000+ довольных пациентов",
   "hd_n": "Д-р Нуршод Орипов",
   "hd_r": "Эндоскопический ЛОР-хирург · терапевт",
-  "hd_e": "Для детей и взрослых"
+  "hd_e": "Для детей и взрослых",
+  "wa_msg": "Здравствуйте! Хочу записаться на приём в Orlent Medical."
  },
  "en": {
   "nav": [
@@ -1087,7 +1089,8 @@ window.I18N={
   "hd_b2": "15,000+ happy patients",
   "hd_n": "Dr. Nurshod Oripov",
   "hd_r": "Endoscopic ENT surgeon · therapist",
-  "hd_e": "For children and adults"
+  "hd_e": "For children and adults",
+  "wa_msg": "Hello! I would like to book an appointment at Orlent Medical."
  },
  "kk": {
   "nav": [
@@ -1450,6 +1453,7 @@ window.I18N={
   "hd_b2": "15 000+ риза емделуші",
   "hd_n": "Дәрігер Нуршод Орипов",
   "hd_r": "Эндоскопиялық ЛОР хирург · терапевт",
-  "hd_e": "Балалар мен ересектерге арналған"
+  "hd_e": "Балалар мен ересектерге арналған",
+  "wa_msg": "Сәлеметсіз бе! Orlent Medical-ға қабылдауға жазылғым келеді."
  }
 };

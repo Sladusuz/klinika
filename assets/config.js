@@ -3,6 +3,7 @@ window.CLINIC = {
   name: "Orlent Medical",
   phone: "+998946476479",
   phoneView: "+998 94 647 64 79",
+  whatsapp: "998946476479",   // WhatsApp raqami (+ siz, probelsiz)
   telegram: "orlentmedical",
   instagram: "orlent_medical",
   address: {

@@ -55,6 +55,7 @@ function render(){
  $("#fs").innerHTML=t.svopt.map(function(o){return"<option>"+o+"</option>"}).join("");
  $("#ad").textContent=C.address[lang];
  $$(".lg-m button").forEach(function(b){b.classList.toggle("on",b.dataset.l===lang);b.setAttribute("aria-selected",b.dataset.l===lang)});$("#lgc").textContent=lang.toUpperCase();
+ $$("[data-wa]").forEach(function(a){a.href="https://wa.me/"+C.whatsapp+"?text="+encodeURIComponent(t.wa_msg);a.target="_blank";a.rel="noopener";var s=a.querySelector("span");if(s)s.textContent=C.phoneView});
  $$("[data-ph]").forEach(function(a){a.href="tel:"+C.phone;var s=a.querySelector("span:not([data-t])");if(s)s.textContent=C.phoneView});
  sndLabel();
  bindFx();
