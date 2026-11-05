@@ -66,7 +66,7 @@ function noscript(L) { // JS o'chirilgan qidiruv robotlari va foydalanuvchilar u
   return `<noscript><main style="max-width:760px;margin:0 auto;padding:24px;font-family:sans-serif;color:#fff;background:#050f22"><h1>Orlent Medical — ${esc(t.h1a)} ${esc(t.h1b)}</h1><p>${esc(t.hp)}</p><h2>${esc(t.sv_h)}</h2><ul>${t.sv.map(x => `<li><b>${esc(x[1])}</b> — ${esc(x[2])}</li>`).join('')}</ul><h2>${esc(t.dr_h)}</h2><ul>${t.dr.map(d => `<li><b>${esc(d[0])}</b> — ${esc(d[1])}. ${esc(d[2])}</li>`).join('')}</ul><h2>${esc(t.ct_h)}</h2><p>${esc(t.l_ad)}: Toshkent, Mirzo Ulug'bek, Sayram 43. ${esc(t.l_ph)}: <a href="tel:+998946476479">+998 94 647 64 79</a></p></main></noscript>`;
 }
 
-const V = '20261107a';
+const V = '20261107b';
 const ctx = { I, PD, PI, CL, PATH, SITE, OGIMG, V, NAV };
 for (const L of Object.keys(PATH)) {
   const h = ssr(tpl, L, ctx).replace('<!--SEO_HEAD-->', head(L)).replace('<html lang="uz">', `<html lang="${L}">`);
