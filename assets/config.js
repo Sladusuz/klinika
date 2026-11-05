@@ -14,7 +14,7 @@ window.CLINIC = {
   },
   // Google/Yandex xarita va sharh havolalari, koordinatalar (Google qidiruv va xarita uchun)
   geo: { lat: 41.3270095, lng: 69.3264717 }, postalCode: "100170",
-  maps: { google: "https://g.page/r/CY92svNpwOEqEBM", review: "https://g.page/r/CY92svNpwOEqEBM/review", yandex: "https://yandex.uz/maps/org/orlent_medical/149891150120/" },
+  maps: { embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3745.2071581368364!2d69.3264717!3d41.327009499999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38aef5006653a8b9%3A0x2ae1c069f3b2768f!2sOrlent%20Medical!5e1!3m2!1sen!2s!4v1793886031546!5m2!1sen!2s", google: "https://g.page/r/CY92svNpwOEqEBM", review: "https://g.page/r/CY92svNpwOEqEBM/review", yandex: "https://yandex.uz/maps/org/orlent_medical/149891150120/" },
   mapQuery: "Sayram 43, Mirzo Ulugbek tumani, Toshkent",   // xaritada qidiriladigan manzil
   // API (Cloudflare Worker) manzili. Bo'sh = sayt bilan bir xil domen (domen /api/* ni Worker'ga yo'naltirgan bo'lsa).
   // Aks holda to'liq manzil, masalan: "https://orlent-medical-api.<akkaunt>.workers.dev"
