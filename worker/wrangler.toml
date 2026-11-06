@@ -17,8 +17,9 @@ command = "node scripts/prep.mjs"
 # Sayt fayllari (statik) — /api/* dan boshqa hamma narsa shu yerdan beriladi
 [assets]
 directory = "./public"
+binding = "ASSETS"
 not_found_handling = "404-page"
-run_worker_first = ["/api/*", "/google6376e58e4d0e9ebb.html"]
+run_worker_first = ["/api/*", "/google6376e58e4d0e9ebb.html", "/assets/video/*"]
 
 [vars]
 # Saytning ochiq manzili (GitHub Pages yoki o'z domeningiz). Bot rasmlari va panel havolasi shu yerdan olinadi.
