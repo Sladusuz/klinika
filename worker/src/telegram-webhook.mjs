@@ -6,6 +6,7 @@ import { openStore } from './lib/state.mjs';
 import { saveUser } from './lib/data.mjs';
 import { sendReport, sendUsersCsv } from './lib/report.mjs';
 import { loadAdmins, addAdmin, removeAdmin, isEnvAdmin } from './lib/admins.mjs';
+import { checkPassword } from './lib/auth.mjs';
 import { recipients, createJob, processJob, kick } from './lib/broadcast.mjs';
 const { call, esc, admins, normPhone, clean, SERVICES, notifyAdmins, SITE, newTicket, leadText, leadKb, hm, panelBtn, setAdminMenu } = tg;
 const LANGS = ['uz', 'ru', 'en'];
@@ -16,7 +17,7 @@ const menuKb = L => ({ keyboard: [[{ text: X[L].menu.apply }], [{ text: X[L].men
 const regKb = L => ({ keyboard: [[{ text: X[L].share, request_contact: true }], [{ text: X[L].skip }]], resize_keyboard: true });
 const stepKb = L => ({ keyboard: [[{ text: X[L].share, request_contact: true }], [{ text: X[L].cancel }]], resize_keyboard: true, one_time_keyboard: false });
 const langKb = () => ({ inline_keyboard: [LANGS.map(l => ({ text: X[l].flag, callback_data: 'lang:' + l }))] });
-const EMO = ['🩺', '👂', '👃', '🗣', '📡', '👶'];
+const EMO = ['🩺', '👂', '👃', '🗣', '👶', '🔬', '📡', '🧪', '💉'];
 const bar = n => '▰'.repeat(n) + '▱'.repeat(3 - n);
 const head = (L, n) => `<code>${bar(n)}</code>  ${n}/3 · <b>${X[L].step[n - 1]}</b>`;
 const EFFECT = '5046509860389126442'; // 🎉 konfetti
@@ -138,6 +139,29 @@ const isAdmin = c => admins().includes(String(c.chat));
 const bcKb = n => ({ inline_keyboard: [[{ text: `✅ Hammaga yuborish (${n})`, callback_data: 'bc:go' }], [{ text: '✏️ Qayta yozish', callback_data: 'bc:re' }, { text: '❌ Bekor', callback_data: 'bc:x' }]] });
 const BC_WAIT = "📢 <b>Hammaga xabar</b>\n\nEndi yuboriladigan xabarni shu yerga yozing: matn, rasm, video, fayl yoki ovozli xabar.\nU <b>ro'yxatdan o'tgan hamma foydalanuvchiga</b> boradi (avval sizga ko'rsatiladi va tasdiqlaysiz).";
 
+// "/admin <parol>": parolni bilgan odam bot admini bo'ladi (yangi zayavkalar, kunlik hisobot). Egasiga xabar boradi, /rmadmin bilan olib tashlash mumkin.
+async function joinAsAdmin(m, c, text) {
+  const mt = text.match(/^\/admin(?:@\w+)?\s+(\S.*)$/i);
+  if (!mt || m.chat.type !== 'private' || !c.st || !process.env.ADMIN_PASSWORD) return false;
+  const who = m.from || {}, name = [who.first_name, who.last_name].filter(Boolean).join(' ') || '—';
+  const key = 'adj:' + c.chat + ':' + Math.floor(Date.now() / 3600000);
+  const n = ((await c.st.get(key)) || { n: 0 }).n;
+  if (n >= 5) { await say(c.chat, "⛔️ Juda ko'p urinish. Bir soatdan keyin qayta urinib ko'ring."); return true; }
+  await call('deleteMessage', { chat_id: c.chat, message_id: m.message_id }).catch(() => {}); // parol chatda qolmasin
+  if (!checkPassword(mt[1].trim())) {
+    await c.st.set(key, { n: n + 1 });
+    await say(c.chat, "❌ Parol noto'g'ri.");
+    if (n === 0) await Promise.allSettled(tg.envAdmins().map(o => call('sendMessage', { chat_id: o, parse_mode: 'HTML', text: `⚠️ Botda <b>/admin</b> uchun noto'g'ri parol kiritildi\n👤 ${esc(name)}${who.username ? ' (@' + esc(who.username) + ')' : ''}\n🆔 <code>${c.chat}</code>` })));
+    return true;
+  }
+  if (isAdmin(c)) { await say(c.chat, "ℹ️ Siz allaqachon adminsiz."); return true; }
+  await addAdmin(c.st, String(c.chat));
+  await setAdminMenu(c.chat, false);
+  await say(c.chat, "✅ <b>Siz admin bo'ldingiz!</b>\n\nEndi sizga yangi zayavkalar va kunlik hisobot keladi.\nBuyruqlar: /stats · /users · /admins");
+  await Promise.allSettled(tg.envAdmins().map(o => call('sendMessage', { chat_id: o, parse_mode: 'HTML', text: `👮 <b>Parol orqali yangi admin qo'shildi</b>\n👤 ${esc(name)}${who.username ? ' (@' + esc(who.username) + ')' : ''}\n🆔 <code>${c.chat}</code>\n\nOlib tashlash: <code>/rmadmin ${c.chat}</code>` })));
+  return true;
+}
+
 async function adminFlow(m, c, text) {
   if (!c.st || !isAdmin(c) || m.chat.type !== 'private') return false;
   const meta = c.meta;
@@ -250,6 +274,7 @@ async function onMessage(m, c) {
     if (!admins().includes(String(c.chat)) || !c.st) return;
     return /stats/i.test(text) ? sendReport(c.st, [c.chat], false) : sendUsersCsv(c.chat, c.st);
   }
+  if (await joinAsAdmin(m, c, text)) return;
   if (await adminFlow(m, c, text)) return;
   if (c.meta.bc && (/^\//.test(text) || findMenu(text))) { delete c.meta.bc; await c.save(); } // boshqa buyruq berilsa, kutilayotgan "hammaga xabar" bekor bo'ladi
   if (m.chat.type !== 'private') return;
