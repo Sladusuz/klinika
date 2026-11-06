@@ -367,3 +367,12 @@ form.sent .ok{display:grid;gap:14px;justify-items:center;margin:0;background:non
 
 #dr{grid-template-columns:repeat(auto-fit,minmax(270px,1fr));max-width:1100px}@media(max-width:640px){#dr{grid-template-columns:1fr}}
 .dstat b{white-space:nowrap;font-size:18px}.dstat div{flex:1 1 76px;padding:10px 6px}
+
+/* shifokor kartochkalari: bir xil balandlik, chiroyli raqam kataklari */
+.doc .bd{display:flex;flex-direction:column;flex:1}
+.dstat{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:10px;margin-top:auto;padding-top:20px}
+.dstat div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:84px;padding:12px 8px;border-radius:18px;background:linear-gradient(160deg,rgba(75,224,140,.14),rgba(25,167,255,.08));border:1px solid rgba(75,224,140,.28);text-align:center;transition:transform .3s var(--ease),border-color .3s}
+.doc:hover .dstat div{border-color:rgba(75,224,140,.5)}.dstat div:hover{transform:translateY(-3px)}
+.dstat b{display:block;white-space:nowrap;font:800 20px/1.1 Manrope,sans-serif;background:var(--grad2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dstat span{font-size:12px;line-height:1.25;opacity:.85;color:#cfe}
+@media(max-width:380px){.dstat{grid-template-columns:repeat(2,1fr)}}
