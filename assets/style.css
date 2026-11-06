@@ -376,3 +376,4 @@ form.sent .ok{display:grid;gap:14px;justify-items:center;margin:0;background:non
 .dstat b{display:block;white-space:nowrap;font:800 20px/1.1 Manrope,sans-serif;background:var(--grad2);-webkit-background-clip:text;background-clip:text;color:transparent}
 .dstat span{font-size:12px;line-height:1.25;opacity:.85;color:#cfe}
 @media(max-width:380px){.dstat{grid-template-columns:repeat(2,1fr)}}
+.doc .bd{align-items:stretch}.doc .bd small{align-self:center}.doc .bd h3,.doc .bd p{text-align:center}
