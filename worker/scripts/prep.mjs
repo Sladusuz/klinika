@@ -92,7 +92,17 @@ writeFileSync(join(out, '_headers'), `/*
   Permissions-Policy: camera=(), microphone=(), geolocation=()
 /
   Content-Security-Policy: frame-ancestors 'self'
-/*/
+/ru/
+  Content-Security-Policy: frame-ancestors 'self'
+/kk/
+  Content-Security-Policy: frame-ancestors 'self'
+/en/
+  Content-Security-Policy: frame-ancestors 'self'
+/uzi/
+  Content-Security-Policy: frame-ancestors 'self'
+/lor/
+  Content-Security-Policy: frame-ancestors 'self'
+/bolalar-lor/
   Content-Security-Policy: frame-ancestors 'self'
 /assets/img/*
   Cache-Control: public, max-age=2592000

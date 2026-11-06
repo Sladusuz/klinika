@@ -26,6 +26,8 @@ run_worker_first = ["/api/*", "/google6376e58e4d0e9ebb.html", "/assets/video/*"]
 SITE_URL = "https://orlentmedical.uz"
 # O'zini-o'zi chaqirish (xabar yuborish bo'laklari) uchun Worker'ning workers.dev manzili
 API_URL = "https://orlent-medical-api.chempme.workers.dev"
+# Admin panel (Telegram Mini App) manzili. Ba'zi mobil operatorlarda asosiy domen DNS orqali kech ochilgani uchun workers.dev manzili ishlatiladi.
+PANEL_URL = "https://orlent-medical-api.chempme.workers.dev/admin/"
 # Formaga/panelga so'rov yuborishi mumkin bo'lgan saytlar (vergul bilan)
 ALLOWED_ORIGINS = "https://orlentmedical.uz,https://www.orlentmedical.uz,https://orlent-medical-api.chempme.workers.dev"
 

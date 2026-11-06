@@ -93,7 +93,7 @@ async function notifyAdmins(l, store) {
   return l;
 }
 
-const panelUrl = () => SITE() + '/admin/';
+const panelUrl = () => process.env.PANEL_URL || SITE() + '/admin/';
 const panelBtn = () => ({ text: '⚙️ Panel', web_app: { url: panelUrl() } });
 // admin chatida bot menyusi yonida «⚙️ Panel» tugmasi; admin bo'lmasa — oddiy menyuga qaytaradi
 async function setAdminMenu(chat_id, on) {
