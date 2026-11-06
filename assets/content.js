@@ -110,7 +110,8 @@ window.I18N={
       "15 000+",
       "mamnun bemor"
      ]
-    ]
+    ],
+    "lor"
    ],
    [
     "Muztorov Mirjalol Rizoqulovich",
@@ -130,7 +131,25 @@ window.I18N={
       "1000+",
       "muvaffaqiyatli operatsiya"
      ]
-    ]
+    ],
+    "lor"
+   ],
+   [
+    "Sharopova Dilobar To'lqinovna",
+    "UZI shifokori · kattalar va bolalar",
+    "Toshkent pediatriya universiteti (bakalavr va magistratura)",
+    "/assets/img/dr-dilobar.jpg",
+    [
+     [
+      "7 yil",
+      "tajriba"
+     ],
+     [
+      "10 000+",
+      "mamnun bemor"
+     ]
+    ],
+    "uzi"
    ]
   ],
   "wy_e": "Nega biz",
@@ -476,7 +495,8 @@ window.I18N={
       "15 000+",
       "довольных пациентов"
      ]
-    ]
+    ],
+    "lor"
    ],
    [
     "Музторов Миржалол Ризокулович",
@@ -496,7 +516,25 @@ window.I18N={
       "1000+",
       "успешных операций"
      ]
-    ]
+    ],
+    "lor"
+   ],
+   [
+    "Шаропова Дилобар Тулкиновна",
+    "Врач УЗИ · взрослые и дети",
+    "Ташкентский педиатрический университет (бакалавриат и магистратура)",
+    "/assets/img/dr-dilobar.jpg",
+    [
+     [
+      "7 лет",
+      "опыта"
+     ],
+     [
+      "10 000+",
+      "довольных пациентов"
+     ]
+    ],
+    "uzi"
    ]
   ],
   "wy_e": "Почему мы",
@@ -842,7 +880,8 @@ window.I18N={
       "15,000+",
       "happy patients"
      ]
-    ]
+    ],
+    "lor"
    ],
    [
     "Muztorov Mirjalol Rizoqulovich",
@@ -862,7 +901,25 @@ window.I18N={
       "1000+",
       "successful surgeries"
      ]
-    ]
+    ],
+    "lor"
+   ],
+   [
+    "Sharopova Dilobar Tulkinovna",
+    "Ultrasound (UZI) doctor · adults and children",
+    "Tashkent Pediatric University (bachelor's and master's)",
+    "/assets/img/dr-dilobar.jpg",
+    [
+     [
+      "7 yrs",
+      "experience"
+     ],
+     [
+      "10,000+",
+      "happy patients"
+     ]
+    ],
+    "uzi"
    ]
   ],
   "wy_e": "Why us",
@@ -1208,7 +1265,8 @@ window.I18N={
       "15 000+",
       "риза емделуші"
      ]
-    ]
+    ],
+    "lor"
    ],
    [
     "Музторов Миржалол Ризокулович",
@@ -1228,7 +1286,25 @@ window.I18N={
       "1000+",
       "сәтті операция"
      ]
-    ]
+    ],
+    "lor"
+   ],
+   [
+    "Шаропова Дилобар Тулкиновна",
+    "УЗИ дәрігері · ересектер мен балалар",
+    "Ташкент педиатрия университеті (бакалавр және магистратура)",
+    "/assets/img/dr-dilobar.jpg",
+    [
+     [
+      "7 жыл",
+      "тәжірибе"
+     ],
+     [
+      "10 000+",
+      "риза емделуші"
+     ]
+    ],
+    "uzi"
    ]
   ],
   "dr_ph": "Балалар мен ересектер",

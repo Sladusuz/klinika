@@ -4,6 +4,7 @@ const ESC = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g,
 const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 const LOC = { uz: 'uz_UZ', ru: 'ru_RU', kk: 'kk_KZ', en: 'en_US' };
 
+const docsFor = (t, tab) => { const k = tab === 'uzi' ? 'uzi' : 'lor'; const f = t.dr.filter(d => d[5] === k); return f.length ? f : t.dr; };
 export function innerPages(ctx, writePage) {
   const { I, PD, PI, CL, PATH, SITE, OGIMG, analyticsTag } = ctx;
   const langs = Object.keys(PATH);
@@ -63,7 +64,7 @@ ${ld}
  </section>
  <section class="ip-sec"><h2>${ESC(ui.services)}</h2><div class="ip-grid">${svc.map(x => `<article class="ip-card"><h3>${ESC(x[1])}</h3><p>${ESC(x[2])}</p></article>`).join('')}</div></section>
  <section class="ip-sec" id="prices"><h2>${ESC(ui.prices)}</h2>${prices}<p class="ip-small">${ESC(ui.note)}</p></section>
- <section class="ip-sec"><h2>${ESC(ui.doctors)}</h2><div class="ip-docs">${t.dr.map(d => `<article class="ip-doc"><img src="${ESC(d[3])}" alt="${ESC(d[0] + ' — ' + d[1])}" loading="lazy" width="800" height="880"><div><h3>${ESC(d[0])}</h3><p class="ip-role">${ESC(d[1])}</p><p>${ESC(d[2])}</p><ul class="ip-chips">${d[4].map(c => `<li><b>${ESC(c[0])}</b> ${ESC(c[1])}</li>`).join('')}</ul></div></article>`).join('')}</div></section>
+ <section class="ip-sec"><h2>${ESC(ui.doctors)}</h2><div class="ip-docs">${docsFor(t, pg.tab).map(d => `<article class="ip-doc"><img src="${ESC(d[3])}" alt="${ESC(d[0] + ' — ' + d[1])}" loading="lazy" width="800" height="880"><div><h3>${ESC(d[0])}</h3><p class="ip-role">${ESC(d[1])}</p><p>${ESC(d[2])}</p><ul class="ip-chips">${d[4].map(c => `<li><b>${ESC(c[0])}</b> ${ESC(c[1])}</li>`).join('')}</ul></div></article>`).join('')}</div></section>
  <section class="ip-sec"><h2>${ESC(ui.faq)}</h2>${T.faq.map(q => `<details class="ip-faq"><summary>${ESC(q[0])}</summary><p>${ESC(q[1])}</p></details>`).join('')}</section>
  <section class="ip-sec ip-contact" id="contact"><h2>${ESC(ui.contact)}</h2>
   <p><b>Orlent Medical</b> — ${ESC(ui.addr)}</p>
