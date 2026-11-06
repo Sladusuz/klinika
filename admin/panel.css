@@ -131,3 +131,9 @@ a.btn{text-decoration:none}
 .dm{margin-top:12px}.dm textarea{min-height:84px}.dm .btn{width:100%;margin-top:8px}
 .sheet h4{font-family:Manrope;font-size:15px;margin:4px 2px 8px}
 .mini{display:grid;gap:8px;margin-bottom:12px}.mini button{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.06);text-align:left;font-size:13.5px}.mini small{color:var(--mute)}
+
+.lg{margin:22px auto 0;max-width:300px;display:grid;gap:12px}
+.lg input{height:50px;border-radius:14px;border:1px solid var(--line,rgba(255,255,255,.14));background:rgba(255,255,255,.07);color:#fff;font:500 16px Inter,sans-serif;padding:0 16px;outline:none;text-align:center}
+.lg input:focus{border-color:#4be08c}
+.lg .btn{height:50px;border-radius:14px;border:0;background:linear-gradient(135deg,#1456c8,#1b8f8a 55%,#2f9e3a);color:#fff;font:700 16px Inter,sans-serif;cursor:pointer}
+.lg .btn:disabled{opacity:.6}.lge{color:#ff8a8a;min-height:20px;font-size:14px}

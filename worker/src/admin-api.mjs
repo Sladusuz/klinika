@@ -1,7 +1,7 @@
 // Mini App admin panel API: POST /api/admin-api  (Telegram initData imzosi + admin tekshiruvi)
 import tg from './lib/tg.js';
 import { openStore } from './lib/state.mjs';
-import { verifyInitData } from './lib/auth.mjs';
+import { verifyInitData, checkPassword, signToken, verifyToken } from './lib/auth.mjs';
 import { loadAdmins, addAdmin, removeAdmin, isEnvAdmin } from './lib/admins.mjs';
 import { recentLeads, setLeadStatus, dashboard, usersList, analytics, userLeads } from './lib/leads.mjs';
 import { recipients, createJob, processJob, kick } from './lib/broadcast.mjs';
@@ -13,7 +13,26 @@ const hash = t => { let h = 5381; for (let i = 0; i < t.length; i++) h = ((h << 
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { error: 'method' });
-  const user = verifyInitData(req.headers.get('x-tg-init-data') || '', process.env.TELEGRAM_BOT_TOKEN);
+  let b; try { b = await req.json(); } catch (e) { b = {}; }
+  const wu = p => { const c = globalThis.__CTX; if (c && c.waitUntil) c.waitUntil(p.catch(() => {})); };
+  // Parol bilan kirish: 15 daqiqada 5 ta urinish (IP bo'yicha), muvaffaqiyatli/shubhali kirishlar egasiga xabar qilinadi
+  if (b.action === 'login') {
+    if (!process.env.ADMIN_PASSWORD) return json(404, { error: 'disabled' });
+    const st0 = await openStore(); if (!st0) return json(503, { error: 'store' });
+    await loadAdmins(st0);
+    const ip = req.headers.get('cf-connecting-ip') || 'ip', key = 'rl:' + ip + ':' + Math.floor(Date.now() / 900000);
+    const tries = ((await st0.get(key)) || { n: 0 }).n;
+    if (tries >= 5) return json(429, { error: 'too_many' });
+    if (!checkPassword(String(b.password || ''))) {
+      await st0.set(key, { n: tries + 1 });
+      if (tries === 0 && (await st0.once('rlalert:' + ip + ':' + Math.floor(Date.now() / 3600000)))) for (const o of envAdmins()) wu(call('sendMessage', { chat_id: o, text: '⚠️ Admin panelga noto\'g\'ri parol kiritildi.\nIP: ' + ip }));
+      return json(401, { error: 'bad_password' });
+    }
+    for (const o of envAdmins()) wu(call('sendMessage', { chat_id: o, text: '🔑 Admin panelga parol bilan kirildi.\nIP: ' + ip + '\nSiz emas bo\'lsangiz, parolni almashtirishni so\'rang.' }));
+    return json(200, signToken());
+  }
+  const viaPw = verifyToken(req.headers.get('x-admin-token') || '');
+  const user = viaPw ? { id: Number(envAdmins()[0]) || 0, first_name: 'Admin', username: '' } : verifyInitData(req.headers.get('x-tg-init-data') || '', process.env.TELEGRAM_BOT_TOKEN);
   if (!user) return json(401, { error: 'auth' });
   const st = await openStore();
   if (!st) return json(503, { error: 'store' });
@@ -30,7 +49,6 @@ export default async (req) => {
     } catch (e) { /* jurnal ixtiyoriy */ }
     return json(403, { error: 'forbidden' });
   }
-  let b; try { b = await req.json(); } catch (e) { b = {}; }
   const me = { id: user.id, name: [user.first_name, user.last_name].filter(Boolean).join(' '), username: user.username || '', main: isEnvAdmin(user.id) };
   const who = user.username ? '@' + user.username : (user.first_name || String(user.id));
   try {

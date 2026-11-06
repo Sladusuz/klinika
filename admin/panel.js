@@ -20,13 +20,34 @@
 
   function toast(msg, err) { var t = $('#toast'); t.textContent = msg; t.className = 'toast on' + (err ? ' err' : ''); haptic(err ? 'err' : 'ok'); clearTimeout(toast.t); toast.t = setTimeout(function () { t.className = 'toast'; }, 2600); }
   function gate(title, text) { $('#gateT').textContent = title; $('#gateP').textContent = text; $('#gate').hidden = false; $('#app').hidden = true; }
+  var TK = 'orlent_admin_tok';
+  function tok() { try { return sessionStorage.getItem(TK) || ''; } catch (e) { return ''; } }
+  function setTok(v) { try { v ? sessionStorage.setItem(TK, v) : sessionStorage.removeItem(TK); } catch (e) { /* ixtiyoriy */ } }
+  function showLogin(msg) {
+    gate('Parol bilan kirish', msg || 'Panelga kirish uchun parolni kiriting.');
+    var box = $('#gate .gate-in');
+    if (!$('#lg')) {
+      box.insertAdjacentHTML('beforeend', '<form id="lg" class="lg"><input id="lgp" type="password" autocomplete="current-password" placeholder="Parol" required><button type="submit" class="btn">Kirish</button><p id="lge" class="lge"></p></form>');
+      $('#lg').onsubmit = function (e) {
+        e.preventDefault(); var btn = $('#lg button'); btn.disabled = true; $('#lge').textContent = '';
+        fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'login', password: $('#lgp').value }) })
+          .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); })
+          .then(function (x) {
+            btn.disabled = false;
+            if (x.s === 200 && x.j.token) { setTok(x.j.token); $('#lgp').value = ''; start(); }
+            else $('#lge').textContent = x.s === 429 ? "Juda ko'p urinish. 15 daqiqadan keyin qayta urining." : x.s === 404 ? "Parol bilan kirish yoqilmagan." : "Parol noto'g'ri.";
+          }).catch(function () { btn.disabled = false; $('#lge').textContent = 'Tarmoq xatosi. Qayta urining.'; });
+      };
+    }
+    $('#lg').hidden = false; setTimeout(function () { try { $('#lgp').focus(); } catch (e) { /* ixtiyoriy */ } }, 50);
+  }
   function api(action, data) {
-    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Tg-Init-Data': (tg && tg.initData) || '' }, body: JSON.stringify(Object.assign({ action: action }, data || {})) })
+    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Tg-Init-Data': (tg && tg.initData) || '', 'X-Admin-Token': tok() }, body: JSON.stringify(Object.assign({ action: action }, data || {})) })
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (r.ok) return j; var e = new Error(j.error || r.status); e.status = r.status; e.code = j.error; throw e; }); });
   }
   function fail(e) {
-    if (e.status === 401) return gate('Qayta oching', "Sessiya eskirgan. Panelni botdagi «⚙️ Panel» tugmasi orqali qaytadan oching.");
-    if (e.status === 403) return gate("Ruxsat yo'q", "Bu panel faqat egasi uchun. Sizning kirishingiz rad etildi.");
+    if (e.status === 401) { setTok(''); return showLogin('Sessiya tugadi. Parolni qayta kiriting yoki panelni botdagi «⚙️ Panel» tugmasidan oching.'); }
+    if (e.status === 403) return showLogin("Bu Telegram hisobi panel egasiniki emas. Parol bilan kirishingiz mumkin.");
     toast('Xatolik: ' + (e.code || e.message), true);
   }
   function busy(btn, p) { btn.disabled = true; return p.then(function (r) { btn.disabled = false; return r; }, function (e) { btn.disabled = false; throw e; }); }
@@ -279,14 +300,17 @@
   $('#refresh').onclick = function () { haptic(); refresh(); };
   addEventListener('keydown', function (e) { if (e.key === 'Escape') { if ($('#sheet').classList.contains('on')) closeSheet(); else closePage(); } });
 
-  if (!tg || !tg.initData) { gate('Telegram ichida oching', "Bu admin panel faqat Telegram botidagi «⚙️ Panel» tugmasi orqali ochiladi."); return; }
-  try { tg.ready(); tg.expand(); tg.setHeaderColor && tg.setHeaderColor('#050f22'); tg.setBackgroundColor && tg.setBackgroundColor('#050f22'); tg.disableVerticalSwipes && tg.disableVerticalSwipes(); } catch (e) { /* ixtiyoriy */ }
-  api('init').then(function (r) {
-    S.me = r.me; S.admins = r.admins; S.dash = r.dash; S.services = r.dash.allServices || [];
-    $('#meName').textContent = (r.me.name || 'Admin') + ' · egasi';
-    $('#gate').hidden = true; $('#app').hidden = false;
-    renderDash();
-    api('stats', { days: 7 }).then(function (x) { S.ins = x.stats; renderDash(); }).catch(function () { /* ixtiyoriy */ });
-    setInterval(function () { if (document.visibilityState === 'visible' && S.tab === 'home' && !S.page) api('dashboard').then(function (x) { S.dash = x.dash; renderDash(); }).catch(function () { /* jim */ }); }, 45000);
-  }).catch(fail);
+  function start() {
+    api('init').then(function (r) {
+      S.me = r.me; S.admins = r.admins; S.dash = r.dash; S.services = r.dash.allServices || [];
+      $('#meName').textContent = (r.me.name || 'Admin') + ' · egasi';
+      $('#gate').hidden = true; $('#app').hidden = false;
+      renderDash();
+      api('stats', { days: 7 }).then(function (x) { S.ins = x.stats; renderDash(); }).catch(function () { /* ixtiyoriy */ });
+      if (!start.timer) start.timer = setInterval(function () { if (document.visibilityState === 'visible' && S.tab === 'home' && !S.page) api('dashboard').then(function (x) { S.dash = x.dash; renderDash(); }).catch(function () { /* jim */ }); }, 45000);
+    }).catch(fail);
+  }
+  if (tg && tg.initData) { try { tg.ready(); tg.expand(); tg.setHeaderColor && tg.setHeaderColor('#050f22'); tg.setBackgroundColor && tg.setBackgroundColor('#050f22'); tg.disableVerticalSwipes && tg.disableVerticalSwipes(); } catch (e) { /* ixtiyoriy */ } start(); }
+  else if (tok()) start();
+  else showLogin();
 })();

@@ -53,7 +53,7 @@ export default {
     const m = /^\/api\/([a-z-]+)\/?$/.exec(url.pathname);
     const origin = allowedOrigin(req);
     if (req.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: origin ? { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'content-type, x-tg-init-data', 'Access-Control-Max-Age': '86400', Vary: 'Origin' } : {} });
+      return new Response(null, { status: 204, headers: origin ? { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'content-type, x-tg-init-data, x-admin-token', 'Access-Control-Max-Age': '86400', Vary: 'Origin' } : {} });
     }
     const fn = m && ROUTES[m[1]];
     if (!fn) return new Response(JSON.stringify({ ok: true, service: 'Orlent Medical API' }), { status: m ? 404 : 200, headers: { 'content-type': 'application/json' } });

@@ -24,3 +24,23 @@ export function signInitData(user, botToken, authDate) {
   p.set('hash', crypto.createHmac('sha256', secret).update(dcs).digest('hex'));
   return p.toString();
 }
+
+// ---- parol bilan kirish (ADMIN_PASSWORD, Cloudflare sirlarida) ----
+const sha = s => crypto.createHash('sha256').update(String(s)).digest();
+const tkey = () => sha('adm|' + (process.env.ADMIN_PASSWORD || '') + '|' + (process.env.TELEGRAM_WEBHOOK_SECRET || ''));
+export function checkPassword(p) {
+  const pw = process.env.ADMIN_PASSWORD;
+  if (!pw || !p) return false;
+  return crypto.timingSafeEqual(sha(p), sha(pw));
+}
+export function signToken(ttlSec = 12 * 3600) {
+  const exp = Math.floor(Date.now() / 1000) + ttlSec;
+  return { token: exp + '.' + crypto.createHmac('sha256', tkey()).update('t' + exp).digest('hex'), exp };
+}
+export function verifyToken(t) {
+  if (!t || !process.env.ADMIN_PASSWORD) return false;
+  const [e, s] = String(t).split('.'); const exp = Number(e);
+  if (!exp || !s || exp < Date.now() / 1000) return false;
+  const calc = Buffer.from(crypto.createHmac('sha256', tkey()).update('t' + exp).digest('hex'), 'hex'), got = Buffer.from(s, 'hex');
+  return calc.length === got.length && crypto.timingSafeEqual(calc, got);
+}
